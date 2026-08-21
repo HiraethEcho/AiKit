@@ -1,0 +1,88 @@
+# GENERATED FROM agents/agents.toml by deploy/deploy.py gen. DO NOT EDIT.
+version: "1.0"
+agents:
+  presets:
+    - "full"
+
+  mcp:
+    codegraph:
+      command: "codegraph"
+      args:
+        - "serve"
+        - "--mcp"
+
+      enabled: true
+      directTools: true
+
+
+
+pi:
+  template: "agents/pi/settings.example.json"
+  project_target: ".pi/settings.json"
+  global_target: ".pi/agent/settings.json"
+  packages:
+    -
+      type: "local"
+      path: "agents/pi/extensions/pi-agents"
+
+    -
+      type: "local"
+      path: "agents/pi/extensions/pi-tasks"
+
+    -
+      type: "local"
+      path: "agents/pi/extensions/pi-pane"
+
+    -
+      type: "local"
+      path: "agents/pi/extensions/pi-asks"
+
+    -
+      type: "local"
+      path: "agents/pi/extensions/pi-context-mode"
+
+    -
+      type: "npm"
+      name: "pi-dsh-minimal"
+
+    -
+      type: "npm"
+      name: "pi-deepseek-search"
+
+    -
+      type: "npm"
+      name: "pi-vision-tool"
+
+    -
+      type: "npm"
+      name: "@tintinweb/pi-subagents"
+
+    -
+      type: "npm"
+      name: "pi-opencode-go-cache"
+
+    -
+      type: "npm"
+      name: "pi-ocgo-usage"
+
+
+  skills:
+    presets:
+      - "full"
+
+
+  commands:
+    dirs:
+      - "flowkit/commands"
+      - "base/commands"
+
+
+  mcp:
+    names:
+      - "codegraph"
+
+
+
+opencode:
+  {}
+

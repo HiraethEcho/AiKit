@@ -1,0 +1,11 @@
+{
+  "model": "claude-sonnet-4-20250514",
+  "max_tokens": 64000,
+  "skills": {
+    "paths": [".agents/skills"]
+  },
+  "permissions": {
+    "allow": ["bash(go test*)", "bash(npm run*)"],
+    "deny": ["bash(rm -rf*)"]
+  }
+}

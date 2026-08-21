@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    // 目标 JS 版本。ES2022 支持现代语法（数组 flat、for await 等）。
+    "target": "ES2022",
+    // 模块系统。package.json 里 "type": "module"，所以用 NodeNext。
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    // 严格模式：帮你找 bug（null/undefined、未赋值等）。
+    "strict": true,
+    // 让 import 后面不用写 .js 也能工作（NodeNext 下最好显式写，见代码注释）。
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    // 编译产物放哪。
+    "outDir": "dist",
+    // 只要 .ts 文件。
+    "rootDir": ".",
+    // 让 TypeScript 认识 Node 的全局类型（process、__dirname 相关等）。
+    "types": ["node"],
+    // 不生成 JS（我们只用 tsc 做类型检查，运行交给 tsx）。改 true 就生成 JS。
+    "noEmit": true,
+    // 报错时也保留 undefined 相关检查。
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["**/*.ts"]
+}

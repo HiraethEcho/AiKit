@@ -1,0 +1,57 @@
+version = "1.0"
+
+[[preset]]
+id = "deep-research"
+description = "深研流水线（14-agent，全面文献综合）"
+skills = ["math-deep-research"]
+agents = ["math-researcher", "research_question_agent", "research_architect_agent", "bibliography_agent", "source_verification_agent", "synthesis_agent", "report_compiler_agent", "editor_in_chief_agent", "ethics_review_agent", "risk_of_bias_agent", "monitoring_agent"]
+commands = []
+mcp = []
+
+[[preset]]
+id = "3w-scan"
+description = "WHY/HOW/WHAT 三路文献扫描"
+skills = ["math-deep-research"]
+agents = ["math-researcher", "bibliography_agent"]
+commands = ["ars-3w"]
+mcp = []
+
+[[preset]]
+id = "lit-review"
+description = "注释书目（论文格式）"
+skills = ["math-deep-research", "literature-survey"]
+agents = ["math-researcher", "synthesis_agent"]
+commands = ["ars-lit-review"]
+mcp = []
+
+[[preset]]
+id = "ideate"
+description = "问题发现与猜想形成"
+skills = ["ideation"]
+agents = ["thinker", "research_question_agent"]
+commands = []
+mcp = []
+
+[[preset]]
+id = "research-loop"
+description = "轻量研究循环（survey→tackle→summary）"
+skills = ["research-loop", "literature-survey", "proof-exploration"]
+agents = ["thinker", "solver", "note-taker", "survey", "teacher"]
+commands = []
+mcp = []
+
+[[preset]]
+id = "orchestrate"
+description = "多技能编排路由"
+skills = ["orchestration"]
+agents = ["thinker"]
+commands = []
+mcp = []
+
+[[preset]]
+id = "socratic"
+description = "苏格拉底引导研究"
+skills = ["math-deep-research"]
+agents = ["socratic_mentor_agent", "research_question_agent"]
+commands = []
+mcp = []

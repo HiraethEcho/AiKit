@@ -1,0 +1,7 @@
+Shell: ${os} ${shell}. CWD: session worktree — use workdir param, not cd.
+Output capped at ~2K lines/50KB — use Read/Grep for full output.
+Prefer Glob,Grep,Read,Edit,Write over shell utils.
+git: no amend/force-push/hard-reset/empty-commit/-i. No secrets.
+GitHub URL → gh CLI. SSH key sourced from agent.
+PTY tasks available via { background: true, pty: true }.
+Placeholders: ${os} ${shell} ${chaining} ${maxLines} ${maxBytes} ${directory}

@@ -1,0 +1,23 @@
+{
+  "name": "pi-ocgo",
+  "version": "0.1.0",
+  "description": "Merged OpenCode Go extension for Pi: prompt caching + subscription usage in one compact footer line",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "opencode-go",
+    "prompt-cache",
+    "usage",
+    "footer"
+  ],
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

@@ -1,0 +1,5 @@
+[texra](https://github.com/texra-ai/texra-scientific-skills)
+[research-writing-skills](https://github.com/alfonso0512/research-writing-skill)
+[paper reading](https://github.com/VeryMath/AI4Math-Paper-Reading)
+[writing](https://github.com/VeryMath/AI4Math-Writing)
+[Auto Research](https://github.com/VeryMath/AI4Math-Auto-Research)

@@ -1,0 +1,25 @@
+{
+  "compaction": {
+    "enabled": true
+  },
+  "defaultThinkingLevel": "high",
+  "doubleEscapeAction": "tree",
+  "enableInstallTelemetry": false,
+  "enableSkillCommands": true,
+  "hideThinkingBlock": true,
+  "packages": [],
+  "skills": [],
+  "prompts": [],
+  "mcp": [],
+  "steeringMode": "all",
+  "treeFilterMode": "no-tools",
+  "followUpMode": "all",
+  "autocompleteMaxVisible": 7,
+  "showCacheMissNotices": true,
+  "defaultProjectTrust": "always",
+  "tuiMode": "fullscreen",
+  "fullscreenScrollbar": "always",
+  "markdown": {
+    "mermaid": "streaming"
+  }
+}

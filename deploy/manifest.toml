@@ -1,0 +1,14 @@
+# manifest.toml — AiKit 资源清单（唯一真实来源）
+# 根清单通过 includes 引用各 kit 的 manifest.toml。
+# include 合并后的资源 id 为 "<kit名>:<原id>"；根清单内联资源 id 保持原样。
+
+version = "1.0"
+includes = [
+  "paperkit/manifest.toml",
+  "researchkit/manifest.toml",
+  "reviewkit/manifest.toml",
+  "extra/manifest.toml",
+  "flowkit/manifest.toml",
+  "forgekit/manifest.toml",
+  "devkit/manifest.toml",
+]

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "plugin": ["oc-plugin-caching", "opencode-slim-system"],
+  "permission": {
+    "rtk*": "allow",
+  },
+  "formatter": {
+    "prettier": {
+      "command": ["prettier", "--write", "$FILE"],
+    },
+  },
+  "provider": {
+    "freemodel": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "FreeModel",
+      "options": {
+        "baseURL": "https://api.freemodel.dev/v1",
+        "apiKey": "{env:FREEMODEL_API_KEY}",
+      },
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt 5.4",
+        },
+      },
+    },
+  },
+  "compaction": {
+    "auto": false,
+    "prune": false,
+  },
+}

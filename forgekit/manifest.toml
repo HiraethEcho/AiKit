@@ -1,0 +1,185 @@
+# forgekit/manifest.toml — AiKit forgekit kit
+# 来源: ~/agentkit/sdd (tool-map) + AiKit reorg
+version = "1.0"
+
+[[skills]]
+id = "app-sdd"
+category = "spec"
+tags = ["lightspec"]
+path = "forgekit/skills/app-sdd"
+description = "Default workflow guide (lightspec-based). Use when starting a session or task in a lightspec project — routes to the right command, skill, or agent across the workflow (init → clarify → plan → code → review → archive). The four files (SPEC/PLAN/DESIGN/HANDOFF) hold the simple project-level view; per-change detail lives in lightspec/."
+
+[[skills]]
+id = "building"
+category = "spec"
+tags = ["build"]
+path = "forgekit/skills/building"
+description = "Implements code in thin vertical slices with quality checks, ponytail minimal code philosophy, and quick-fix/incremental/tdd/plan-driven modes — including plan execution, mismatch handling, and acceptance validation."
+
+[[skills]]
+id = "init-sdd"
+category = "spec"
+tags = ["init", "lightspec"]
+path = "forgekit/skills/init-sdd"
+description = "Initialize a project with the default (lightspec) workflow — creates `lightspec/` (copied workflow doc), writes `SPEC.md` and `PLAN.md`, updates `AGENTS.md` and `README.md`. The four files (SPEC/PLAN/DESIGN/HANDOFF) stay simple; detail lives in `lightspec/`. Use for a new project that needs proposal/archive discipline."
+
+[[skills]]
+id = "knowledge-capture"
+category = "spec"
+tags = ["archive"]
+path = "forgekit/skills/knowledge-capture"
+description = "Compound skill for capturing decisions, solutions, and lessons learned — stores to docs/solutions/ with dedup"
+
+[[skills]]
+id = "planning"
+category = "spec"
+tags = ["plan", "lightspec"]
+path = "forgekit/skills/planning"
+description = "Creates specs and breaks down work into tasks using lightspec, with quick-plan/spec/architecture modes — including vertical-slice decomposition for complex features."
+
+[[skills]]
+id = "planning-and-task-breakdown"
+category = "spec"
+tags = ["plan", "lightspec"]
+path = "forgekit/skills/planning-and-task-breakdown"
+description = "Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible."
+
+[[skills]]
+id = "reviewing"
+category = "spec"
+tags = ["review"]
+path = "forgekit/skills/reviewing"
+description = "Reviews code across five axes (correctness, readability, architecture, security, performance) with ponytail over-engineering check — plus fresh-perspective (blind-spot) and criteria-walk (acceptance verification) review modes."
+
+[[skills]]
+id = "shipping"
+category = "spec"
+tags = ["ship"]
+path = "forgekit/skills/shipping"
+description = "Prepares code for release with git workflow, documentation, and commit/release/audit modes."
+
+[[skills]]
+id = "spec-driven-development"
+category = "spec"
+tags = ["spec", "lightspec", "clarify"]
+path = "forgekit/skills/spec-driven-development"
+description = "Clarifies requirements and produces a concrete spec — SPEC.md (lite workflow) or a lightspec proposal (lightspec workflow). The sdd clarify stage's specification engine — use when requirements are unclear, ambiguous, or exist only as a vague idea, before planning begins."
+
+[[skills]]
+id = "spec-proposal"
+category = "spec"
+tags = ["spec", "lightspec"]
+path = "forgekit/skills/spec-proposal"
+description = "Scaffolds a new sdd change proposal — clarifies requirements, writes proposal/design/tasks/spec deltas, reviews with plan-reviewer, validates. The lightspec workflow's clarify-to-proposal entry — use for new features, changes, or any non-trivial work before implementation."
+
+[[skills]]
+id = "spec-router"
+category = "spec"
+tags = ["spec", "lightspec"]
+path = "forgekit/skills/spec-router"
+description = "Entry point for spec-driven development — interviews users, creates and validates specs using lightspec."
+
+[[skills]]
+id = "test-router"
+category = "spec"
+tags = ["test"]
+path = "forgekit/skills/test-router"
+description = "Detects project type, runs appropriate tests, validates against spec scenarios, and reports results."
+
+[[agents]]
+id = "builder"
+category = "spec"
+tags = ["build"]
+path = "forgekit/agents/builder.md"
+description = "Implements code in thin vertical slices with quality checks, ponytail minimal code philosophy, and incremental verification."
+
+[[agents]]
+id = "code-reviewer"
+category = "spec"
+tags = ["review"]
+path = "forgekit/agents/code-reviewer.md"
+description = "Reviews code quality across five axes (correctness, readability, architecture, security, performance) with ponytail over-engineering check."
+
+[[agents]]
+id = "documenter"
+category = "spec"
+tags = ["documentation"]
+path = "forgekit/agents/documenter.md"
+description = "Creates and updates project documentation — README, CHANGELOG, ADRs, API docs, migration guides."
+
+[[agents]]
+id = "orchestrator"
+category = "spec"
+tags = ["orchestrate", "lightspec"]
+path = "forgekit/agents/orchestrator.md"
+description = "Coordinates multi-agent SDD workflow — dispatches specialists, owns acceptance assertions, requires runtime proof before \"done\"."
+
+[[agents]]
+id = "plan-reviewer"
+category = "spec"
+tags = ["plan", "review"]
+path = "forgekit/agents/plan-reviewer.md"
+description = "Reviews plans and specs before execution — checks completeness, testability, dependency ordering, and alignment with existing architecture."
+
+[[agents]]
+id = "planner"
+category = "spec"
+tags = ["spec", "plan"]
+path = "forgekit/agents/planner.md"
+description = "Creates specs and task breakdowns for the SDD workflow using lightspec format."
+
+[[agents]]
+id = "releaser"
+category = "spec"
+tags = ["ship"]
+path = "forgekit/agents/releaser.md"
+description = "Manages releases — version bumping, changelog generation, tagging, and verification."
+
+[[commands]]
+id = "build"
+category = "spec"
+tags = ["build"]
+path = "forgekit/commands/build.md"
+description = "Implement the next task — build, verify, request review (sdd code stage)"
+
+[[commands]]
+id = "init-sdd"
+category = "spec"
+tags = ["init", "lightspec"]
+path = "forgekit/commands/init-sdd.md"
+description = "Initialize a project with the default (lightspec) workflow — lightspec/ + SPEC.md + PLAN.md. The four files stay simple; detail lives in lightspec/"
+
+[[commands]]
+id = "plan"
+category = "spec"
+tags = ["plan"]
+path = "forgekit/commands/plan.md"
+description = "Break work into small verifiable tasks — sdd plan stage. Route per the AGENTS.md workflow block"
+
+[[commands]]
+id = "review"
+category = "spec"
+tags = ["review"]
+path = "forgekit/commands/review.md"
+description = "Conduct a code review — five-axis, fresh-perspective, or criteria-walk"
+
+[[commands]]
+id = "ship"
+category = "spec"
+tags = ["ship"]
+path = "forgekit/commands/ship.md"
+description = "Run the pre-launch checklist and prepare for release (sdd ship stage)"
+
+[[commands]]
+id = "spec"
+category = "spec"
+tags = ["spec", "lightspec"]
+path = "forgekit/commands/spec.md"
+description = "Start spec-driven development — clarify, then write a structured spec (sdd clarify stage). Route per the AGENTS.md workflow block"
+
+[[commands]]
+id = "test"
+category = "spec"
+tags = ["test"]
+path = "forgekit/commands/test.md"
+description = "Run tests — TDD workflow or acceptance validation (sdd test stage)"

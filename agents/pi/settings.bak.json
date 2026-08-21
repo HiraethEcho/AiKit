@@ -1,0 +1,46 @@
+{
+  "compaction": {
+    "enabled": true
+  },
+  "defaultThinkingLevel": "high",
+  "doubleEscapeAction": "tree",
+  "enableInstallTelemetry": false,
+  "enableSkillCommands": true,
+  "hideThinkingBlock": true,
+  "packages": [
+    "~/AiKit/agent/pi/extensions/pi-toolkit",
+    "~/AiKit/agent/pi/extensions/pi-footer/",
+    "~/AiKit/agent/pi/extensions/pi-ocgo/",
+    "~/AiKit/agent/pi/extensions/pi-context-mode",
+    "npm:pi-deepseek-search",
+    "npm:pi-vision-tool",
+    "npm:@tintinweb/pi-subagents",
+    "npm:pi-dsh-minimal"
+  ],
+  "steeringMode": "all",
+  "treeFilterMode": "no-tools",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "deepseek-v4-flash",
+  "lastChangelogVersion": "0.84.2",
+  "followUpMode": "all",
+  "enabledModels": [
+    "opencode-go/kimi-k2.6",
+    "opencode/deepseek-v4-flash-free",
+    "opencode-go/qwen3.8-max",
+    "deepseek/deepseek-v4-flash",
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/deepseek-v4-pro"
+  ],
+  "autocompleteMaxVisible": 7,
+  "showCacheMissNotices": true,
+  "defaultProjectTrust": "always",
+  "tuiMode": "fullscreen",
+  "fullscreenScrollbar": "always",
+  "markdown": {
+    "mermaid": "streaming"
+  },
+  "theme": "noctalia",
+  "skillful": {
+    "hiddenSkills": []
+  }
+}

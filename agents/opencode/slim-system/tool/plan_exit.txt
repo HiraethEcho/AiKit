@@ -1,0 +1,2 @@
+Signal planning phase complete — prompts user to switch to build agent.
+Do not use Question for plan approval — this tool handles that.

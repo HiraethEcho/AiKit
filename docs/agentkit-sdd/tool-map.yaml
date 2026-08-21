@@ -1,0 +1,147 @@
+# ============================================================
+# SDD 工具清单 (tool-map)
+#
+# 档位映射 (sdd 分类 → agentkit 档位目录):
+#   minimal → code-minimal   最基础: 工作流骨架 (pickup/archive/rest/upgrade)
+#   lite    → code-lite      文件驱动工作流 (无 CLI, 四文件承载全部细节)
+#   sdd     → code           default 工作流 (lightspec 管理, 四文件简单, 细节在 lightspec/)
+#   extra   → code-extra     池: 工作流无关通用工具 (手动使用, 不入链)
+#
+# 文件均为 sdd/ 下相对路径 (agents/ skills/ commands/ 目录, 扩展名省略)
+# ============================================================
+
+lite:
+  description: 文件驱动工作流 — SPEC/PLAN/DESIGN/HANDOFF 承载全部细节, 无 proposal/validate 仪式
+  agents:
+    - lite-orchestrator      # 主编码 agent: 驱动 6 阶段循环, 分派 lite-builder/lite-test-engineer
+    - lite-plan-reviewer     # 计划审查: 切片/排序/可测性
+    - lite-builder           # 实施: 下一 PLAN.md 任务, 薄切片
+    - lite-test-engineer     # 测试: 当前切片的单测/集成/SPEC 场景
+    - lite-code-reviewer     # 审查: 五轴 (correctness/simplicity/scope/verification/security)
+  skills:
+    - app-lite-sdd           # 工作流引导: 6 阶段文件驱动循环
+    - init-lite-sdd          # 初始化: SPEC.md + PLAN.md + AGENTS.md LiteSpec 块
+    - lite-brainstorm        # clarify 1/2: 发散, 想法 → brainstorm note
+    - lite-refine            # clarify 2/2: 收敛, 想法 → SPEC.md
+    - lite-plan              # plan: SPEC.md → 分阶段 PLAN.md 勾选框
+    - lite-build             # code: 实施下一任务 + 打勾
+  commands:
+    - init-lite-sdd          # 初始化项目
+    - lite-build             # 实施下一任务
+
+sdd:
+  description: default 工作流 (lightspec) — 四文件简单, 细节在 lightspec/ (proposal/apply/archive 纪律)
+  agents:
+    - orchestrator           # 主编码 agent: 协调工作流, 分派专业 agent, 拥有验收断言
+    - planner                # 规格 + 任务拆分
+    - plan-reviewer          # 计划批评: 完整性/排序/可行性
+    - builder                # 实施: 薄垂直切片, 验证增量
+    - code-reviewer          # 审查: 五轴 + 快速模式
+    - documenter             # 文档: README/ADR/API
+    - releaser               # 发布: 版本/changelog/tag
+  skills:
+    - app-sdd                # 工作流引导: 按阶段路由 (含 clarify/test 路由表)
+    - init-sdd               # 初始化: lightspec/ + 四文件 + AGENTS.md LightSpec 块
+    - spec-proposal          # clarify: 提案脚手架 (proposal/design/tasks/spec deltas) + validate
+    - spec-driven-development # clarify: 需求澄清规格引擎
+    - planning               # plan: 入口 (quick-plan/spec/architecture 模式)
+    - planning-and-task-breakdown # plan: 深度任务分解
+    - building               # code: 薄切片实施 + 验收验证 (两工作流共用)
+    - reviewing              # review: 五轴/新视角/标准走查
+    - shipping               # ship: 发布准备
+    - knowledge-capture      # archive: 决策/方案/经验沉淀
+    - spec-router            # reference: 旧 clarify 路由, 内容已并入 app-sdd
+    - test-router            # reference: 旧 test 路由, 内容已并入 app-sdd
+  commands:
+    - init-sdd               # 初始化项目 (lightspec/)
+    - spec                   # 提案 (spec-proposal + 访谈 + plan-reviewer)
+    - plan                   # 计划 (按工作流块路由 planning / lite-plan)
+    - build                  # 实施 (lightspec-apply + coding skills)
+    - test                   # 测试
+    - review                 # 审查
+    - ship                   # 发布
+
+minimal:
+  description: code-minimal 档 — 工作流骨架, 两工作流共用 — 不含工作流逻辑, 差异由 init 写入的 AGENTS.md 工作流块决定
+  agents:
+    - orchestrator           # 也作共享件入口 (pickup/rest/upgrade 的 agent)
+  skills:
+    - pickup                 # 进度检查 + 续接: 读工作流块 + 四文件
+    - archive                # 阶段收尾: 验证 → PLAN 标记 → SPEC 决策回写 → 按块跑 lightspec archive
+    - rest                   # 暂停: PLAN.md ⏸ 注记 + HANDOFF.md
+    - upgrade                # lite → sdd 迁移: 保留四文件, 加 lightspec/ 层
+  commands:
+    - pickup
+    - archive
+    - rest
+    - upgrade
+
+extra:
+  description: 工作流无关通用工具 — 目录平铺于 skills/, 按需引用
+  agents:
+    - test-engineer          # 测试 (tdd/浏览器)
+    - security-auditor       # 安全审计
+    - architect              # 设计决策/ADR
+    - researcher             # 快速只读侦察
+    - bowser                 # Playwright 浏览器自动化
+    - general                # 通用编码
+    - deep-researcher        # 跨领域深度侦察
+    - claim-verifier         # 主张核验 (Verified/Weakened/Falsified)
+    - diff-auditor           # diff 模式枚举
+    - scope-tracer           # 调查路径追踪
+    - slice-verifier         # 切片对抗验证
+    - integration-scanner    # 反向引用查找
+    - artifact-code-reviewer # 终稿对抗审查
+    - codebase-locator       # 超级 grep/find/ls
+    - codebase-analyzer      # 深度组件分析
+    - codebase-pattern-finder # 相似实现查找
+  skills:
+    # --- coding ---
+    - test-driven-development
+    - code-review-and-quality
+    - source-driven-development
+    - api-and-interface-design
+    - frontend-ui-engineering
+    - browser-testing-with-devtools
+    - ci-cd-and-automation
+    - code-simplification
+    - debugging-and-error-recovery
+    - deprecation-and-migration
+    - performance-optimization
+    - security-and-hardening
+    - context-engineering
+    - git-workflow-and-versioning
+    - documentation-and-adrs
+    # --- 推理 ---
+    - think
+    - expert-panel
+    - advisor
+    - orchestrate
+    - discovery
+    - idea-refine
+    - grill-me
+    - interview-me
+    - peer-review
+    # --- 系统创作 ---
+    - craft-skill
+    - designing-agents
+    # --- 检索 ---
+    - context7
+    # --- 打包/系统 ---
+    - aur-guides
+    # --- 极简 (ponytail 家族) ---
+    - ponytail
+    - ponytail-review
+    - ponytail-audit
+    - ponytail-debt
+    - ponytail-gain
+    - ponytail-help
+  commands:
+    - code-simplify          # ponytail 极简审查
+    - design-agent           # 创作 agent/skill/command
+    - ponytail               # 设置极简强度
+    - ponytail-review
+    - ponytail-audit
+    - ponytail-debt
+    - ponytail-gain
+    - ponytail-help

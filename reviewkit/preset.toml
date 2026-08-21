@@ -1,0 +1,65 @@
+version = "1.0"
+
+[[preset]]
+id = "full-review"
+description = "完整多视角审稿（EIC + 3 评审 + 反方）"
+skills = ["math-reviewer", "manuscript-review", "rigor-review", "proof-obligation-audit", "claim-evidence-ledger"]
+agents = ["math-reviewer", "eic_agent", "domain_reviewer_agent", "methodology_reviewer_agent", "perspective_reviewer_agent", "devils_advocate_reviewer_agent", "field_analyst_agent", "editorial_synthesizer_agent"]
+commands = ["ars-review"]
+mcp = []
+
+[[preset]]
+id = "quick"
+description = "快速评估"
+skills = ["math-reviewer"]
+agents = ["math-reviewer", "eic_agent"]
+commands = ["ars-quick-review"]
+mcp = []
+
+[[preset]]
+id = "re-review"
+description = "再审（修订验证）"
+skills = ["math-reviewer", "manuscript-review"]
+agents = ["math-reviewer", "eic_agent", "methodology_reviewer_agent"]
+commands = ["ars-re-review"]
+mcp = []
+
+[[preset]]
+id = "methodology"
+description = "方法聚焦审稿"
+skills = ["math-reviewer", "rigor-review", "proof-obligation-audit"]
+agents = ["methodology_reviewer_agent", "math-reviewer"]
+commands = ["ars-methodology-review"]
+mcp = []
+
+[[preset]]
+id = "guided"
+description = "引导式审稿"
+skills = ["math-reviewer"]
+agents = ["math-reviewer"]
+commands = ["ars-guided-review"]
+mcp = []
+
+[[preset]]
+id = "calibration"
+description = "审稿人校准"
+skills = ["math-reviewer"]
+agents = ["eic_agent", "editorial_synthesizer_agent"]
+commands = ["ars-calibration"]
+mcp = []
+
+[[preset]]
+id = "inline"
+description = "编译安全内联批注"
+skills = ["inline-paper-critic", "writing-commenter"]
+agents = ["reviewer"]
+commands = ["simulate-reviewer"]
+mcp = []
+
+[[preset]]
+id = "audit-math"
+description = "数学正确性审计"
+skills = ["manuscript-review", "rigor-review", "proof-obligation-audit", "claim-evidence-ledger"]
+agents = ["math-reviewer"]
+commands = ["ars-methodology-review"]
+mcp = []

@@ -1,0 +1,41 @@
+provider = "ollama-cloud"
+model = "minimax-m3"
+compact_enabled = true
+default_permission_mode = "standard"
+default_prompt = "code"
+edit_system = "hashedit"
+
+[custom_providers.deepseek]
+provider_type = "openai"
+base_url = "https://api.deepseek.com/v1"
+api_key_env = "DEEPSEEK_API_KEY"
+[custom_providers.ollama-cloud]
+provider_type = "openai"
+base_url = "https://ollama.com/v1/"
+api_key_env = "OLLAMA_API_KEY"
+[custom_providers.ollama-local]
+provider_type = "openai"
+base_url = "http://localhost:11434/v1/"
+api_key_env = "TERM"
+[custom_providers.ollama-wsl]
+provider_type = "openai"
+base_url = "https://16wsllama.keinmal.top/v1/"
+api_key_env = "WSL_OLLAMA_API_KEY"
+
+[quick_models.deepseek-flash]
+provider = "deepseek"
+model = "deepseek-v4-flash"
+[quick_models.qwen3-coder-next]
+provider = "ollama-cloud"
+model = "qwen3-coder-next"
+[quick_models.minimax-m3]
+provider = "ollama-cloud"
+model = "minimax-m3"
+[quick_models.ornith]
+provider = "ollama-local"
+model = "ornith:9b"
+
+[chain]
+brainstorm-to-plan = true
+plan-to-code = true
+code-to-review = false

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "lean-ctx": {
+      "args": [
+        "mcp"
+      ],
+      "command": "/usr/bin/lean-ctx",
+      "env": {
+        "LEAN_CTX_DATA_DIR": "/home/hiraeth/.local/share/lean-ctx"
+      },
+      "tools": [
+        "*"
+      ],
+      "type": "local"
+    }
+  }
+}

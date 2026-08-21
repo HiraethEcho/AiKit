@@ -1,0 +1,25 @@
+{
+  "name": "pi-board",
+  "version": "0.2.0",
+  "description": "Blackboard workspace for pi: pin project files & history messages, annotate / modify, assemble & send. Zero-dependency.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "pi-extension"
+  ],
+  "files": [
+    "index.ts",
+    "shared",
+    "client",
+    "README.md"
+  ],
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

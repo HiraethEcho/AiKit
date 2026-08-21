@@ -1,0 +1,4 @@
+Spawn a sub-agent with independent context and tool access.
+Required: subagent_type, short description, self-contained prompt.
+task_id resumes an existing sub-session. User sees only your summary.
+Launch independent sub-agents in parallel in one turn.

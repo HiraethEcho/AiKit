@@ -1,0 +1,89 @@
+version = "1.0"
+
+[[preset]]
+id = "full-pipeline"
+description = "从零写论文全流程（Phase 0-5 agent 链）"
+skills = ["theorem-proof-writing", "paper-skeleton", "notation-consistency", "formula-readability", "latex-build-audit", "citation-check"]
+agents = ["intake", "structure-architect", "theorem-writer", "abstract-bilingual", "formatter"]
+commands = ["outline-gen", "abstract", "introduction", "section-expand", "latex-compile", "latex-audit"]
+mcp = []
+
+[[preset]]
+id = "plan"
+description = "论文骨架规划"
+skills = ["paper-skeleton", "theorem-proof-writing"]
+agents = ["structure-architect"]
+commands = ["outline-gen", "method"]
+mcp = []
+
+[[preset]]
+id = "write"
+description = "逐节撰写"
+skills = ["theorem-proof-writing", "notation-consistency", "formula-readability"]
+agents = ["theorem-writer"]
+commands = ["proof-write", "section-expand", "introduction", "experiment-analysis"]
+mcp = []
+
+[[preset]]
+id = "revision"
+description = "收到审稿意见后修改"
+skills = ["mathematical-enhancer", "notation-consistency", "formula-readability"]
+agents = ["revision-coach", "revision_coach_agent"]
+commands = ["rebuttal", "ars-revision", "ars-revision-coach", "ars-rebuttal-audit"]
+mcp = []
+
+[[preset]]
+id = "beamer"
+description = "数学 Beamer 演示"
+skills = ["math-beamer"]
+agents = []
+commands = ["academic-talk", "architecture-diagram", "figure-caption"]
+mcp = []
+
+[[preset]]
+id = "latex"
+description = "LaTeX 编译与审计"
+skills = ["latex-build-audit"]
+agents = []
+commands = ["latex-compile", "latex-audit"]
+mcp = []
+
+[[preset]]
+id = "citation"
+description = "引用核实"
+skills = ["citation-check"]
+agents = ["math-verifier", "citation_compliance_agent"]
+commands = ["ars-citation-check"]
+mcp = []
+
+[[preset]]
+id = "polish"
+description = "润色去 AI 味"
+skills = []
+agents = []
+commands = ["polish", "deai", "en-shorten", "en-expand", "logic-check", "abbrev-check"]
+mcp = []
+
+[[preset]]
+id = "mrs-pipeline"
+description = "mrs math-paper 12-agent 流水线"
+skills = ["math-paper"]
+agents = ["math-writer", "intake_agent", "literature_strategist_agent", "structure_architect_agent", "argument_builder_agent", "draft_writer_agent", "abstract_bilingual_agent", "citation_compliance_agent", "formatter_agent", "peer_reviewer_agent", "socratic_mentor_agent", "visualization_agent"]
+commands = ["ars-plan", "ars-outline", "ars-abstract", "ars-format-convert"]
+mcp = []
+
+[[preset]]
+id = "grant"
+description = "基金申请书与研究计划"
+skills = []
+agents = []
+commands = ["grant-proposal", "research-proposal", "research-gap"]
+mcp = []
+
+[[preset]]
+id = "figures"
+description = "图表制作与题注"
+skills = ["tikz-figure-builder"]
+agents = ["visualization_agent"]
+commands = ["architecture-diagram", "chart-recommend", "figure-caption", "table-caption"]
+mcp = []
