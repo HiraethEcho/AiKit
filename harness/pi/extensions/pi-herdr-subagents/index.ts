@@ -1513,6 +1513,9 @@ async function relayPendingQuestion(running: RunningSubagent, payload: any): Pro
     } else {
       reply = `User answered:\n${buildRelayAnswerText(relayed.questions, relayed.answers)}`;
     }
+    if (!relayed.cancelled && relayed.note?.trim()) {
+      reply += `\nNote: ${relayed.note.trim()}`;
+    }
     if (running.backend === "rpc" && running.rpc) {
       // RPC steer only queues into a RUNNING agent; a child parked by
       // ask_question is idle, so use prompt to start a fresh turn with the

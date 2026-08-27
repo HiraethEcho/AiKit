@@ -53,6 +53,8 @@ interface AskUserQuestionResultDetails {
 	mode: AskUserQuestionMode;
 	answers: AskAnswer[];
 	message?: string;
+	/** Optional note appended by the user on the submit tab. */
+	note?: string;
 	/** Present when multiple questions were asked in one window. */
 	questions?: Array<{
 		id: string;
@@ -618,6 +620,7 @@ function buildQuestionsResult(
 	questions: ResolvedAskQuestion[],
 	answers: Map<string, AskAnswer[]>,
 	message?: string,
+	note?: string,
 ) {
 	const questionResults = questions.map((q) => ({
 		id: q.id,
@@ -628,12 +631,13 @@ function buildQuestionsResult(
 		answers: answers.get(q.id) ?? [],
 	}));
 	const flat = questionResults.flatMap((q) => q.answers);
-	const text = questionResults
+	let text = questionResults
 		.map((q) => {
 			if (q.answers.length === 0) return `${q.label}: —`;
 			return `${q.label}: ${q.answers.map(formatAnswerForModel).join("; ")}`;
 		})
 		.join("\n");
+	if (note && note.trim()) text += `\nNote: ${note.trim()}`;
 	return {
 		content: [{ type: "text" as const, text }],
 		details: {
@@ -643,6 +647,7 @@ function buildQuestionsResult(
 			answers: flat,
 			questions: questionResults,
 			...(message ? { message } : {}),
+			...(note && note.trim() ? { note: note.trim() } : {}),
 		} as AskUserQuestionResultDetails,
 	};
 }
@@ -667,10 +672,10 @@ function unavailableQuestionsResult(questions: ResolvedAskQuestion[], message: s
 async function runAskQuestionsUI(
 	ctx: any,
 	questions: ResolvedAskQuestion[],
-): Promise<{ cancelled: boolean; answers: Map<string, AskAnswer[]> }> {
+): Promise<{ cancelled: boolean; answers: Map<string, AskAnswer[]>; note?: string }> {
 	const totalTabs = questions.length + 1; // + Submit
 
-	return ctx.ui.custom((tui: any, theme: any, _kb: any, done: (result: { cancelled: boolean; answers: Map<string, AskAnswer[]> }) => void) => {
+	return ctx.ui.custom((tui: any, theme: any, _kb: any, done: (result: { cancelled: boolean; answers: Map<string, AskAnswer[]>; note?: string }) => void) => {
 		let currentTab = 0;
 		let optionIndex = 0;
 		let editMode = false;
@@ -678,6 +683,7 @@ async function runAskQuestionsUI(
 		let cachedLines: string[] | undefined;
 		let cachedWidth = -1;
 		const answers = new Map<string, AskAnswer[]>();
+		let note = "";
 		const editor = new Editor(tui, createEditorTheme(theme));
 
 		function refresh() {
@@ -774,6 +780,14 @@ async function runAskQuestionsUI(
 
 		editor.onSubmit = (value) => {
 			if (!editQuestionId) return;
+			if (editQuestionId === "__note__") {
+				note = value.trim();
+				editMode = false;
+				editQuestionId = null;
+				editor.setText("");
+				refresh();
+				return;
+			}
 			const q = questions.find((item) => item.id === editQuestionId);
 			if (!q) return;
 			const trimmed = value.trim() || "(no response)";
@@ -826,8 +840,25 @@ async function runAskQuestionsUI(
 			}
 
 			if (currentTab === questions.length) {
-				if (matchesKey(data, Key.enter) && allAnswered()) {
-					done({ cancelled: false, answers });
+				if (matchesKey(data, Key.up)) {
+					optionIndex = Math.max(0, optionIndex - 1);
+					refresh();
+					return;
+				}
+				if (matchesKey(data, Key.down)) {
+					optionIndex = Math.min(1, optionIndex + 1);
+					refresh();
+					return;
+				}
+				if (matchesKey(data, Key.enter)) {
+					if (optionIndex === 0 && allAnswered()) {
+						done({ cancelled: false, answers, note: note.trim() || undefined });
+					} else if (optionIndex === 1) {
+						editMode = true;
+						editQuestionId = "__note__";
+						editor.setText(note);
+						refresh();
+					}
 				} else if (matchesKey(data, Key.escape)) {
 					done({ cancelled: true, answers });
 				}
@@ -913,20 +944,37 @@ async function runAskQuestionsUI(
 			}
 
 			if (currentTab === questions.length) {
-				addWrapped(lines, theme.fg("accent", theme.bold("Ready to submit")), rw, " ");
-				lines.push("");
-				for (const q of questions) {
-					const list = answers.get(q.id) ?? [];
-					if (list.length > 0) {
-						addWrapped(lines, `${theme.fg("muted", `${q.label}: `)}${theme.fg("text", list.map(formatAnswerForModel).join("; "))}`, rw, " ");
-					} else {
-						addWrapped(lines, `${theme.fg("muted", `${q.label}: `)}${theme.fg("warning", "—")}`, rw, " ");
+				if (editMode && editQuestionId === "__note__") {
+					addWrapped(lines, theme.fg("muted", "Append a note:"), rw, " ");
+					for (const line of editor.render(Math.max(1, rw - 2))) add(` ${line}`);
+					lines.push("");
+					addWrapped(lines, theme.fg("dim", "Enter to save • Esc to cancel"), rw, " ");
+				} else {
+					addWrapped(lines, theme.fg("accent", theme.bold("Ready to submit")), rw, " ");
+					lines.push("");
+					for (const q of questions) {
+						const list = answers.get(q.id) ?? [];
+						if (list.length > 0) {
+							addWrapped(lines, `${theme.fg("muted", `${q.label}: `)}${theme.fg("text", list.map(formatAnswerForModel).join("; "))}`, rw, " ");
+						} else {
+							addWrapped(lines, `${theme.fg("muted", `${q.label}: `)}${theme.fg("warning", "—")}`, rw, " ");
+						}
+					}
+					lines.push("");
+					const canSubmit = allAnswered();
+					const submitLabel = canSubmit ? "✓ Submit" : "Submit (answer all questions first)";
+					const submitRow = optionIndex === 0
+						? theme.fg("accent", `> ${submitLabel}`)
+						: theme.fg(canSubmit ? "success" : "dim", `  ${submitLabel}`);
+					add(submitRow);
+					const noteRow = optionIndex === 1
+						? theme.fg("accent", "> ✎ Append a note")
+						: theme.fg("text", "  ✎ Append a note");
+					add(noteRow);
+					if (note && note.trim()) {
+						addWrapped(lines, theme.fg("muted", `    Note: ${note.trim()}`), rw, " ");
 					}
 				}
-				lines.push("");
-				addWrapped(lines, allAnswered()
-					? theme.fg("success", "Enter to submit")
-					: theme.fg("warning", "Unanswered questions"), rw, " ");
 			} else {
 				const q = currentQuestion()!;
 				addWrapped(lines, theme.fg("text", q.question), rw, " ");
@@ -965,9 +1013,11 @@ async function runAskQuestionsUI(
 
 			lines.push("");
 			if (!editMode) {
-				addWrapped(lines, theme.fg("dim", questions.length > 1
-					? "Tab/←→ navigate • ↑↓ select • Enter confirm • Esc cancel"
-					: "↑↓ navigate • Enter select • Esc cancel"), rw, " ");
+				addWrapped(lines, theme.fg("dim", currentTab === questions.length
+					? "↑↓ select • Enter confirm / edit note • Esc cancel"
+					: questions.length > 1
+						? "Tab/←→ navigate • ↑↓ select • Enter confirm • Esc cancel"
+						: "↑↓ navigate • Enter select • Esc cancel"), rw, " ");
 			}
 			lines.push(theme.fg("accent", "─".repeat(rw)));
 
@@ -1030,11 +1080,11 @@ export interface RelayQuestionInput {
 export async function askUserQuestionsDirect(
 	ctx: any,
 	inputs: RelayQuestionInput[],
-): Promise<{ cancelled: boolean; questions: ResolvedAskQuestion[]; answers: Map<string, AskAnswer[]> }> {
+): Promise<{ cancelled: boolean; questions: ResolvedAskQuestion[]; answers: Map<string, AskAnswer[]>; note?: string }> {
 	const questions = resolveAskQuestions({ questions: inputs });
 	if (!ctx?.hasUI) return { cancelled: true, questions, answers: new Map() };
 	const result = await withUILock(() => runAskQuestionsUI(ctx, questions));
-	return { cancelled: result.cancelled, questions, answers: result.answers };
+	return { cancelled: result.cancelled, questions, answers: result.answers, note: result.note };
 }
 
 /** One line per question: `Q1: <answer list>` — used to ship replies back to the child. */
@@ -1096,7 +1146,7 @@ export default function askUserQuestion(pi: ExtensionAPI) {
 				if (questions.length > 1) {
 					const result = await runAskQuestionsUI(ctx, questions);
 					if (result.cancelled) return cancelledQuestionsResult(questions);
-					return buildQuestionsResult("answered", questions, result.answers);
+					return buildQuestionsResult("answered", questions, result.answers, undefined, result.note);
 				}
 
 				const { question, context, mode, options } = first;
