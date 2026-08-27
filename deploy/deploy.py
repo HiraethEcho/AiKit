@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """AiKit deploy — Phase 1 symlink deployment CLI.
 
+Generation of manifest/preset/agents data files is handled by the standalone
+`gen.py` (run `python3 gen.py`). This CLI deploys (symlinks/agents settings).
+
 Commands:
   deploy.py                 interactive TUI
   deploy.py list [--cat C --tag T]   list all resources
   deploy.py doctor          validate manifests/presets/paths
   deploy.py scan [--write]  diff real subdirs against manifest (--write: add stubs)
-  deploy.py gen [--format lua|json|yaml|all]   generate data files (default all)
-  deploy.py gen-lua         alias for gen --format lua
+  deploy.py agents          preview pi settings + .agents plan
+  deploy.py agents --project <proj>   write <proj>/.agents + .pi
+  deploy.py agents --global           write ~/.agents + ~/.pi
 
 list/scan filters: --cat <cat> (repeatable) --tag <tag> (repeatable)
 """
@@ -28,7 +32,14 @@ except ImportError:  # pragma: no cover
 DEPLOY = pathlib.Path(__file__).resolve().parent
 ROOT = DEPLOY.parent  # repo root
 HOME = pathlib.Path.home()
-AGENTS_TOML = ROOT / "agents" / "agents.toml"  # agent 配置唯一真源
+import sys
+sys.path.insert(0, str(ROOT))
+from gen import (
+    load_manifest, load_presets, load_agents,
+    expand_preset, _resolve_ref, expand_presets_by_id,
+    mcp_json_data, render_pi_settings, build_data,
+    _load_toml, AGENTS_TOML, gen_lua,
+)
 SECTIONS = ("skills", "agents", "commands", "mcp")
 TARGET_DIRS = {
     "skills": ".agents/skills",
@@ -40,142 +51,16 @@ TARGET_DIRS = {
 
 # ---------------------------------------------------------------- toml utils
 
-def _load_toml(path: pathlib.Path) -> dict:
-    with path.open("rb") as f:
-        return tomllib.load(f)
 
 
-def _check_entries(path: pathlib.Path, data: dict) -> list[str]:
-    errs = []
-    required = {"id", "category", "tags", "path", "description"}
-    for sec in SECTIONS:
-        entries = data.get(sec, [])
-        seen = set()
-        for i, e in enumerate(entries):
-            missing = required - set(e)
-            if missing:
-                errs.append(f"{path}: {sec}[{i}] missing {sorted(missing)}")
-            if e.get("id") in seen:
-                errs.append(f"{path}: {sec} duplicate id {e.get('id')!r}")
-            seen.add(e.get("id"))
-    return errs
 
 
-def load_manifest() -> dict:
-    """Load deploy/manifest.toml, resolve includes (relative to repo root)."""
-    root_data = _load_toml(DEPLOY / "manifest.toml")
-    errs = _check_entries(DEPLOY / "manifest.toml", root_data)
-    merged = {s: [] for s in SECTIONS}
-    used = {s: set() for s in SECTIONS}
-
-    def add(entries, section, qualifier, path):
-        for e in entries:
-            raw_id = e["id"]
-            qual_id = f"{qualifier}:{raw_id}" if qualifier else raw_id
-            if qual_id in used[section]:
-                raise ValueError(f"duplicate qualified id: {section}:{qual_id}")
-            used[section].add(qual_id)
-            item = dict(e)
-            item["_qual_id"] = qual_id
-            item["_kit"] = qualifier
-            item["_sec"] = section
-            item["_manifest"] = str(path)
-            merged[section].append(item)
-
-    for sec in SECTIONS:
-        for e in root_data.get(sec, []):
-            add([e], sec, None, DEPLOY / "manifest.toml")
-
-    for inc in root_data.get("includes", []):
-        p = ROOT / inc
-        if not p.exists():
-            errs.append(f"include missing: {inc}")
-            continue
-        data = _load_toml(p)
-        errs += _check_entries(p, data)
-        qualifier = p.parent.name
-        for sec in SECTIONS:
-            for e in data.get(sec, []):
-                add([e], sec, qualifier, p)
-
-    if errs:
-        raise ValueError("\n".join(errs))
-    return merged
 
 
-def load_presets() -> list[dict]:
-    """Read deploy/preset.toml includes; fallback: kit glob excluding deploy/."""
-    out: list[dict] = []
-    root_p = DEPLOY / "preset.toml"
-    if root_p.exists():
-        root_data = _load_toml(root_p)
-        for pre in root_data.get("preset", []):
-            item = dict(pre)
-            item["_kit"] = None
-            item["_id"] = pre["id"]
-            out.append(item)
-        for inc in root_data.get("includes", []):
-            p = ROOT / inc
-            if not p.exists():
-                continue
-            data = _load_toml(p)
-            qualifier = p.parent.name
-            for pre in data.get("preset", []):
-                item = dict(pre)
-                item["_kit"] = qualifier
-                item["_id"] = f"{qualifier}:{pre['id']}"
-                out.append(item)
-    else:
-        for p in sorted(ROOT.glob("*/preset.toml")):
-            if p.parent.name == "deploy":
-                continue
-            data = _load_toml(p)
-            kit = p.parent.name
-            for pre in data.get("preset", []):
-                item = dict(pre)
-                item["_kit"] = kit
-                item["_id"] = f"{kit}:{pre['id']}"
-                out.append(item)
-    return out
 
 
-def expand_preset(preset: dict, manifest: dict) -> list[dict]:
-    out: list[dict] = []
-    by_kit = {}
-    for sec in SECTIONS:
-        for e in manifest[sec]:
-            by_kit.setdefault(e["_kit"], []).append(e)
-
-    kits = preset.get("kits")
-    has_refs = any(preset.get(sec) for sec in SECTIONS)
-    if kits is None and not has_refs and preset["_kit"]:
-        kits = [preset["_kit"]]
-    for kit in kits or []:
-        for e in by_kit.get(kit, []):
-            if e not in out:
-                out.append(e)
-
-    for sec in SECTIONS:
-        for ref in preset.get(sec, []):
-            hit = _resolve_ref(ref, manifest, sec, preset["_kit"])
-            if hit and hit not in out:
-                out.append(hit)
-    return out
 
 
-def _resolve_ref(ref: str, manifest: dict, section: str, kit: str | None = None):
-    entries = manifest.get(section, [])
-    if kit:
-        for e in entries:
-            if e["_kit"] == kit and e["id"] == ref:
-                return e
-    for e in entries:
-        if e["_qual_id"] == ref:
-            return e
-    for e in entries:
-        if e["_qual_id"].endswith(":" + ref):
-            return e
-    return None
 
 
 # ---------------------------------------------------------------- planning
@@ -240,65 +125,10 @@ def apply_link(entry: dict, ask=None) -> str:
 
 # ---------------------------------------------------------------- lua gen
 
-def lua_repr(obj) -> str:
-    if isinstance(obj, bool):
-        return "true" if obj else "false"
-    if obj is None:
-        return "nil"
-    if isinstance(obj, (int, float)):
-        return str(obj)
-    if isinstance(obj, str):
-        return lua_string(obj)
-    if isinstance(obj, list):
-        return "{ " + ", ".join(lua_repr(x) for x in obj) + " }"
-    if isinstance(obj, dict):
-        return "{ " + ", ".join(f"[{lua_string(k)}] = {lua_repr(v)}" for k, v in obj.items()) + " }"
-    raise TypeError(type(obj))
 
 
-def lua_string(s: str) -> str:
-    if "\n" in s or "]]" in s:
-        level = 1
-        while ("]" * level) in s:
-            level += 1
-        return f"[{'='*level}[\n{s}\n]{'='*level}]"
-    esc = s.replace("\\", "\\\\").replace('"', '\\"').replace("\r", "\\r").replace("\n", "\\n")
-    return f'"{esc}"'
 
 
-def build_data():
-    manifest = load_manifest()
-    presets = load_presets()
-    agents = _load_toml(AGENTS_TOML) if AGENTS_TOML.exists() else {}
-
-    def clean_entry(e):
-        return {
-            "id": e["_qual_id"],
-            "kit": e.get("_kit") or "",
-            "category": e.get("category", ""),
-            "tags": e.get("tags", []),
-            "path": e["path"],
-            "description": e.get("description", ""),
-        }
-
-    manifest_data = {"version": "1.0"}
-    for sec in SECTIONS:
-        manifest_data[sec] = [clean_entry(e) for e in manifest[sec]]
-
-    def clean_preset(p):
-        return {
-            "id": p["_id"],
-            "kit": p.get("_kit") or "",
-            "description": p.get("description", ""),
-            "kits": p.get("kits", []),
-            "skills": p.get("skills", []),
-            "agents": p.get("agents", []),
-            "commands": p.get("commands", []),
-            "mcp": p.get("mcp", []),
-        }
-
-    presets_data = {"version": "1.0", "preset": [clean_preset(p) for p in presets]}
-    return manifest_data, presets_data, agents
 
 
 def _atomic_write(path: pathlib.Path, text: str):
@@ -307,105 +137,21 @@ def _atomic_write(path: pathlib.Path, text: str):
     tmp.replace(path)
 
 
-def gen_lua():
-    manifest_data, presets_data, agents = build_data()
-    files = {
-        "manifest.lua": manifest_data,
-        "preset.lua": presets_data,
-        "agents.lua": agents,
-    }
-    for name, data in files.items():
-        src = name.replace(".lua", ".toml")
-        header = f"-- GENERATED FROM {src} by deploy/deploy.py gen. DO NOT EDIT.\n"
-        body = lua_repr(data)
-        _atomic_write(DEPLOY / name, header + "return " + body + "\n")
-    print("gen: manifest.lua preset.lua agents.lua written")
 
 
-def gen_json():
-    import json as _json
-    manifest_data, presets_data, agents = build_data()
-    files = {
-        "manifest.json": manifest_data,
-        "preset.json": presets_data,
-        "agents.json": agents,
-    }
-    for name, data in files.items():
-        _atomic_write(DEPLOY / name, _json.dumps(data, indent=2, ensure_ascii=False) + "\n")
-    print("gen: manifest.json preset.json agents.json written")
 
 
 # minimal YAML emitter (zero-dep, only for generated sidecar files)
-def _yaml_inline(v):
-    if v is None:
-        return "null"
-    if isinstance(v, bool):
-        return "true" if v else "false"
-    if isinstance(v, (int, float)):
-        return str(v)
-    if isinstance(v, str):
-        return json.dumps(v, ensure_ascii=False)
-    return None
 
 
-def _yaml_key(k: str) -> str:
-    if k and all(c.isalnum() or c in "_-./" for c in k):
-        return k
-    return json.dumps(k, ensure_ascii=False)
 
 
-def _yaml_block(obj, ind="") -> str:
-    if isinstance(obj, dict):
-        if not obj:
-            return ind + "{}\n"
-        out = []
-        for k, v in obj.items():
-            iv = _yaml_inline(v)
-            if iv is not None:
-                out.append(f"{ind}{_yaml_key(k)}: {iv}")
-            else:
-                out.append(f"{ind}{_yaml_key(k)}:")
-                out.append(_yaml_block(v, ind + "  "))
-        return "\n".join(out) + "\n"
-    if isinstance(obj, list):
-        if not obj:
-            return ind + "[]\n"
-        out = []
-        for v in obj:
-            iv = _yaml_inline(v)
-            if iv is not None:
-                out.append(f"{ind}- {iv}")
-            else:
-                out.append(f"{ind}-")
-                out.append(_yaml_block(v, ind + "  "))
-        return "\n".join(out) + "\n"
-    return ind + str(obj) + "\n"
 
 
-def _yaml_dump(data: dict) -> str:
-    return _yaml_block(data)
 
 
-def gen_yaml():
-    manifest_data, presets_data, agents = build_data()
-    files = {
-        "manifest.yaml": ("manifest.toml / preset.toml", manifest_data),
-        "preset.yaml": ("preset.toml", presets_data),
-        "agents.yaml": ("agents/agents.toml", agents),
-    }
-    for name, (src, data) in files.items():
-        header = f"# GENERATED FROM {src} by deploy/deploy.py gen. DO NOT EDIT.\n"
-        _atomic_write(DEPLOY / name, header + _yaml_dump(data))
-    print("gen: manifest.yaml preset.yaml agents.yaml written")
 
 
-def gen(fmt: str):
-    if fmt in ("lua", "all"):
-        gen_lua()
-    if fmt in ("json", "all"):
-        gen_json()
-    if fmt in ("yaml", "all"):
-        gen_yaml()
 
 
 # ---------------------------------------------------------------- commands
@@ -857,62 +603,12 @@ def run_tui(stdscr, args):
 
 # ---------------------------------------------------------------- agents render
 
-def load_agents() -> dict:
-    return _load_toml(AGENTS_TOML) if AGENTS_TOML.exists() else {}
 
 
-def expand_presets_by_id(preset_ids: list[str], manifest, presets) -> list[dict]:
-    out = []
-    for pid in preset_ids:
-        pre = next((x for x in presets if x["_id"] == pid), None)
-        if pre is None:
-            raise SystemExit(f"bad preset ref: {pid}")
-        for e in expand_preset(pre, manifest):
-            if e not in out:
-                out.append(e)
-    return out
 
 
-def mcp_json_data(agents_cfg: dict) -> dict:
-    servers = (agents_cfg.get("agents") or {}).get("mcp") or {}
-    return {"mcpServers": servers}
 
 
-def render_pi_settings():
-    agents_cfg = load_agents()
-    pi = agents_cfg.get("pi", {})
-    if not pi:
-        raise SystemExit("agents/agents.toml: missing [pi]")
-    template_p = ROOT / pi["template"]
-    if not template_p.exists():
-        raise SystemExit(f"template missing: {template_p}")
-    data = json.loads(template_p.read_text())
-
-    packages = []
-    for p in pi.get("packages", []):
-        kind = p.get("type")
-        if kind == "npm":
-            packages.append("npm:" + p["name"])
-        elif kind == "local":
-            packages.append(str((ROOT / p["path"]).resolve()))
-        else:
-            raise SystemExit(f"bad pi.packages type: {kind!r}")
-    data["packages"] = packages
-
-    manifest = load_manifest()
-    presets = load_presets()
-    skills = []
-    for pid in pi.get("skills", {}).get("presets", []):
-        pre = next((x for x in presets if x["_id"] == pid), None)
-        if pre is None:
-            raise SystemExit(f"bad preset ref: {pid}")
-        for e in expand_preset(pre, manifest):
-            if e["_sec"] == "skills":
-                skills.append(e["path"].replace("/skills/", "/"))
-    data["skills"] = sorted(set(skills))
-    data["prompts"] = [str((ROOT / d).resolve()) for d in pi.get("commands", {}).get("dirs", [])]
-    data["mcp"] = list(pi.get("mcp", {}).get("names", []))
-    return data
 
 
 def _target_root(args) -> pathlib.Path | None:

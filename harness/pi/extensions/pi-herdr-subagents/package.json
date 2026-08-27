@@ -1,0 +1,15 @@
+{
+  "name": "pi-herdr-subagents",
+  "version": "0.1.0",
+  "description": "Async subagents for pi — Herdr split panes when pi runs inside Herdr, headless pi RPC fallback otherwise",
+  "type": "module",
+  "private": true,
+  "pi": {
+    "extensions": ["./index.ts"]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "@sinclair/typebox": "*"
+  }
+}

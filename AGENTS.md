@@ -23,13 +23,13 @@ agents/          # coding agents and their extensions/plugins
   codex/
   claude-code/
 persona/         # custom personas (build/general/scout/audit/plan/reviewer)
-base/            # basic tools — 内容手动挑选中 (暂空, 骨架在 flowkit)
+base/            # basic tools — 内容手动挑选中 (暂空, 骨架在 codekit)
   agents/        # (待填)
   skills/        # foundation skills (e.g. grill-me, handoff)
   commands/      # handoff, pickup
 modules          # submodule remotes — 仅记录, 不 clone
-flowkit/         # 轻 workflow (lite 全套, 文件驱动): conductor/slicer/maker/tester/inspector
-forgekit/        # 重 workflow (SDD/lightspec): orchestrator/planner/plan-reviewer/builder/code-reviewer/documenter/releaser
+codekit/         # 轻 workflow (lite 全套, 文件驱动): conductor/slicer/maker/tester/inspector
+speckit/        # 重 workflow (SDD/lightspec): orchestrator/planner/plan-reviewer/builder/code-reviewer/documenter/releaser
 devkit/          # code-extra 池: 工作流外工具 (context7, ponytail-*, tdd, security …) — 不进 workflow preset
 extra/           # extra 工具: 文献/ocr/翻译/格式 + agentkit extra 32 skills — 不进 workflow preset
 paperkit/        # 写论文 (+ 收到 review 后修改)
@@ -58,4 +58,4 @@ docs/            # 文档 (sdd docs → docs/agentkit-sdd/)
 2. Check whether a directory already exists before creating files.
 3. Add or update content under the appropriate top-level directory.
 4. Keep this file in sync when the layout changes materially.
-5. Agent 配置单一真源 `agents/agents.toml`；`deploy.py gen` 后 `deploy.py agents` 写目标 。
+5. Agent 配置单一真源 `harness/agents.toml`；`gen.py` 生成后 `deploy.py agents` 写目标 。

@@ -1,4 +1,4 @@
-# GENERATED FROM manifest.toml / preset.toml by deploy/deploy.py gen. DO NOT EDIT.
+# GENERATED FROM deploy/manifest.toml / preset.toml by gen.py. DO NOT EDIT.
 version: "1.0"
 skills:
   -
@@ -828,239 +828,239 @@ skills:
     description: "微信读书助手 — 搜索书籍、管理书架、查看笔记划线、浏览书评、阅读统计、发现推荐好书"
 
   -
-    id: "flowkit:app"
-    kit: "flowkit"
+    id: "codekit:app"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
 
-    path: "flowkit/skills/app"
+    path: "codekit/skills/app"
     description: "Lite workflow guide (file-driven, CLI-free) — use when starting a session or task in a lite project. 6-stage loop — brainstorm → refine (SPEC.md) → plan (PLAN.md) → build → review → archive, routed through /init /task /archive. The four files carry all detail."
 
   -
-    id: "flowkit:archive"
-    kit: "flowkit"
+    id: "codekit:archive"
+    kit: "codekit"
     category: "lite"
     tags:
       - "archive"
       - "shared"
 
-    path: "flowkit/skills/archive"
+    path: "codekit/skills/archive"
     description: "Roll up a completed phase — verify completion, mark PLAN.md done, fold decisions into SPEC.md, refresh DESIGN/HANDOFF/README/CHANGELOG only where the surface changed, then run any archival step named by the AGENTS.md workflow block (e.g. lightspec archive). Shared by the lite and default workflows."
 
   -
-    id: "flowkit:init"
-    kit: "flowkit"
+    id: "codekit:init"
+    kit: "codekit"
     category: "lite"
     tags:
       - "init"
       - "lite"
 
-    path: "flowkit/skills/init"
+    path: "codekit/skills/init"
     description: "Scaffold the lite workflow file layer — AGENTS.md pointers, SPEC.md (Goal/What/Decisions), PLAN.md (phases with task checkboxes), optional DESIGN.md, HANDOFF.md on first pause. The four files carry all detail; no CLI tooling. Use to initialize a small project with the standalone lite workflow."
 
   -
-    id: "flowkit:brainstorm"
-    kit: "flowkit"
+    id: "codekit:brainstorm"
+    kit: "codekit"
     category: "lite"
     tags:
       - "spec"
       - "lite"
 
-    path: "flowkit/skills/brainstorm"
+    path: "codekit/skills/brainstorm"
     description: "Lite workflow idea generation — diverges on a vague idea, explores the problem space, surfaces prior work, and produces a structured brainstorm note. Use in the lite clarify stage before refine (idea → SPEC.md)."
 
   -
-    id: "flowkit:task"
-    kit: "flowkit"
+    id: "codekit:task"
+    kit: "codekit"
     category: "lite"
     tags:
       - "build"
       - "lite"
 
-    path: "flowkit/skills/task"
+    path: "codekit/skills/task"
     description: "Implement the next unfinished task from PLAN.md — locate the current phase, read the linked DESIGN.md section if present, implement, and tick the checkbox. Use for executing lite workflow work without proposal or validation ceremony."
 
   -
-    id: "flowkit:plan"
-    kit: "flowkit"
+    id: "codekit:plan"
+    kit: "codekit"
     category: "lite"
     tags:
       - "plan"
       - "lite"
 
-    path: "flowkit/skills/plan"
+    path: "codekit/skills/plan"
     description: "Lite workflow planner — breaks SPEC.md into a phased PLAN.md with task checkboxes, dependency ordering, and per-task acceptance criteria. Use in the lite workflow after refine, before building."
 
   -
-    id: "flowkit:refine"
-    kit: "flowkit"
+    id: "codekit:refine"
+    kit: "codekit"
     category: "lite"
     tags:
       - "spec"
       - "lite"
 
-    path: "flowkit/skills/refine"
+    path: "codekit/skills/refine"
     description: "Refine a vague idea into a concrete SPEC.md using structured questioning modes (Sherlock/Poirot/Columbo). The lite workflow clarify convergence tool — use after brainstorm, before plan."
 
   -
-    id: "flowkit:pickup"
-    kit: "flowkit"
+    id: "codekit:pickup"
+    kit: "codekit"
     category: "lite"
     tags:
       - "pickup"
       - "shared"
 
-    path: "flowkit/skills/pickup"
+    path: "codekit/skills/pickup"
     description: "Check sdd workflow progress and pick up work for a new session or agent. Shared by the lite and default workflows — reads the workflow block in AGENTS.md, then SPEC.md/PLAN.md/DESIGN.md/HANDOFF.md, and reports where we are and what's next. Use when starting a new session, after an interruption, or when asked \"where are we / what's next\"."
 
   -
-    id: "flowkit:rest"
-    kit: "flowkit"
+    id: "codekit:rest"
+    kit: "codekit"
     category: "lite"
     tags:
       - "rest"
       - "shared"
 
-    path: "flowkit/skills/rest"
+    path: "codekit/skills/rest"
     description: "Pause in-progress work without archiving — survey per the AGENTS.md workflow block, record a parked note in PLAN.md, append HANDOFF.md, report status. Shared by the lite and default workflows. Use on pause, handoff, or session end with in-progress work."
 
   -
-    id: "flowkit:upgrade"
-    kit: "flowkit"
+    id: "codekit:upgrade"
+    kit: "codekit"
     category: "lite"
     tags:
       - "upgrade"
       - "shared"
 
-    path: "flowkit/skills/upgrade"
+    path: "codekit/skills/upgrade"
     description: "Upgrade a lite workflow project to the default (lightspec) workflow — keep SPEC.md (Goal/What/Decisions), DESIGN.md, and HANDOFF.md; add the lightspec/ layer; migrate PLAN.md tasks into the first change's tasks.md; swap the AGENTS.md workflow block. Use when a lite project outgrows the file-driven flow."
 
   -
-    id: "forgekit:app-sdd"
-    kit: "forgekit"
+    id: "speckit:app-sdd"
+    kit: "speckit"
     category: "spec"
     tags:
       - "lightspec"
 
-    path: "forgekit/skills/app-sdd"
+    path: "speckit/skills/app-sdd"
     description: "Default workflow guide (lightspec-based). Use when starting a session or task in a lightspec project — routes to the right command, skill, or agent across the workflow (init → clarify → plan → code → review → archive). The four files (SPEC/PLAN/DESIGN/HANDOFF) hold the simple project-level view; per-change detail lives in lightspec/."
 
   -
-    id: "forgekit:building"
-    kit: "forgekit"
+    id: "speckit:building"
+    kit: "speckit"
     category: "spec"
     tags:
       - "build"
 
-    path: "forgekit/skills/building"
+    path: "speckit/skills/building"
     description: "Implements code in thin vertical slices with quality checks, ponytail minimal code philosophy, and quick-fix/incremental/tdd/plan-driven modes — including plan execution, mismatch handling, and acceptance validation."
 
   -
-    id: "forgekit:init-sdd"
-    kit: "forgekit"
+    id: "speckit:init-sdd"
+    kit: "speckit"
     category: "spec"
     tags:
       - "init"
       - "lightspec"
 
-    path: "forgekit/skills/init-sdd"
+    path: "speckit/skills/init-sdd"
     description: "Initialize a project with the default (lightspec) workflow — creates `lightspec/` (copied workflow doc), writes `SPEC.md` and `PLAN.md`, updates `AGENTS.md` and `README.md`. The four files (SPEC/PLAN/DESIGN/HANDOFF) stay simple; detail lives in `lightspec/`. Use for a new project that needs proposal/archive discipline."
 
   -
-    id: "forgekit:knowledge-capture"
-    kit: "forgekit"
+    id: "speckit:knowledge-capture"
+    kit: "speckit"
     category: "spec"
     tags:
       - "archive"
 
-    path: "forgekit/skills/knowledge-capture"
+    path: "speckit/skills/knowledge-capture"
     description: "Compound skill for capturing decisions, solutions, and lessons learned — stores to docs/solutions/ with dedup"
 
   -
-    id: "forgekit:planning"
-    kit: "forgekit"
+    id: "speckit:planning"
+    kit: "speckit"
     category: "spec"
     tags:
       - "plan"
       - "lightspec"
 
-    path: "forgekit/skills/planning"
+    path: "speckit/skills/planning"
     description: "Creates specs and breaks down work into tasks using lightspec, with quick-plan/spec/architecture modes — including vertical-slice decomposition for complex features."
 
   -
-    id: "forgekit:planning-and-task-breakdown"
-    kit: "forgekit"
+    id: "speckit:planning-and-task-breakdown"
+    kit: "speckit"
     category: "spec"
     tags:
       - "plan"
       - "lightspec"
 
-    path: "forgekit/skills/planning-and-task-breakdown"
+    path: "speckit/skills/planning-and-task-breakdown"
     description: "Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible."
 
   -
-    id: "forgekit:reviewing"
-    kit: "forgekit"
+    id: "speckit:reviewing"
+    kit: "speckit"
     category: "spec"
     tags:
       - "review"
 
-    path: "forgekit/skills/reviewing"
+    path: "speckit/skills/reviewing"
     description: "Reviews code across five axes (correctness, readability, architecture, security, performance) with ponytail over-engineering check — plus fresh-perspective (blind-spot) and criteria-walk (acceptance verification) review modes."
 
   -
-    id: "forgekit:shipping"
-    kit: "forgekit"
+    id: "speckit:shipping"
+    kit: "speckit"
     category: "spec"
     tags:
       - "ship"
 
-    path: "forgekit/skills/shipping"
+    path: "speckit/skills/shipping"
     description: "Prepares code for release with git workflow, documentation, and commit/release/audit modes."
 
   -
-    id: "forgekit:spec-driven-development"
-    kit: "forgekit"
+    id: "speckit:spec-driven-development"
+    kit: "speckit"
     category: "spec"
     tags:
       - "spec"
       - "lightspec"
       - "clarify"
 
-    path: "forgekit/skills/spec-driven-development"
+    path: "speckit/skills/spec-driven-development"
     description: "Clarifies requirements and produces a concrete spec — SPEC.md (lite workflow) or a lightspec proposal (lightspec workflow). The sdd clarify stage's specification engine — use when requirements are unclear, ambiguous, or exist only as a vague idea, before planning begins."
 
   -
-    id: "forgekit:spec-proposal"
-    kit: "forgekit"
+    id: "speckit:spec-proposal"
+    kit: "speckit"
     category: "spec"
     tags:
       - "spec"
       - "lightspec"
 
-    path: "forgekit/skills/spec-proposal"
+    path: "speckit/skills/spec-proposal"
     description: "Scaffolds a new sdd change proposal — clarifies requirements, writes proposal/design/tasks/spec deltas, reviews with plan-reviewer, validates. The lightspec workflow's clarify-to-proposal entry — use for new features, changes, or any non-trivial work before implementation."
 
   -
-    id: "forgekit:spec-router"
-    kit: "forgekit"
+    id: "speckit:spec-router"
+    kit: "speckit"
     category: "spec"
     tags:
       - "spec"
       - "lightspec"
 
-    path: "forgekit/skills/spec-router"
+    path: "speckit/skills/spec-router"
     description: "Entry point for spec-driven development — interviews users, creates and validates specs using lightspec."
 
   -
-    id: "forgekit:test-router"
-    kit: "forgekit"
+    id: "speckit:test-router"
+    kit: "speckit"
     category: "spec"
     tags:
       - "test"
 
-    path: "forgekit/skills/test-router"
+    path: "speckit/skills/test-router"
     description: "Detects project type, runs appropriate tests, validates against spec scenarios, and reports results."
 
   -
@@ -2055,132 +2055,132 @@ agents:
     description: "side-tool 调度（上下文隔离）"
 
   -
-    id: "flowkit:maker"
-    kit: "flowkit"
+    id: "codekit:maker"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
       - "build"
 
-    path: "flowkit/agents/maker.md"
+    path: "codekit/agents/maker.md"
     description: "Lite workflow maker — implements the next PLAN.md task in thin vertical slices with ponytail minimal code and incremental verification. File-driven, no proposal gate."
 
   -
-    id: "flowkit:inspector"
-    kit: "flowkit"
+    id: "codekit:inspector"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
       - "review"
 
-    path: "flowkit/agents/inspector.md"
+    path: "codekit/agents/inspector.md"
     description: "Lite workflow code reviewer — five-axis review (correctness, simplicity, scope, verification, security) of the current slice with ponytail over-engineering check. File-driven, no proposal gate."
 
   -
-    id: "flowkit:conductor"
-    kit: "flowkit"
+    id: "codekit:conductor"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
       - "orchestrate"
 
-    path: "flowkit/agents/conductor.md"
+    path: "codekit/agents/conductor.md"
     description: "Lite workflow main coding agent — drives the file-driven 6-stage loop (SPEC.md/PLAN.md), dispatches maker/tester, owns the PLAN.md checkbox, requires verification before \"done\". No CLI tooling, no proposal gate."
 
   -
-    id: "flowkit:slicer"
-    kit: "flowkit"
+    id: "codekit:slicer"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
       - "plan"
       - "review"
 
-    path: "flowkit/agents/slicer.md"
+    path: "codekit/agents/slicer.md"
     description: "Lite workflow plan reviewer — checks PLAN.md slicing, dependency ordering, and testability against SPEC.md before building starts. Lightweight, file-driven, no proposal gate."
 
   -
-    id: "flowkit:tester"
-    kit: "flowkit"
+    id: "codekit:tester"
+    kit: "codekit"
     category: "lite"
     tags:
       - "lite"
       - "test"
 
-    path: "flowkit/agents/tester.md"
+    path: "codekit/agents/tester.md"
     description: "Lite workflow test engineer — writes and runs tests for the current PLAN.md slice — unit, integration, and SPEC scenario validation. File-driven, no proposal gate."
 
   -
-    id: "forgekit:builder"
-    kit: "forgekit"
+    id: "speckit:builder"
+    kit: "speckit"
     category: "spec"
     tags:
       - "build"
 
-    path: "forgekit/agents/builder.md"
+    path: "speckit/agents/builder.md"
     description: "Implements code in thin vertical slices with quality checks, ponytail minimal code philosophy, and incremental verification."
 
   -
-    id: "forgekit:code-reviewer"
-    kit: "forgekit"
+    id: "speckit:code-reviewer"
+    kit: "speckit"
     category: "spec"
     tags:
       - "review"
 
-    path: "forgekit/agents/code-reviewer.md"
+    path: "speckit/agents/code-reviewer.md"
     description: "Reviews code quality across five axes (correctness, readability, architecture, security, performance) with ponytail over-engineering check."
 
   -
-    id: "forgekit:documenter"
-    kit: "forgekit"
+    id: "speckit:documenter"
+    kit: "speckit"
     category: "spec"
     tags:
       - "documentation"
 
-    path: "forgekit/agents/documenter.md"
+    path: "speckit/agents/documenter.md"
     description: "Creates and updates project documentation — README, CHANGELOG, ADRs, API docs, migration guides."
 
   -
-    id: "forgekit:orchestrator"
-    kit: "forgekit"
+    id: "speckit:orchestrator"
+    kit: "speckit"
     category: "spec"
     tags:
       - "orchestrate"
       - "lightspec"
 
-    path: "forgekit/agents/orchestrator.md"
+    path: "speckit/agents/orchestrator.md"
     description: "Coordinates multi-agent SDD workflow — dispatches specialists, owns acceptance assertions, requires runtime proof before \"done\"."
 
   -
-    id: "forgekit:plan-reviewer"
-    kit: "forgekit"
+    id: "speckit:plan-reviewer"
+    kit: "speckit"
     category: "spec"
     tags:
       - "plan"
       - "review"
 
-    path: "forgekit/agents/plan-reviewer.md"
+    path: "speckit/agents/plan-reviewer.md"
     description: "Reviews plans and specs before execution — checks completeness, testability, dependency ordering, and alignment with existing architecture."
 
   -
-    id: "forgekit:planner"
-    kit: "forgekit"
+    id: "speckit:planner"
+    kit: "speckit"
     category: "spec"
     tags:
       - "spec"
       - "plan"
 
-    path: "forgekit/agents/planner.md"
+    path: "speckit/agents/planner.md"
     description: "Creates specs and task breakdowns for the SDD workflow using lightspec format."
 
   -
-    id: "forgekit:releaser"
-    kit: "forgekit"
+    id: "speckit:releaser"
+    kit: "speckit"
     category: "spec"
     tags:
       - "ship"
 
-    path: "forgekit/agents/releaser.md"
+    path: "speckit/agents/releaser.md"
     description: "Manages releases — version bumping, changelog generation, tagging, and verification."
 
   -
@@ -2869,141 +2869,141 @@ commands:
     description: "审稿人校准"
 
   -
-    id: "flowkit:archive"
-    kit: "flowkit"
+    id: "codekit:archive"
+    kit: "codekit"
     category: "lite"
     tags:
       - "archive"
       - "shared"
 
-    path: "flowkit/commands/archive.md"
+    path: "codekit/commands/archive.md"
     description: "Roll up a completed phase — shared by the lite and default workflows. Verify completion, mark PLAN.md done, update SPEC.md decisions and human docs (README/CHANGELOG) where the surface changed, then run any archival step named by the AGENTS.md workflow block"
 
   -
-    id: "flowkit:init"
-    kit: "flowkit"
+    id: "codekit:init"
+    kit: "codekit"
     category: "lite"
     tags:
       - "init"
       - "lite"
 
-    path: "flowkit/commands/init.md"
+    path: "codekit/commands/init.md"
     description: "Initialize a project with the lite workflow — create SPEC.md, PLAN.md, AGENTS.md pointers, optional DESIGN.md. The four files carry all detail; no CLI tooling"
 
   -
-    id: "flowkit:task"
-    kit: "flowkit"
+    id: "codekit:task"
+    kit: "codekit"
     category: "lite"
     tags:
       - "build"
       - "lite"
 
-    path: "flowkit/commands/task.md"
+    path: "codekit/commands/task.md"
     description: "Apply the next unfinished task from PLAN.md — implement, self-review, tick the checkbox. Lite workflow build step."
 
   -
-    id: "flowkit:pickup"
-    kit: "flowkit"
+    id: "codekit:pickup"
+    kit: "codekit"
     category: "lite"
     tags:
       - "pickup"
       - "shared"
 
-    path: "flowkit/commands/pickup.md"
+    path: "codekit/commands/pickup.md"
     description: "Check sdd workflow progress and pick up work — shared by the lite and default workflows. Reads the workflow block in AGENTS.md (written by /init-sdd or /init), then SPEC/PLAN/DESIGN/HANDOFF, and reports where we are and what's next"
 
   -
-    id: "flowkit:rest"
-    kit: "flowkit"
+    id: "codekit:rest"
+    kit: "codekit"
     category: "lite"
     tags:
       - "rest"
       - "shared"
 
-    path: "flowkit/commands/rest.md"
+    path: "codekit/commands/rest.md"
     description: "Pause in-progress work without archiving — shared by the lite and default workflows. Survey per the AGENTS.md workflow block, add a parked note to PLAN.md, append HANDOFF.md, report status"
 
   -
-    id: "flowkit:upgrade"
-    kit: "flowkit"
+    id: "codekit:upgrade"
+    kit: "codekit"
     category: "lite"
     tags:
       - "upgrade"
       - "shared"
 
-    path: "flowkit/commands/upgrade.md"
+    path: "codekit/commands/upgrade.md"
     description: "Upgrade a lite workflow project to the default (lightspec) workflow — keep SPEC/PLAN/DESIGN/HANDOFF, add the lightspec/ layer, migrate PLAN.md tasks into the first change's tasks.md, swap the AGENTS.md workflow block"
 
   -
-    id: "forgekit:build"
-    kit: "forgekit"
+    id: "speckit:build"
+    kit: "speckit"
     category: "spec"
     tags:
       - "build"
 
-    path: "forgekit/commands/build.md"
+    path: "speckit/commands/build.md"
     description: "Implement the next task — build, verify, request review (sdd code stage)"
 
   -
-    id: "forgekit:init-sdd"
-    kit: "forgekit"
+    id: "speckit:init-sdd"
+    kit: "speckit"
     category: "spec"
     tags:
       - "init"
       - "lightspec"
 
-    path: "forgekit/commands/init-sdd.md"
+    path: "speckit/commands/init-sdd.md"
     description: "Initialize a project with the default (lightspec) workflow — lightspec/ + SPEC.md + PLAN.md. The four files stay simple; detail lives in lightspec/"
 
   -
-    id: "forgekit:plan"
-    kit: "forgekit"
+    id: "speckit:plan"
+    kit: "speckit"
     category: "spec"
     tags:
       - "plan"
 
-    path: "forgekit/commands/plan.md"
+    path: "speckit/commands/plan.md"
     description: "Break work into small verifiable tasks — sdd plan stage. Route per the AGENTS.md workflow block"
 
   -
-    id: "forgekit:review"
-    kit: "forgekit"
+    id: "speckit:review"
+    kit: "speckit"
     category: "spec"
     tags:
       - "review"
 
-    path: "forgekit/commands/review.md"
+    path: "speckit/commands/review.md"
     description: "Conduct a code review — five-axis, fresh-perspective, or criteria-walk"
 
   -
-    id: "forgekit:ship"
-    kit: "forgekit"
+    id: "speckit:ship"
+    kit: "speckit"
     category: "spec"
     tags:
       - "ship"
 
-    path: "forgekit/commands/ship.md"
+    path: "speckit/commands/ship.md"
     description: "Run the pre-launch checklist and prepare for release (sdd ship stage)"
 
   -
-    id: "forgekit:spec"
-    kit: "forgekit"
+    id: "speckit:spec"
+    kit: "speckit"
     category: "spec"
     tags:
       - "spec"
       - "lightspec"
 
-    path: "forgekit/commands/spec.md"
+    path: "speckit/commands/spec.md"
     description: "Start spec-driven development — clarify, then write a structured spec (sdd clarify stage). Route per the AGENTS.md workflow block"
 
   -
-    id: "forgekit:test"
-    kit: "forgekit"
+    id: "speckit:test"
+    kit: "speckit"
     category: "spec"
     tags:
       - "test"
 
-    path: "forgekit/commands/test.md"
+    path: "speckit/commands/test.md"
     description: "Run tests — TDD workflow or acceptance validation (sdd test stage)"
 
   -

@@ -1,4 +1,4 @@
-# GENERATED FROM agents/agents.toml by deploy/deploy.py gen. DO NOT EDIT.
+# GENERATED FROM harness/agents.toml by gen.py. DO NOT EDIT.
 version: "1.0"
 agents:
   presets:
@@ -17,29 +17,29 @@ agents:
 
 
 pi:
-  template: "agents/pi/settings.example.json"
+  template: "harness/agents/pi/settings.example.json"
   project_target: ".pi/settings.json"
   global_target: ".pi/agent/settings.json"
   packages:
     -
       type: "local"
-      path: "agents/pi/extensions/pi-agents"
+      path: "harness/agents/pi/extensions/pi-agents"
 
     -
       type: "local"
-      path: "agents/pi/extensions/pi-tasks"
+      path: "harness/agents/pi/extensions/pi-tasks"
 
     -
       type: "local"
-      path: "agents/pi/extensions/pi-pane"
+      path: "harness/agents/pi/extensions/pi-pane"
 
     -
       type: "local"
-      path: "agents/pi/extensions/pi-asks"
+      path: "harness/agents/pi/extensions/pi-asks"
 
     -
       type: "local"
-      path: "agents/pi/extensions/pi-context-mode"
+      path: "harness/agents/pi/extensions/pi-context-mode"
 
     -
       type: "npm"
@@ -73,7 +73,7 @@ pi:
 
   commands:
     dirs:
-      - "flowkit/commands"
+      - "codekit/commands"
       - "base/commands"
 
 

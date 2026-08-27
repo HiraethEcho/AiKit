@@ -1,0 +1,84 @@
+# harness/agents.toml — agent 配置唯一真源
+# gen.py 生成 deploy/agents.{lua,json,yaml}
+# deploy.py agents 部署到目标（--project PATH 或 --global）
+
+version = "1.0"
+
+# [agents] — Phase 1 资源: 部署到 <project>/.agents/ 或 ~/.agents/
+[agents]
+presets = ["full"]
+
+# [agents.mcp] — 渲染为 <target>/.agents/mcp.json (mcpServers)
+[agents.mcp]
+[agents.mcp.codegraph]
+command = "codegraph"
+args = ["serve", "--mcp"]
+enabled = true
+directTools = true
+
+# [pi] — pi settings: <project>/.pi/ 或 ~/.pi/
+[pi]
+template = "harness/agents/pi/settings.example.json"
+project_target = ".pi/settings.json"
+global_target = ".pi/agent/settings.json"
+
+# packages: type=local → path 展开为 <repo-root>/<path>; type=npm → name 加 npm: 前缀
+# (实际目录为 extensions/, pi-toolkit 已拆分为 pi-agents/pi-tasks/pi-pane)
+[[pi.packages]]
+type = "local"
+path = "harness/agents/pi/extensions/pi-agents"
+
+[[pi.packages]]
+type = "local"
+path = "harness/agents/pi/extensions/pi-tasks"
+
+[[pi.packages]]
+type = "local"
+path = "harness/agents/pi/extensions/pi-pane"
+
+[[pi.packages]]
+type = "local"
+path = "harness/agents/pi/extensions/pi-asks"
+
+[[pi.packages]]
+type = "local"
+path = "harness/agents/pi/extensions/pi-context-mode"
+
+[[pi.packages]]
+type = "npm"
+name = "pi-dsh-minimal"
+
+[[pi.packages]]
+type = "npm"
+name = "pi-deepseek-search"
+
+[[pi.packages]]
+type = "npm"
+name = "pi-vision-tool"
+
+[[pi.packages]]
+type = "npm"
+name = "@tintinweb/pi-subagents"
+
+[[pi.packages]]
+type = "npm"
+name = "pi-opencode-go-cache"
+
+[[pi.packages]]
+type = "npm"
+name = "pi-ocgo-usage"
+
+# pi skills: preset 引用 manifest preset → 展开为该 preset 全部 skills
+[pi.skills]
+presets = ["full"]
+
+# pi commands: 部署为 pi settings 的 prompts 目录 (绝对路径)
+[pi.commands]
+dirs = ["codekit/commands", "base/commands"]
+
+# pi mcp: 部署为 pi settings 的 mcp 名称
+[pi.mcp]
+names = ["codegraph"]
+
+# [opencode] — 占位, 后续 agent 配置
+[opencode]

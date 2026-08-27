@@ -1,7 +1,7 @@
 # preset.toml — Phase 1 预设（唯一真实来源）
 # 根清单通过 includes 引用各 kit 的 preset.toml。
 # include 合并后的 preset id 为 "<kit名>:<preset id>"；根内联 preset id 保持原样。
-# full = flowkit (轻) + forgekit (重); extra/devkit 永不进 workflow preset。
+# full = codekit (轻) + speckit (重); extra/devkit 永不进 workcode preset。
 
 version = "1.0"
 includes = [
@@ -9,22 +9,22 @@ includes = [
   "researchkit/preset.toml",
   "reviewkit/preset.toml",
   "extra/preset.toml",
-  "flowkit/preset.toml",
-  "forgekit/preset.toml",
+  "codekit/preset.toml",
+  "speckit/preset.toml",
 ]
 
 [[preset]]
 id = "full"
-description = "flowkit(轻) + forgekit(重) 全工作流 — 不含 extra/devkit"
-skills = ["flowkit:pickup", "flowkit:archive", "flowkit:rest", "flowkit:upgrade",
-  "flowkit:app", "flowkit:init", "flowkit:brainstorm", "flowkit:refine", "flowkit:plan", "flowkit:task",
-  "forgekit:app-sdd", "forgekit:init-sdd", "forgekit:spec-proposal", "forgekit:spec-driven-development",
-  "forgekit:planning", "forgekit:planning-and-task-breakdown", "forgekit:building", "forgekit:reviewing",
-  "forgekit:shipping", "forgekit:knowledge-capture"]
-agents = ["flowkit:conductor", "flowkit:slicer", "flowkit:maker", "flowkit:tester", "flowkit:inspector",
-  "forgekit:orchestrator", "forgekit:planner", "forgekit:plan-reviewer", "forgekit:builder",
-  "forgekit:code-reviewer", "forgekit:documenter", "forgekit:releaser"]
-commands = ["flowkit:pickup", "flowkit:archive", "flowkit:rest", "flowkit:upgrade",
-  "flowkit:init", "flowkit:task",
-  "forgekit:init-sdd", "forgekit:spec", "forgekit:plan", "forgekit:build", "forgekit:test", "forgekit:review", "forgekit:ship"]
+description = "codekit(轻) + speckit(重) 全工作流 — 不含 extra/devkit"
+skills = ["codekit:pickup", "codekit:archive", "codekit:rest", "codekit:upgrade",
+  "codekit:app", "codekit:init", "codekit:brainstorm", "codekit:refine", "codekit:plan", "codekit:task",
+  "speckit:app-sdd", "speckit:init-sdd", "speckit:spec-proposal", "speckit:spec-driven-development",
+  "speckit:planning", "speckit:planning-and-task-breakdown", "speckit:building", "speckit:reviewing",
+  "speckit:shipping", "speckit:knowledge-capture"]
+agents = ["codekit:conductor", "codekit:slicer", "codekit:maker", "codekit:tester", "codekit:inspector",
+  "speckit:orchestrator", "speckit:planner", "speckit:plan-reviewer", "speckit:builder",
+  "speckit:code-reviewer", "speckit:documenter", "speckit:releaser"]
+commands = ["codekit:pickup", "codekit:archive", "codekit:rest", "codekit:upgrade",
+  "codekit:init", "codekit:task",
+  "speckit:init-sdd", "speckit:spec", "speckit:plan", "speckit:build", "speckit:test", "speckit:review", "speckit:ship"]
 mcp = []

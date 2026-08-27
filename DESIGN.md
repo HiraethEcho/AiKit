@@ -1,6 +1,5 @@
 # DESIGN
 
-Merging `../agentkit/` + `../mathkit/` into flat AiKit. Fresh git, no history.
 
 ## Layout
 
@@ -10,8 +9,8 @@ AiKit/
   agents/       coding agent configs
   base/         base profile (contents chosen manually)
   persona/      main agents / custom system prompts
-  flowkit/      轻 workflow (lite 全套, 文件驱动)
-  forgekit/     重 workflow (SDD/lightspec)
+  codekit/      轻 workflow (lite 全套, 文件驱动)
+  speckit/     重 workflow (SDD/lightspec)
   devkit/       code-extra 工具池 (不进 workflow preset)
   extra/        extra 工具 (文献/ocr/翻译/格式)
   paperkit/     paper/notes writing kit
@@ -25,40 +24,6 @@ AiKit/
 
 Under each `*kit/`: `agents/`, `skills/`, `commands/`.
 
-## Mapping
-
-| Dest | Source |
-|---|---|
-| agents/ | agentkit/agent/* (pi, opencode, codex, reasonix, zerostack, claude, universal, models-full.json) |
-| agents/mcp/ | agentkit/mcp/ |
-| agents/pi/extensions/ | subset of agentkit/agent/pi/extensions/ — handled manually, NOT submodule |
-| persona/ | agentkit/agents/{base,extra} — handled manually |
-| codekit→flowkit/forgekit/devkit | agentkit/{agents,skills,commands}/code* — split: lite→flowkit, sdd→forgekit, extra→devkit |
-| paperkit/ | mathkit/paperkit |
-| reviewkit/ | mathkit/reviewkit (仅论文审稿; code review 在 workflow 内) |
-| researchkit/ | mathkit/kit (8 agents) + mathkit/opt/arm + mrs/research |
-| extra/ | mathkit/toolkit (renamed mathtoolkit) + agentkit/skills/extra 32 |
-| docs/ | agentkit/docs (+ others later) |
-| base/ | chosen manually |
-
-## Submodules (opt/)
-
-| Path | URL |
-|---|---|
-| opt/co-mathematician | git@github.com:hiraethecho/co-mathematician |
-| opt/AI4Math-Auto-Research | git@github.com:VeryMath/AI4Math-Auto-Research.git |
-| opt/agent-skills | https://github.com/addyosmani/agent-skills.git |
-
-## Excluded / skip
-
-- agentkit: deploy.py, deploy.sh, deploy.md, HANDOFF.md, fakehome/, tests/
-- agentkit/sdd/ — untouched, not copied
-- mathkit/kit/ — tmp, handled by user
-- mathkit/phd/, outputs/, overview*.md
-- mathkit/opt non-git dirs
-- mathkit/workspace — not in this dir
-- agentkit/opt other dirs (cave, pix-skills, rpiv-*, pi-astro-agents) — handled manually
-
 ## Deploy
 
 ### 架构总览
@@ -66,8 +31,8 @@ Under each `*kit/`: `agents/`, `skills/`, `commands/`.
 ```
 manifest.toml ─┐
 */manifest.toml┤
-*/preset.toml ─┼─(deploy.py gen)──> manifest.lua / preset.lua / agents.lua ──> deploy.lua
-agents/agents.toml ┘      manifest.json / preset.json / agents.json (shell: jq 读 json)
+*/preset.toml ─┼─(gen.py)──> manifest.lua / preset.lua / agents.lua ──> deploy.lua
+harness/agents.toml ┘   manifest.json / preset.json / agents.json (shell: jq 读 json)
        │
        └──(deploy.py, tomllib)──> 两阶段部署（Python 版）
 ```
@@ -102,21 +67,21 @@ agents/agents.toml ┘      manifest.json / preset.json / agents.json (shell: jq
 - kit 级：`[[preset]]`，作用域默认本 kit；省略 `kits` 且无逐类引用 = 整 kit。
 - 合并后 preset id 加 kit 前缀：`paperkit:full`。
 
-`agents/agents.toml`（唯一真源, 无 extends）:
+`harness/agents.toml`（唯一真源, 无 extends）:
 
 - `[pi]`：`template`（settings.example.json 路径）、`project_target`、`global_target`。
 - `[pi]`：`template`（settings.example.json 路径）、`project_target`、`global_target`。
 - `[[pi.packages]]`：`type = "local"`（`path` 仓库相对 → 部署时绝对路径）| `type = "npm"`（`name` → `npm:<name>`）。
-- `[pi.skills] presets = ["full"]`：根 preset（flowkit+forgekit），展开为 `kit/name`。
+- `[pi.skills] presets = ["full"]`：根 preset（codekit+speckit），展开为 `kit/name`。
 - `[pi.commands] dirs`：→ pi `prompts` 绝对目录。
 - `[pi.mcp] names`：→ pi `mcp` 名称。
-- `agents/pi/settings.example.json`：模板，packages/skills/prompts/mcp 为空数组，脚本填充。
+- `harness/agents/pi/settings.example.json`：模板，packages/skills/prompts/mcp 为空数组，脚本填充。
 
 > 不写任何部署状态文件（无 `deploy-state.json`）；`status` 命令已移除。
 
 ### 多格式生成
 
-`deploy/deploy.py gen --format lua|json|yaml|all`（默认 all）：
+`gen.py --format lua|json|yaml|all`（默认 all）：
 
 - 单一数据源 TOML → `build_data()` 合并 → 多格式序列化。
 - `lua`：Lua 表，`deploy.lua` dofile。
@@ -180,7 +145,7 @@ preview:                deploy.py agents
 project .pi/settings.json:  deploy.py agents --project <path>
 global  ~/.pi/agent/settings.json: deploy.py agents --global
 
-读取 agents/agents.toml[pi] + settings.example.json
+读取 harness/agents.toml[pi] + settings.example.json
 packages: path → <repo-root>/<path>
           npm  → "npm:<name>"
 skills:   preset 展开 (manifest) → "kit/name"

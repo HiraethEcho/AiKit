@@ -8,7 +8,7 @@ includes = [
   "researchkit/manifest.toml",
   "reviewkit/manifest.toml",
   "extra/manifest.toml",
-  "flowkit/manifest.toml",
-  "forgekit/manifest.toml",
+  "codekit/manifest.toml",
+  "speckit/manifest.toml",
   "devkit/manifest.toml",
 ]

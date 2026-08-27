@@ -45,22 +45,22 @@ build/general/scout/audit/plan/reviewer
 
 ## base
 
-基础工具 — 内容手动挑选中（此前 flowkit 承载 shared 骨架）
+基础工具 — 内容手动挑选中（此前 codekit 承载 shared 骨架）
 
 ### skills
 
 - grill-me
 - handoff
 
-## flowkit
+## codekit
 
 轻 workflow (lite 全套, 文件驱动):
 
 - skills: app / init / brainstorm / refine / plan / task + pickup/archive/rest/upgrade (骨架临时)
-- agents: conductor / slicer / maker / tester / inspector (名称与 forgekit 不同, 不靠 kit 前缀)
+- agents: conductor / slicer / maker / tester / inspector (名称与 speckit 不同, 不靠 kit 前缀)
 - commands: init / task (+ skeleton 命令)
 
-## forgekit
+## speckit
 
 重 workflow (SDD/lightspec, default 工作流):
 
@@ -94,8 +94,8 @@ submodule 远程地址记录 (仅记录, 不 clone): `modules`
 
 ## deploy
 
-- 真源: `agents/agents.toml` (agents presets / agents.mcp / pi packages-skills-prompts-mcp) + `agents/pi/settings.example.json` 模板
-- `python3 deploy/deploy.py gen` — 重生成 manifest/preset/agents 的 lua+json (+yaml 只读 sidecar, 脚本不用)
+- 真源: `harness/agents.toml` (agents presets / agents.mcp / pi packages-skills-prompts-mcp) + `harness/agents/pi/settings.example.json` 模板
+- `python3 gen.py` — 独立生成脚本, 重生成 deploy/manifest/preset/agents 的 lua+json (+yaml 只读 sidecar, 脚本不用)
 - `python3 deploy/deploy.py agents` — 预览 (.agents 链接计划 + mcp.json + pi settings)
 - `python3 deploy/deploy.py agents --project <proj>` — 写 `<proj>/.agents/` + `<proj>/.pi/settings.json`
 - `python3 deploy/deploy.py agents --global` — 写 `~/.agents/` + `~/.pi/agent/settings.json`
