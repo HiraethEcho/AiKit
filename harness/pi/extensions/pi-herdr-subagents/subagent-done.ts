@@ -77,7 +77,6 @@ export function runningChildrenCount(): number {
 }
 
 export function shouldAutoExitOnAgentEnd(
-  _userTookOver: boolean,
   messages: any[] | undefined,
 ): boolean {
   // Manual input should not strand an auto-exit subagent. If the latest agent
@@ -271,7 +270,7 @@ export default function (pi: ExtensionAPI) {
       !awaitingAnswer &&
       !hasPendingChildren &&
       autoExit &&
-      shouldAutoExitOnAgentEnd(userTookOver, messages);
+      shouldAutoExitOnAgentEnd(messages);
 
     if (shouldExit) {
       // Surface stopReason: "error" turns (auto-retry exhausted, provider

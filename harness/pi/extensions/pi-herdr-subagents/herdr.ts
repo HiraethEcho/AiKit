@@ -87,7 +87,6 @@ export function createHerdrSurfaceSplit(
   name: string,
   direction: "right" | "down" = "right",
 ): string {
-  void name;
   const parentPaneId = getHerdrParentPaneId();
   const args = ["pane", "split", parentPaneId, "--direction", direction];
   args.push("--no-focus", "--cwd", process.cwd());
@@ -133,19 +132,6 @@ export function runScriptInPane(
 
   sendHerdrCommand(surface, `bash ${shellEscape(scriptPath)}`);
   return scriptPath;
-}
-
-/** Read pane screen (sync). */
-export function readPane(surface: string, lines = 50): string {
-  return herdrExec([
-    "pane",
-    "read",
-    surface,
-    "--source",
-    "visible",
-    "--lines",
-    String(lines),
-  ]);
 }
 
 /** Read pane screen (async). */
@@ -343,13 +329,6 @@ export function parsePaneProcessInfo(
     pids: [...pids],
     foregroundProcesses,
   };
-}
-
-export function getPaneProcessInfo(surface: string): HerdrPaneProcessInfo {
-  return parsePaneProcessInfo(
-    herdrExec(["pane", "process-info", "--pane", surface]),
-    surface,
-  );
 }
 
 async function getPaneProcessInfoAsync(

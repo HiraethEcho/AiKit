@@ -478,7 +478,6 @@ function formatUsageSegments(stats: SessionStats): string[] {
 }
 
 /** ANSI colors for widget status icons (raw, since the widget bypasses theme). */
-const ICON_GREEN = "\x1b[38;2;126;186;103m";
 const ICON_YELLOW = "\x1b[38;2;214;181;94m";
 const ICON_RED = "\x1b[38;2;224;108;117m";
 const ICON_DIM = "\x1b[38;2;128;128;128m";
@@ -487,7 +486,6 @@ const ICON_DIM = "\x1b[38;2;128;128;128m";
 function widgetIcon(kind: StatusSnapshot["kind"]): string {
   switch (kind) {
     case "active":
-    case "running":
       return `${ICON_YELLOW}⟳${RST}`;
     case "stalled":
       return `${ICON_RED}⟳${RST}`;
@@ -527,7 +525,6 @@ function getArtifactDir(sessionDir: string, sessionId: string): string {
 
 function formatWidgetRightLabel(snapshot: StatusSnapshot): string {
   if (snapshot.kind === "starting") return " starting… ";
-  if (snapshot.kind === "running") return ` running ${snapshot.elapsedText} `;
   if (snapshot.kind === "active") {
     const label = snapshot.activityLabel ?? snapshot.activeScope;
     const duration = snapshot.activeDurationText ? ` ${snapshot.activeDurationText}` : "";
@@ -1081,7 +1078,6 @@ function startStatusRefresh(pi: ExtensionAPI) {
     let shouldRefreshWidget = false;
 
     for (const running of runningSubagents.values()) {
-      observeRunningSubagent(running, now);
       const { nextState, snapshot, transition } = advanceStatusState(running.statusState, now);
       if (nextState.currentKind !== running.statusState.currentKind) {
         shouldRefreshWidget = true;
@@ -1229,8 +1225,12 @@ async function launchSubagent(
   const effectiveTools = agentDefs?.tools;
   const effectiveSkills = agentDefs?.skills;
   const effectiveThinking = agentDefs?.thinking;
-  const effectiveInteractive = resolveEffectiveInteractive(params, agentDefs);
   const backend = surfaceBackend();
+  // RPC children are headless — nobody can quit their session from a pane, so
+  // they must ALWAYS auto-exit on completion regardless of the agent's
+  // `interactive` / `auto-exit` frontmatter.
+  const effectiveAutoExit = backend === "rpc" ? true : (agentDefs?.autoExit ?? false);
+  const effectiveInteractive = backend === "rpc" ? false : resolveEffectiveInteractive(params, agentDefs);
 
   const sessionFile = ctx.sessionManager.getSessionFile();
   if (!sessionFile) throw new Error("No session file");
@@ -1267,19 +1267,15 @@ async function launchSubagent(
   const { inheritsConversationContext } = launchBehavior;
 
   // Build the task message.
-  const modeHint = agentDefs?.autoExit
+  const modeHint = effectiveAutoExit
     ? "Complete your task autonomously. When you are finished, simply stop — your session ends automatically."
-    : backend === "rpc"
-      ? "Complete your task. When finished, call the subagent_done tool. You may receive steering messages from the orchestrator at any time."
-      : "Complete your task. The user can interact with you at any time, and the session ends when the user exits the pane.";
+    : "Complete your task. The user can interact with you at any time, and the session ends when the user exits the pane.";
   const askHint =
     "\nIf you need to ask the user a question, call the ask_question tool — " +
     "the question appears in the main session window and the answer is delivered back to you.";
-  const summaryInstruction = agentDefs?.autoExit
+  const summaryInstruction = effectiveAutoExit
     ? "Your FINAL assistant message should summarize what you accomplished."
-    : backend === "rpc"
-      ? "Your FINAL assistant message (before calling subagent_done) should summarize what you accomplished."
-      : "Your FINAL assistant message (before the user exits) should summarize what you accomplished.";
+    : "Your FINAL assistant message (before the user exits) should summarize what you accomplished.";
   const grantSpawning = !!(agentDefs?.subagentAgents && agentDefs.subagentAgents.length > 0);
   const identity = agentDefs?.body ?? null;
   const systemPromptMode = agentDefs?.systemPromptMode;
@@ -1297,7 +1293,7 @@ async function launchSubagent(
 
   const toolAllowlist = buildSubagentToolAllowlist(effectiveTools, {
     grantSpawning,
-    autoExit: agentDefs?.autoExit ?? false,
+    autoExit: effectiveAutoExit,
   });
 
   // Snapshot the resolved sandbox for later resume.
@@ -1309,7 +1305,7 @@ async function launchSubagent(
     systemPromptMode: systemPromptMode ?? null,
     identity: identityInSystemPrompt ? identity : null,
     spawnable: agentDefs?.subagentAgents ?? null,
-    autoExit: agentDefs?.autoExit ?? false,
+    autoExit: effectiveAutoExit,
     cwd: effectiveCwd ?? null,
     agentDir: resolvedAgentDir,
   };
@@ -1339,7 +1335,7 @@ async function launchSubagent(
     env.PI_SUBAGENT_AGENT = params.agent;
     envPairs.push(["PI_SUBAGENT_AGENT", params.agent]);
   }
-  if (agentDefs?.autoExit) {
+  if (effectiveAutoExit) {
     env.PI_SUBAGENT_AUTO_EXIT = "1";
     envPairs.push(["PI_SUBAGENT_AUTO_EXIT", "1"]);
   }
@@ -1517,19 +1513,40 @@ async function relayPendingQuestion(running: RunningSubagent, payload: any): Pro
     } else {
       reply = `User answered:\n${buildRelayAnswerText(relayed.questions, relayed.answers)}`;
     }
-    const steer = steerSubagent(running, reply);
-    if ("error" in steer) {
-      latestPi?.sendMessage(
-        {
-          customType: "subagent_question",
-          content:
-            `Sub-agent "${name}" asked a question and the user answered, but the reply ` +
-            `could not be delivered (${steer.error}).`,
-          display: true,
-          details: { name, agent: running.agent, question: questionSummary },
-        },
-        { triggerTurn: true, deliverAs: "steer" },
-      );
+    if (running.backend === "rpc" && running.rpc) {
+      // RPC steer only queues into a RUNNING agent; a child parked by
+      // ask_question is idle, so use prompt to start a fresh turn with the
+      // user's answer.
+      try {
+        await running.rpc.sendPrompt(reply);
+      } catch (error: any) {
+        latestPi?.sendMessage(
+          {
+            customType: "subagent_question",
+            content:
+              `Sub-agent "${name}" asked a question and the user answered, but the reply ` +
+              `could not be delivered (${error?.message ?? String(error)}).`,
+            display: true,
+            details: { name, agent: running.agent, question: questionSummary },
+          },
+          { triggerTurn: true, deliverAs: "steer" },
+        );
+      }
+    } else {
+      const steer = steerSubagent(running, reply);
+      if ("error" in steer) {
+        latestPi?.sendMessage(
+          {
+            customType: "subagent_question",
+            content:
+              `Sub-agent "${name}" asked a question and the user answered, but the reply ` +
+              `could not be delivered (${steer.error}).`,
+            display: true,
+            details: { name, agent: running.agent, question: questionSummary },
+          },
+          { triggerTurn: true, deliverAs: "steer" },
+        );
+      }
     }
     return;
   }
@@ -1588,6 +1605,7 @@ function deliverPendingQuestion(running: RunningSubagent): void {
 async function watchSubagent(
   running: RunningSubagent,
   signal: AbortSignal,
+  opts?: { skipSummaryRead?: boolean },
 ): Promise<SubagentResult> {
   const { name, task, startTime, sessionFile } = running;
   const combinedSignal = AbortSignal.any([signal, getModuleAbortSignal()]);
@@ -1620,11 +1638,20 @@ async function watchSubagent(
       throw new Error("subagent has no surface");
     }
 
+    // Catch an ask_question written on the child's final turn: the completion
+    // loop already stopped ticking, so a pending `.ask` would otherwise be
+    // silently dropped.
+    deliverPendingQuestion(running);
+
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
 
     // Result extraction from the session file (both backends).
     let summary: string;
-    if (existsSync(sessionFile)) {
+    if (opts?.skipSummaryRead) {
+      // Resume path recomputes the summary from entries added after resume;
+      // reading the whole file here would be wasted work.
+      summary = "";
+    } else if (existsSync(sessionFile)) {
       const allEntries = getNewEntries(sessionFile, 0);
       summary =
         findLastAssistantMessage(allEntries) ??
@@ -2364,7 +2391,7 @@ export default function subagentsExtension(pi: ExtensionAPI) {
         const watcherAbort = new AbortController();
         running.abortController = watcherAbort;
 
-        watchSubagent(running, watcherAbort.signal)
+        watchSubagent(running, watcherAbort.signal, { skipSummaryRead: true })
           .then((result) => {
             updateWidget();
 

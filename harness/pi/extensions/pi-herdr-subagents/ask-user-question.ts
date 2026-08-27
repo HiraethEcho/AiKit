@@ -613,11 +613,6 @@ interface StoredAskAnswer {
 	index?: number;
 }
 
-function formatStoredAnswer(answer: StoredAskAnswer): string {
-	if (answer.wasCustom) return `Other: ${answer.label}`;
-	return answer.index != null ? `${answer.index}. ${answer.label}` : answer.label;
-}
-
 function buildQuestionsResult(
 	status: AskUserQuestionStatus,
 	questions: ResolvedAskQuestion[],

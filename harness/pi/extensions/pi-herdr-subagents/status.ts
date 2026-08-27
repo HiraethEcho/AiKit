@@ -3,8 +3,7 @@ export const DEFAULT_STATUS_LINE_LIMIT = 4;
 export const MAX_STATUS_NAME_LENGTH = 72;
 export const MAX_STATUS_LINE_LENGTH = 120;
 
-export type SubagentStatusKind = "starting" | "active" | "waiting" | "stalled" | "running";
-export type SubagentStatusSource = "pi";
+export type SubagentStatusKind = "starting" | "active" | "waiting" | "stalled";
 export type SubagentStatusTransition = "stalled" | "recovered" | null;
 export type StatusSnapshotState = "unseen" | "present" | "missing" | "invalid" | "wrong-id";
 export type StatusActivityPhase = "starting" | "active" | "waiting" | "done";
@@ -28,7 +27,7 @@ export type StatusObservation =
     };
 
 export interface SubagentStatusState {
-  source: SubagentStatusSource;
+  source: "pi";
   startTimeMs: number;
   firstObservationAtMs: number | null;
   lastActivityAtMs: number | null;
@@ -106,7 +105,7 @@ export function formatElapsedDuration(ms: number): string {
 }
 
 export function createStatusState(params: {
-  source: SubagentStatusSource;
+  source: "pi";
   startTimeMs: number;
 }): SubagentStatusState {
   return {
@@ -343,10 +342,6 @@ export function formatStatusLine(name: string, snapshot: StatusSnapshot): string
   if (snapshot.kind === "starting") {
     const label = snapshot.statusLabel ? ` (${snapshot.statusLabel})` : "";
     return boundStatusLine(`${boundedName} running ${snapshot.elapsedText}, starting${label}.`);
-  }
-
-  if (snapshot.kind === "running") {
-    return boundStatusLine(`${boundedName} running ${snapshot.elapsedText}.`);
   }
 
   if (snapshot.kind === "active") {
