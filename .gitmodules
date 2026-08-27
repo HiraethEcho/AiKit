@@ -1,0 +1,24 @@
+[submodule "opt/pi-config"]
+	path = opt/pi-config
+	url = git@github.com:amosblomqvist/pi-config.git
+[submodule "opt/pi-interactive-subagents"]
+	path = opt/pi-interactive-subagents
+	url = https://github.com/amosblomqvist/pi-interactive-subagents
+[submodule "opt/co-mathematician"]
+	path = opt/co-mathematician
+	url = git@github.com:hiraethecho/co-mathematician
+[submodule "opt/AAR"]
+	path = opt/AAR
+	url = git@github.com:VeryMath/AI4Math-Auto-Research
+[submodule "opt/texra"]
+	path = opt/texra
+	url = git@github.com:texra-ai/texra-scientific-skills
+[submodule "opt/RWS"]
+	path = opt/RWS
+	url = git@github.com:alfonso0512/research-writing-skill
+[submodule "opt/PaperReading"]
+	path = opt/PaperReading
+	url = git@github.com:VeryMath/AI4Math-Paper-Reading
+[submodule "opt/Writing"]
+	path = opt/Writing
+	url = git@github.com:VeryMath/AI4Math-Writing
