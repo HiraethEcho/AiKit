@@ -9,63 +9,63 @@ preset:
       []
 
     skills:
-      - "codekit:pickup"
-      - "codekit:archive"
-      - "codekit:rest"
-      - "codekit:upgrade"
-      - "codekit:app"
-      - "codekit:init"
-      - "codekit:brainstorm"
-      - "codekit:refine"
-      - "codekit:plan"
-      - "codekit:task"
-      - "speckit:app-sdd"
-      - "speckit:init-sdd"
-      - "speckit:spec-proposal"
-      - "speckit:spec-driven-development"
-      - "speckit:planning"
-      - "speckit:planning-and-task-breakdown"
-      - "speckit:building"
-      - "speckit:reviewing"
-      - "speckit:shipping"
-      - "speckit:knowledge-capture"
+      - "code:pickup"
+      - "code:archive"
+      - "code:rest"
+      - "code:upgrade"
+      - "code:app"
+      - "code:init"
+      - "code:brainstorm"
+      - "code:refine"
+      - "code:plan"
+      - "code:task"
+      - "spec:app-sdd"
+      - "spec:init-sdd"
+      - "spec:spec-proposal"
+      - "spec:spec-driven-development"
+      - "spec:planning"
+      - "spec:planning-and-task-breakdown"
+      - "spec:building"
+      - "spec:reviewing"
+      - "spec:shipping"
+      - "spec:knowledge-capture"
 
     agents:
-      - "codekit:conductor"
-      - "codekit:slicer"
-      - "codekit:maker"
-      - "codekit:tester"
-      - "codekit:inspector"
-      - "speckit:orchestrator"
-      - "speckit:planner"
-      - "speckit:plan-reviewer"
-      - "speckit:builder"
-      - "speckit:code-reviewer"
-      - "speckit:documenter"
-      - "speckit:releaser"
+      - "code:conductor"
+      - "code:slicer"
+      - "code:maker"
+      - "code:tester"
+      - "code:inspector"
+      - "spec:orchestrator"
+      - "spec:planner"
+      - "spec:plan-reviewer"
+      - "spec:builder"
+      - "spec:code-reviewer"
+      - "spec:documenter"
+      - "spec:releaser"
 
     commands:
-      - "codekit:pickup"
-      - "codekit:archive"
-      - "codekit:rest"
-      - "codekit:upgrade"
-      - "codekit:init"
-      - "codekit:task"
-      - "speckit:init-sdd"
-      - "speckit:spec"
-      - "speckit:plan"
-      - "speckit:build"
-      - "speckit:test"
-      - "speckit:review"
-      - "speckit:ship"
+      - "code:pickup"
+      - "code:archive"
+      - "code:rest"
+      - "code:upgrade"
+      - "code:init"
+      - "code:task"
+      - "spec:init-sdd"
+      - "spec:spec"
+      - "spec:plan"
+      - "spec:build"
+      - "spec:test"
+      - "spec:review"
+      - "spec:ship"
 
     mcp:
       []
 
 
   -
-    id: "paperkit:full-pipeline"
-    kit: "paperkit"
+    id: "paper:full-pipeline"
+    kit: "paper"
     description: "从零写论文全流程（Phase 0-5 agent 链）"
     kits:
       []
@@ -98,8 +98,8 @@ preset:
 
 
   -
-    id: "paperkit:plan"
-    kit: "paperkit"
+    id: "paper:plan"
+    kit: "paper"
     description: "论文骨架规划"
     kits:
       []
@@ -120,8 +120,8 @@ preset:
 
 
   -
-    id: "paperkit:write"
-    kit: "paperkit"
+    id: "paper:write"
+    kit: "paper"
     description: "逐节撰写"
     kits:
       []
@@ -145,8 +145,8 @@ preset:
 
 
   -
-    id: "paperkit:revision"
-    kit: "paperkit"
+    id: "paper:revision"
+    kit: "paper"
     description: "收到审稿意见后修改"
     kits:
       []
@@ -171,8 +171,8 @@ preset:
 
 
   -
-    id: "paperkit:beamer"
-    kit: "paperkit"
+    id: "paper:beamer"
+    kit: "paper"
     description: "数学 Beamer 演示"
     kits:
       []
@@ -193,8 +193,8 @@ preset:
 
 
   -
-    id: "paperkit:latex"
-    kit: "paperkit"
+    id: "paper:latex"
+    kit: "paper"
     description: "LaTeX 编译与审计"
     kits:
       []
@@ -214,8 +214,8 @@ preset:
 
 
   -
-    id: "paperkit:citation"
-    kit: "paperkit"
+    id: "paper:citation"
+    kit: "paper"
     description: "引用核实"
     kits:
       []
@@ -235,8 +235,8 @@ preset:
 
 
   -
-    id: "paperkit:polish"
-    kit: "paperkit"
+    id: "paper:polish"
+    kit: "paper"
     description: "润色去 AI 味"
     kits:
       []
@@ -260,8 +260,8 @@ preset:
 
 
   -
-    id: "paperkit:mrs-pipeline"
-    kit: "paperkit"
+    id: "paper:mrs-pipeline"
+    kit: "paper"
     description: "mrs math-paper 12-agent 流水线"
     kits:
       []
@@ -294,8 +294,8 @@ preset:
 
 
   -
-    id: "paperkit:grant"
-    kit: "paperkit"
+    id: "paper:grant"
+    kit: "paper"
     description: "基金申请书与研究计划"
     kits:
       []
@@ -316,8 +316,8 @@ preset:
 
 
   -
-    id: "paperkit:figures"
-    kit: "paperkit"
+    id: "paper:figures"
+    kit: "paper"
     description: "图表制作与题注"
     kits:
       []
@@ -339,8 +339,8 @@ preset:
 
 
   -
-    id: "researchkit:deep-research"
-    kit: "researchkit"
+    id: "research:deep-research"
+    kit: "research"
     description: "深研流水线（14-agent，全面文献综合）"
     kits:
       []
@@ -369,8 +369,8 @@ preset:
 
 
   -
-    id: "researchkit:3w-scan"
-    kit: "researchkit"
+    id: "research:3w-scan"
+    kit: "research"
     description: "WHY/HOW/WHAT 三路文献扫描"
     kits:
       []
@@ -390,8 +390,8 @@ preset:
 
 
   -
-    id: "researchkit:lit-review"
-    kit: "researchkit"
+    id: "research:lit-review"
+    kit: "research"
     description: "注释书目（论文格式）"
     kits:
       []
@@ -412,8 +412,8 @@ preset:
 
 
   -
-    id: "researchkit:ideate"
-    kit: "researchkit"
+    id: "research:ideate"
+    kit: "research"
     description: "问题发现与猜想形成"
     kits:
       []
@@ -433,8 +433,8 @@ preset:
 
 
   -
-    id: "researchkit:research-loop"
-    kit: "researchkit"
+    id: "research:research-loop"
+    kit: "research"
     description: "轻量研究循环（survey→tackle→summary）"
     kits:
       []
@@ -459,8 +459,8 @@ preset:
 
 
   -
-    id: "researchkit:orchestrate"
-    kit: "researchkit"
+    id: "research:orchestrate"
+    kit: "research"
     description: "多技能编排路由"
     kits:
       []
@@ -479,8 +479,8 @@ preset:
 
 
   -
-    id: "researchkit:socratic"
-    kit: "researchkit"
+    id: "research:socratic"
+    kit: "research"
     description: "苏格拉底引导研究"
     kits:
       []
@@ -500,8 +500,8 @@ preset:
 
 
   -
-    id: "reviewkit:full-review"
-    kit: "reviewkit"
+    id: "review:full-review"
+    kit: "review"
     description: "完整多视角审稿（EIC + 3 评审 + 反方）"
     kits:
       []
@@ -531,8 +531,8 @@ preset:
 
 
   -
-    id: "reviewkit:quick"
-    kit: "reviewkit"
+    id: "review:quick"
+    kit: "review"
     description: "快速评估"
     kits:
       []
@@ -552,8 +552,8 @@ preset:
 
 
   -
-    id: "reviewkit:re-review"
-    kit: "reviewkit"
+    id: "review:re-review"
+    kit: "review"
     description: "再审（修订验证）"
     kits:
       []
@@ -575,8 +575,8 @@ preset:
 
 
   -
-    id: "reviewkit:methodology"
-    kit: "reviewkit"
+    id: "review:methodology"
+    kit: "review"
     description: "方法聚焦审稿"
     kits:
       []
@@ -598,8 +598,8 @@ preset:
 
 
   -
-    id: "reviewkit:guided"
-    kit: "reviewkit"
+    id: "review:guided"
+    kit: "review"
     description: "引导式审稿"
     kits:
       []
@@ -618,8 +618,8 @@ preset:
 
 
   -
-    id: "reviewkit:calibration"
-    kit: "reviewkit"
+    id: "review:calibration"
+    kit: "review"
     description: "审稿人校准"
     kits:
       []
@@ -639,8 +639,8 @@ preset:
 
 
   -
-    id: "reviewkit:inline"
-    kit: "reviewkit"
+    id: "review:inline"
+    kit: "review"
     description: "编译安全内联批注"
     kits:
       []
@@ -660,8 +660,8 @@ preset:
 
 
   -
-    id: "reviewkit:audit-math"
-    kit: "reviewkit"
+    id: "review:audit-math"
+    kit: "review"
     description: "数学正确性审计"
     kits:
       []
@@ -831,8 +831,8 @@ preset:
 
 
   -
-    id: "codekit:base"
-    kit: "codekit"
+    id: "code:base"
+    kit: "code"
     description: "共享骨架: pickup / archive / rest / upgrade (内容待 base 手动挑选)"
     kits:
       []
@@ -857,8 +857,8 @@ preset:
 
 
   -
-    id: "codekit:lite"
-    kit: "codekit"
+    id: "code:lite"
+    kit: "code"
     description: "轻 workflow 全套: file-driven (SPEC/PLAN/DESIGN/HANDOFF)"
     kits:
       []
@@ -887,8 +887,8 @@ preset:
 
 
   -
-    id: "speckit:default"
-    kit: "speckit"
+    id: "spec:default"
+    kit: "spec"
     description: "重项目: lightspec (proposal/apply/archive 纪律)"
     kits:
       []

@@ -4,11 +4,11 @@
 
 version = "1.0"
 includes = [
-  "paperkit/manifest.toml",
-  "researchkit/manifest.toml",
-  "reviewkit/manifest.toml",
-  "extra/manifest.toml",
-  "codekit/manifest.toml",
-  "speckit/manifest.toml",
-  "devkit/manifest.toml",
+  "modules/paper/manifest.toml",
+  "modules/research/manifest.toml",
+  "modules/review/manifest.toml",
+  "modules/extra/manifest.toml",
+  "modules/code/manifest.toml",
+  "modules/spec/manifest.toml",
+  "modules/dev/manifest.toml",
 ]

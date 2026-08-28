@@ -5,26 +5,26 @@
 
 version = "1.0"
 includes = [
-  "paperkit/preset.toml",
-  "researchkit/preset.toml",
-  "reviewkit/preset.toml",
-  "extra/preset.toml",
-  "codekit/preset.toml",
-  "speckit/preset.toml",
+  "modules/paper/preset.toml",
+  "modules/research/preset.toml",
+  "modules/review/preset.toml",
+  "modules/extra/preset.toml",
+  "modules/code/preset.toml",
+  "modules/spec/preset.toml",
 ]
 
 [[preset]]
 id = "full"
 description = "codekit(轻) + speckit(重) 全工作流 — 不含 extra/devkit"
-skills = ["codekit:pickup", "codekit:archive", "codekit:rest", "codekit:upgrade",
-  "codekit:app", "codekit:init", "codekit:brainstorm", "codekit:refine", "codekit:plan", "codekit:task",
-  "speckit:app-sdd", "speckit:init-sdd", "speckit:spec-proposal", "speckit:spec-driven-development",
-  "speckit:planning", "speckit:planning-and-task-breakdown", "speckit:building", "speckit:reviewing",
-  "speckit:shipping", "speckit:knowledge-capture"]
-agents = ["codekit:conductor", "codekit:slicer", "codekit:maker", "codekit:tester", "codekit:inspector",
-  "speckit:orchestrator", "speckit:planner", "speckit:plan-reviewer", "speckit:builder",
-  "speckit:code-reviewer", "speckit:documenter", "speckit:releaser"]
-commands = ["codekit:pickup", "codekit:archive", "codekit:rest", "codekit:upgrade",
-  "codekit:init", "codekit:task",
-  "speckit:init-sdd", "speckit:spec", "speckit:plan", "speckit:build", "speckit:test", "speckit:review", "speckit:ship"]
+skills = ["code:pickup", "code:archive", "code:rest", "code:upgrade",
+  "code:app", "code:init", "code:brainstorm", "code:refine", "code:plan", "code:task",
+  "spec:app-sdd", "spec:init-sdd", "spec:spec-proposal", "spec:spec-driven-development",
+  "spec:planning", "spec:planning-and-task-breakdown", "spec:building", "spec:reviewing",
+  "spec:shipping", "spec:knowledge-capture"]
+agents = ["code:conductor", "code:slicer", "code:maker", "code:tester", "code:inspector",
+  "spec:orchestrator", "spec:planner", "spec:plan-reviewer", "spec:builder",
+  "spec:code-reviewer", "spec:documenter", "spec:releaser"]
+commands = ["code:pickup", "code:archive", "code:rest", "code:upgrade",
+  "code:init", "code:task",
+  "spec:init-sdd", "spec:spec", "spec:plan", "spec:build", "spec:test", "spec:review", "spec:ship"]
 mcp = []

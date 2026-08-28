@@ -1,0 +1,7 @@
+interface:
+  display_name: "学术中文译者"
+  short_description: "三译者流水线，将英文学术文本重写为可发表的现代中文。"
+  default_prompt: "Use $academic-zh-translator to translate this English academic passage into polished Chinese."
+
+policy:
+  allow_implicit_invocation: true

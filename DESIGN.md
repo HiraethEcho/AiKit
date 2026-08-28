@@ -9,13 +9,14 @@ AiKit/
   agents/       coding agent configs
   base/         base profile (contents chosen manually)
   persona/      main agents / custom system prompts
-  codekit/      轻 workflow (lite 全套, 文件驱动)
-  speckit/     重 workflow (SDD/lightspec)
-  devkit/       code-extra 工具池 (不进 workflow preset)
-  extra/        extra 工具 (文献/ocr/翻译/格式)
-  paperkit/     paper/notes writing kit
-  reviewkit/    review kit (论文审稿)
-  researchkit/  research assistance kit
+  modules/      submodule remotes — 仅记录, 不 clone
+    code/        轻 workflow (lite 全套, 文件驱动)
+    spec/        重 workflow (SDD/lightspec)
+    dev/         code-extra 工具池 (不进 workflow preset)
+    extra/       extra 工具 (文献/ocr/翻译/格式)
+    paper/       paper/notes writing kit
+    review/      review kit (论文审稿)
+    research/    research assistance kit
   docs/         documents
   opt/          git submodules
 ```
@@ -81,7 +82,7 @@ harness/agents.toml ┘   manifest.json / preset.json / agents.json (shell: jq �
 
 ### 多格式生成
 
-`gen.py --format lua|json|yaml|all`（默认 all）：
+`python3 deploy/gen.py --format lua|json|yaml|all`（默认 all）：
 
 - 单一数据源 TOML → `build_data()` 合并 → 多格式序列化。
 - `lua`：Lua 表，`deploy.lua` dofile。

@@ -44,7 +44,7 @@ skills、agents、commands、mcp、plugins 等。
 
 #### D-1 `manifest.toml`（Phase 1 资源）
 
-- 根 `deploy/manifest.toml` 用 `includes = ["paperkit/manifest.toml", ...]` 引用各 kit 清单（include 相对仓库根）。
+- 根 `deploy/manifest.toml` 用 `includes = ["modules/paper/manifest.toml", ...]` 引用各 kit 清单（include 相对仓库根）。
 - kit 级 `*/manifest.toml` 按类型分组：`[[skills]]`、`[[agents]]`、`[[commands]]`、`[[mcp]]`。
 - 合并后资源 id 为 `<kit名>:<原id>`（kit 前缀）；根清单内联资源 id 保持原样。
 - 每个资源字段：
@@ -62,7 +62,7 @@ skills、agents、commands、mcp、plugins 等。
 
 #### D-2 `preset.toml`（Phase 1 预设）
 
-- 根 `deploy/preset.toml` 用 `includes = ["paperkit/preset.toml", ...]` 引用 kit 预设。
+- 根 `deploy/preset.toml` 用 `includes = ["modules/paper/preset.toml", ...]` 引用 kit 预设。
 - kit 级 `*/preset.toml`：`[[preset]]`，作用域默认本 kit。
 - `[[preset]]` 字段：`id`、`description`、`kits`（可选，整 kit）、`skills`、`agents`、`commands`、`mcp`。
 - 省略 `kits` 且无逐类引用 = 整 kit。
@@ -106,15 +106,14 @@ skills、agents、commands、mcp、plugins 等。
 
 #### D-5 数据文件生成（多格式）
 
-- `deploy/deploy.py gen --format lua|json|sh|all` 从 TOML 聚合生成多格式文件
+- `python3 deploy/gen.py --format lua|json|sh|all` 从 TOML 聚合生成多格式文件
   （默认 `all`）。
 - `lua`：`manifest.lua` / `preset.lua` / `agents.lua`（Lua 版 `dofile` 加载）。
 - `json`：`manifest.json` / `preset.json` / `agents.json`（给 jq/node 等）。
 - `sh`：`manifest.sh`（bash `source` 直接读取，`RESOURCES`/`PRESETS` 数组 + pi 变量）。
-- 生成文件提交到仓库；头部注释 `GENERATED FROM <src> by deploy/deploy.py gen. DO NOT EDIT.`
+- 生成文件提交到仓库；头部注释 `GENERATED FROM <src> by deploy/gen.py. DO NOT EDIT.`
   （JSON 无注释）。
 - 原子写入（临时文件后 replace）；生成失败不覆盖旧文件。
-- `deploy.py gen-lua` 为 `gen --format lua` 别名。
 
 #### D-6 Lua 版 `deploy.lua`
 
@@ -214,12 +213,12 @@ description = "web search mcp"
 ### `preset.toml` 示例（kit 级）
 
 ```toml
-# paperkit/preset.toml
+# paper/preset.toml
 version = "1.0"
 
 [[preset]]
 id = "full"
-description = "paperkit 全套"
+description = "paper 全套"
 
 [[preset]]
 id = "writers"

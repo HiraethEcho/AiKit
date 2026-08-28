@@ -38,7 +38,7 @@ from gen import (
     load_manifest, load_presets, load_agents,
     expand_preset, _resolve_ref, expand_presets_by_id,
     mcp_json_data, render_pi_settings, build_data,
-    _load_toml, AGENTS_TOML, gen_lua,
+    _load_toml, AGENTS_TOML, gen_lua, gen,
 )
 SECTIONS = ("skills", "agents", "commands", "mcp")
 TARGET_DIRS = {
@@ -689,12 +689,6 @@ def main():
         return cmd_doctor()
     if args.command == "scan":
         return cmd_scan(write=args.write)
-    if args.command == "gen-lua":
-        gen("lua")
-        return 0
-    if args.command == "gen":
-        gen(args.format)
-        return 0
     if args.command == "agents":
         return cmd_agents(args)
 

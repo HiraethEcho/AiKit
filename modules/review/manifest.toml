@@ -1,0 +1,167 @@
+[[skills]]
+id = "manuscript-review"
+category = "math"
+tags = ["review", "math", "audit"]
+path = "modules/review/skills/manuscript-review"
+description = "数学正确性审稿（独立验证计算，findings-first）"
+
+[[skills]]
+id = "rigor-review"
+category = "math"
+tags = ["review", "proof", "rigor"]
+path = "modules/review/skills/rigor-review"
+description = "证明严谨性 6 维度审稿（arm）"
+
+[[skills]]
+id = "inline-paper-critic"
+category = "math"
+tags = ["review", "latex", "comment"]
+path = "modules/review/skills/inline-paper-critic"
+description = "编译安全内联数学批注"
+
+[[skills]]
+id = "writing-commenter"
+category = "math"
+tags = ["review", "comment", "notation"]
+path = "modules/review/skills/writing-commenter"
+description = "逻辑/记号/编辑三模式批注"
+
+[[skills]]
+id = "proof-obligation-audit"
+category = "math"
+tags = ["review", "proof", "audit"]
+path = "modules/review/skills/proof-obligation-audit"
+description = "证明义务与假设审计"
+
+[[skills]]
+id = "claim-evidence-ledger"
+category = "math"
+tags = ["review", "evidence", "audit"]
+path = "modules/review/skills/claim-evidence-ledger"
+description = "断言-证据溯源台账"
+
+[[agents]]
+id = "reviewer"
+category = "math"
+tags = ["review"]
+path = "modules/review/agents/reviewer.md"
+description = "审稿执行（数学正确性 + 表达双轨）"
+
+[[commands]]
+id = "review"
+category = "math"
+tags = ["review"]
+path = "modules/review/commands/review.md"
+description = "草稿 → findings-first 审稿报告"
+
+[[commands]]
+id = "simulate-reviewer"
+category = "math"
+tags = ["review", "simulation"]
+path = "modules/review/commands/simulate-reviewer.md"
+description = "模拟审稿人（表达层面）"
+
+[[skills]]
+id = "math-reviewer"
+category = "math"
+tags = ['review', 'multi-perspective']
+path = "modules/review/skills/math-reviewer"
+description = "多视角审稿（EIC+3评审+反方，8 modes）"
+
+[[agents]]
+id = "math-reviewer"
+category = "math"
+tags = ['review', 'math']
+path = "modules/review/agents/math-reviewer.md"
+description = "审稿执行（mrs 主 agent）"
+
+[[agents]]
+id = "eic_agent"
+category = "math"
+tags = ['review', 'editor']
+path = "modules/review/agents/eic_agent.md"
+description = "主编裁决"
+
+[[agents]]
+id = "domain_reviewer_agent"
+category = "math"
+tags = ['review', 'domain']
+path = "modules/review/agents/domain_reviewer_agent.md"
+description = "领域审稿"
+
+[[agents]]
+id = "methodology_reviewer_agent"
+category = "math"
+tags = ['review', 'methodology']
+path = "modules/review/agents/methodology_reviewer_agent.md"
+description = "方法审稿"
+
+[[agents]]
+id = "perspective_reviewer_agent"
+category = "math"
+tags = ['review', 'perspective']
+path = "modules/review/agents/perspective_reviewer_agent.md"
+description = "跨学科视角审稿"
+
+[[agents]]
+id = "devils_advocate_reviewer_agent"
+category = "math"
+tags = ['review', 'critique']
+path = "modules/review/agents/devils_advocate_reviewer_agent.md"
+description = "反方辩手"
+
+[[agents]]
+id = "field_analyst_agent"
+category = "math"
+tags = ['review', 'field']
+path = "modules/review/agents/field_analyst_agent.md"
+description = "领域分析"
+
+[[agents]]
+id = "editorial_synthesizer_agent"
+category = "math"
+tags = ['review', 'editor']
+path = "modules/review/agents/editorial_synthesizer_agent.md"
+description = "编辑综合"
+
+[[commands]]
+id = "ars-review"
+category = "math"
+tags = ['review']
+path = "modules/review/commands/ars-review.md"
+description = "完整审稿"
+
+[[commands]]
+id = "ars-re-review"
+category = "math"
+tags = ['review', 'verify']
+path = "modules/review/commands/ars-re-review.md"
+description = "再审（修订验证）"
+
+[[commands]]
+id = "ars-quick-review"
+category = "math"
+tags = ['review', 'quick']
+path = "modules/review/commands/ars-quick-review.md"
+description = "快速评估"
+
+[[commands]]
+id = "ars-methodology-review"
+category = "math"
+tags = ['review', 'methodology']
+path = "modules/review/commands/ars-methodology-review.md"
+description = "方法聚焦审稿"
+
+[[commands]]
+id = "ars-guided-review"
+category = "math"
+tags = ['review', 'guided']
+path = "modules/review/commands/ars-guided-review.md"
+description = "引导式审稿"
+
+[[commands]]
+id = "ars-calibration"
+category = "math"
+tags = ['review', 'calibration']
+path = "modules/review/commands/ars-calibration.md"
+description = "审稿人校准"

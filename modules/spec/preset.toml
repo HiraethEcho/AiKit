@@ -1,0 +1,10 @@
+# modules/spec/preset.toml — 重 workflow (SDD/lightspec) presets
+version = "1.0"
+
+[[preset]]
+id = "default"
+description = "重项目: lightspec (proposal/apply/archive 纪律)"
+skills = ["app-sdd", "init-sdd", "spec-proposal", "spec-driven-development", "planning", "planning-and-task-breakdown", "building", "reviewing", "shipping", "knowledge-capture"]
+agents = ["orchestrator", "planner", "plan-reviewer", "builder", "code-reviewer", "documenter", "releaser"]
+commands = ["init-sdd", "spec", "plan", "build", "test", "review", "ship"]
+mcp = []

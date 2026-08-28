@@ -23,18 +23,18 @@ agents/          # coding agents and their extensions/plugins
   codex/
   claude-code/
 persona/         # custom personas (build/general/scout/audit/plan/reviewer)
-base/            # basic tools — 内容手动挑选中 (暂空, 骨架在 codekit)
+base/            # basic tools — 内容手动挑选中 (暂空, 骨架在 code)
   agents/        # (待填)
   skills/        # foundation skills (e.g. grill-me, handoff)
   commands/      # handoff, pickup
 modules          # submodule remotes — 仅记录, 不 clone
-codekit/         # 轻 workflow (lite 全套, 文件驱动): conductor/slicer/maker/tester/inspector
-speckit/        # 重 workflow (SDD/lightspec): orchestrator/planner/plan-reviewer/builder/code-reviewer/documenter/releaser
-devkit/          # code-extra 池: 工作流外工具 (context7, ponytail-*, tdd, security …) — 不进 workflow preset
-extra/           # extra 工具: 文献/ocr/翻译/格式 + agentkit extra 32 skills — 不进 workflow preset
-paperkit/        # 写论文 (+ 收到 review 后修改)
-reviewkit/       # 审稿 (论文 review)
-researchkit/     # 研究辅助
+  code/          # 轻 workflow (lite 全套, 文件驱动): conductor/slicer/maker/tester/inspector
+  spec/          # 重 workflow (SDD/lightspec): orchestrator/planner/plan-reviewer/builder/code-reviewer/documenter/releaser
+  dev/           # code-extra 池: 工作流外工具 (context7, ponytail-*, tdd, security …) — 不进 workflow preset
+  extra/         # extra 工具: 文献/ocr/翻译/格式规范 + agentkit extra 32 skills, 共 48 + agents) — 不进 workflow preset
+  paper/         # 写论文 (+ 收到 review 后修改)
+  review/        # 审稿 (论文 review)
+  research/      # 研究辅助
 docs/            # 文档 (sdd docs → docs/agentkit-sdd/)
 ```
 

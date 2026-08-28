@@ -1,0 +1,209 @@
+[[skills]]
+id = "ideation"
+category = "math"
+tags = ['research', 'conjecture']
+path = "modules/research/skills/ideation"
+description = "问题发现与猜想形成"
+
+[[skills]]
+id = "literature-survey"
+category = "math"
+tags = ['research', 'literature']
+path = "modules/research/skills/literature-survey"
+description = "文献调研与论文提取"
+
+[[skills]]
+id = "proof-exploration"
+category = "math"
+tags = ['research', 'proof']
+path = "modules/research/skills/proof-exploration"
+description = "证明策略探索"
+
+[[skills]]
+id = "orchestration"
+category = "math"
+tags = ['research', 'orchestration']
+path = "modules/research/skills/orchestration"
+description = "研究阶段编排与路由"
+
+[[skills]]
+id = "math-deep-research"
+category = "math"
+tags = ['research', 'deep-research', 'literature']
+path = "modules/research/skills/math-deep-research"
+description = "深研流水线（14-agent，8 modes）"
+
+[[skills]]
+id = "research-loop"
+category = "math"
+tags = ["research", "loop", "minimal"]
+path = "modules/research/skills/research-loop"
+description = "轻量研究循环（survey→tackle→summary，原 kit/minimal）"
+
+[[agents]]
+id = "math-researcher"
+category = "math"
+tags = ['research', 'literature']
+path = "modules/research/agents/math-researcher.md"
+description = "数学研究执行（检索/验证/综合）"
+
+[[agents]]
+id = "bibliography_agent"
+category = "math"
+tags = ['research', 'bibliography']
+path = "modules/research/agents/bibliography_agent.md"
+description = "书目构建"
+
+[[agents]]
+id = "source_verification_agent"
+category = "math"
+tags = ['research', 'verification']
+path = "modules/research/agents/source_verification_agent.md"
+description = "来源核实"
+
+[[agents]]
+id = "synthesis_agent"
+category = "math"
+tags = ['research', 'synthesis']
+path = "modules/research/agents/synthesis_agent.md"
+description = "综合"
+
+[[agents]]
+id = "research_architect_agent"
+category = "math"
+tags = ['research', 'planning']
+path = "modules/research/agents/research_architect_agent.md"
+description = "研究架构设计"
+
+[[agents]]
+id = "research_question_agent"
+category = "math"
+tags = ['research', 'planning']
+path = "modules/research/agents/research_question_agent.md"
+description = "研究问题形成"
+
+[[agents]]
+id = "devils_advocate_agent"
+category = "math"
+tags = ['research', 'critique']
+path = "modules/research/agents/devils_advocate_agent.md"
+description = "反方辩手"
+
+[[agents]]
+id = "socratic_mentor_agent"
+category = "math"
+tags = ['research', 'mentor']
+path = "modules/research/agents/socratic_mentor_agent.md"
+description = "苏格拉底导师"
+
+[[agents]]
+id = "report_compiler_agent"
+category = "math"
+tags = ['research', 'report']
+path = "modules/research/agents/report_compiler_agent.md"
+description = "报告汇编"
+
+[[agents]]
+id = "editor_in_chief_agent"
+category = "math"
+tags = ['research', 'editor']
+path = "modules/research/agents/editor_in_chief_agent.md"
+description = "主编把关"
+
+[[agents]]
+id = "ethics_review_agent"
+category = "math"
+tags = ['research', 'ethics']
+path = "modules/research/agents/ethics_review_agent.md"
+description = "伦理审查"
+
+[[agents]]
+id = "meta_analysis_agent"
+category = "math"
+tags = ['research', 'meta-analysis']
+path = "modules/research/agents/meta_analysis_agent.md"
+description = "元分析"
+
+[[agents]]
+id = "monitoring_agent"
+category = "math"
+tags = ['research', 'monitoring']
+path = "modules/research/agents/monitoring_agent.md"
+description = "文献监测"
+
+[[agents]]
+id = "risk_of_bias_agent"
+category = "math"
+tags = ['research', 'bias']
+path = "modules/research/agents/risk_of_bias_agent.md"
+description = "偏倚风险评估"
+
+[[agents]]
+id = "timeline_extraction_agent"
+category = "math"
+tags = ['research', 'timeline']
+path = "modules/research/agents/timeline_extraction_agent.md"
+description = "时间线提取"
+
+[[commands]]
+id = "ars-3w"
+category = "math"
+tags = ['research', 'literature']
+path = "modules/research/commands/ars-3w.md"
+description = "WHY/HOW/WHAT 三路文献扫描"
+
+[[commands]]
+id = "ars-lit-review"
+category = "math"
+tags = ['research', 'literature']
+path = "modules/research/commands/ars-lit-review.md"
+description = "注释书目（论文格式）"
+
+[[agents]]
+id = "thinker"
+category = "math"
+tags = ['research', 'orchestration']
+path = "modules/research/agents/thinker.md"
+description = "主编排：猜想/拆解/派发"
+
+[[agents]]
+id = "solver"
+category = "math"
+tags = ['research', 'proof']
+path = "modules/research/agents/solver.md"
+description = "证明构造（按复杂度）"
+
+[[agents]]
+id = "reviewer"
+category = "math"
+tags = ['research', 'review']
+path = "modules/research/agents/reviewer.md"
+description = "证明审阅"
+
+[[agents]]
+id = "writer"
+category = "math"
+tags = ['research', 'writing']
+path = "modules/research/agents/writer.md"
+description = "研究笔记/转论文"
+
+[[agents]]
+id = "note-taker"
+category = "math"
+tags = ['research', 'notes']
+path = "modules/research/agents/note-taker.md"
+description = "结构化研究笔记"
+
+[[agents]]
+id = "survey"
+category = "math"
+tags = ['research', 'literature']
+path = "modules/research/agents/survey.md"
+description = "文献综述"
+
+[[agents]]
+id = "teacher"
+category = "math"
+tags = ['research', 'teach']
+path = "modules/research/agents/teacher.md"
+description = "基于 Zotero 讲解"
