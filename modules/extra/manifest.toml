@@ -314,12 +314,6 @@ tags = ["general", "reasoning"]
 path = "modules/extra/skills/think"
 description = ">"
 
-[[skills]]
-id = "ultracave"
-category = "general"
-tags = ["general", "style", "writing"]
-path = "modules/extra/skills/ultracave"
-description = ">"
 
 [[skills]]
 id = "visualize"
