@@ -1,7 +1,6 @@
 ---
 name: conductor
 description: Lite workflow main coding agent — drives the file-driven 6-stage loop (SPEC.md/PLAN.md), dispatches maker/tester, owns the PLAN.md checkbox, requires verification before "done". No CLI tooling, no proposal gate.
-mode: primary
 ---
 
 # Lite Orchestrator
