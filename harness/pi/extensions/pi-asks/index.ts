@@ -29,6 +29,7 @@ interface AskResult {
   questions: Question[];
   answers: Answer[];
   cancelled: boolean;
+  note?: string;
 }
 
 // ── Schema ────────────────────────────────────────────────────────────────
@@ -110,7 +111,8 @@ export default function (pi: ExtensionAPI): void {
           return { content: [{ type: "text" as const, text: "User cancelled." }], details: { answers: [], cancelled: true } };
         }
         const lines = response.answers.map((a: any) => `${a.id}: ${a.label}`);
-        return { content: [{ type: "text" as const, text: lines.join("\n") }], details: { answers: response.answers, cancelled: false } };
+        if (response.note) lines.push(`Note: ${response.note}`);
+        return { content: [{ type: "text" as const, text: lines.join("\n") }], details: { answers: response.answers, cancelled: false, ...(response.note ? { note: response.note } : {}) } };
       }
 
       // TUI mode
@@ -132,6 +134,7 @@ export default function (pi: ExtensionAPI): void {
         const ql = questions.find(q => q.id === a.id)?.label || a.id;
         return a.wasCustom ? `${ql}: user wrote: ${a.label}` : `${ql}: ${a.index}. ${a.label}`;
       });
+      if (result.note) lines.push(`Note: ${result.note}`);
       return { content: [{ type: "text" as const, text: lines.join("\n") }], details: result };
     },
 
@@ -151,6 +154,7 @@ export default function (pi: ExtensionAPI): void {
       const lines = (details.answers || []).map((a: any) =>
         `${theme.fg("success", "✓ ")}${theme.fg("accent", a.id)}: ${a.wasCustom ? theme.fg("muted", "(wrote) ") + a.label : `${a.index}. ${a.label}`}`
       );
+      if (details.note) lines.push(`${theme.fg("muted", "Note: ")}${theme.fg("accent", details.note)}`);
       return new Text(lines.join("\n"), 0, 0);
     },
   });
@@ -170,6 +174,8 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
     let inputQuestionId: string | null = null;
     let cachedLines: string[] | undefined;
     const answers = new Map<string, Answer>();
+    let note = "";
+    let confirmCancel = false;
 
     const editorTheme = {
       borderColor: (s: string) => theme.fg("accent", s),
@@ -186,7 +192,7 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
     function refresh() { cachedLines = undefined; tui.requestRender(); }
 
     function submit(cancelled: boolean) {
-      done({ questions, answers: Array.from(answers.values()), cancelled });
+      done({ questions, answers: Array.from(answers.values()), cancelled, note: note.trim() || undefined });
     }
 
     function currentQuestion() { return questions[currentTab]; }
@@ -201,40 +207,71 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
 
     function allAnswered() { return questions.every(q => answers.has(q.id)); }
 
-    function advanceAfterAnswer() {
-      if (!isMulti) { submit(false); return; }
-      if (currentTab < questions.length - 1) { currentTab++; }
-      else { currentTab = questions.length; }
+    function goTab(index: number) {
+      currentTab = ((index % totalTabs) + totalTabs) % totalTabs;
       optionIndex = 0;
+      confirmCancel = false;
+      if (currentTab === questions.length) {
+        // Submit tab: wait for optional append note by default.
+        inputMode = true;
+        inputQuestionId = "__note__";
+        editor.setText(note);
+      } else {
+        inputMode = false;
+        inputQuestionId = null;
+      }
       refresh();
+    }
+
+    function advanceAfterAnswer() {
+      if (currentTab < questions.length - 1) goTab(currentTab + 1);
+      else goTab(questions.length);
     }
 
     editor.onSubmit = (value) => {
       if (!inputQuestionId) return;
+      if (inputQuestionId === "__note__") {
+        note = value.trim();
+        inputMode = false;
+        inputQuestionId = null;
+        editor.setText("");
+        if (!allAnswered()) {
+          const idx = questions.findIndex(q => !answers.has(q.id));
+          goTab(idx >= 0 ? idx : questions.length - 1);
+          return;
+        }
+        // Enter always submits: empty note → plain, non-empty → note appended.
+        submit(false);
+        return;
+      }
       const trimmed = value.trim() || "(no response)";
       answers.set(inputQuestionId, { id: inputQuestionId, value: trimmed, label: trimmed, wasCustom: true });
       inputMode = false;
       inputQuestionId = null;
       editor.setText("");
+      if (!isMulti) { submit(false); return; } // single-question custom answer → submit directly
       advanceAfterAnswer();
     };
 
     function handleInput(data: string) {
       if (inputMode) {
-        if (matchesKey(data, Key.escape)) { inputMode = false; inputQuestionId = null; editor.setText(""); refresh(); return; }
+        if (matchesKey(data, Key.escape)) {
+          if (inputQuestionId === "__note__") {
+            note = editor.getText().trim(); // keep draft
+            goTab(questions.length - 1); // back to last question
+          } else { inputMode = false; inputQuestionId = null; editor.setText(""); refresh(); }
+          return;
+        }
         editor.handleInput(data); refresh(); return;
       }
       const q = currentQuestion();
       const opts = currentOptions();
 
+      if (!matchesKey(data, Key.escape)) confirmCancel = false;
+
       if (isMulti) {
-        if (matchesKey(data, Key.tab) || matchesKey(data, Key.right)) { currentTab = (currentTab + 1) % totalTabs; optionIndex = 0; refresh(); return; }
-        if (matchesKey(data, Key.shift("tab")) || matchesKey(data, Key.left)) { currentTab = (currentTab - 1 + totalTabs) % totalTabs; optionIndex = 0; refresh(); return; }
-      }
-      if (currentTab === questions.length) {
-        if (matchesKey(data, Key.enter) && allAnswered()) submit(false);
-        else if (matchesKey(data, Key.escape)) submit(true);
-        return;
+        if (matchesKey(data, Key.tab) || matchesKey(data, Key.right)) { goTab(currentTab + 1); return; }
+        if (matchesKey(data, Key.shift("tab")) || matchesKey(data, Key.left)) { goTab(currentTab - 1); return; }
       }
       if (matchesKey(data, Key.up)) { optionIndex = Math.max(0, optionIndex - 1); refresh(); return; }
       if (matchesKey(data, Key.down)) { optionIndex = Math.min(opts.length - 1, optionIndex + 1); refresh(); return; }
@@ -244,7 +281,10 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
         answers.set(q.id, { id: q.id, value: opt.value, label: opt.label, wasCustom: false, index: optionIndex + 1 });
         advanceAfterAnswer(); return;
       }
-      if (matchesKey(data, Key.escape)) submit(true);
+      if (matchesKey(data, Key.escape)) {
+        if (confirmCancel) submit(true);
+        else { confirmCancel = true; refresh(); }
+      }
     }
 
     function render(width: number): string[] {
@@ -298,6 +338,7 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
         lines.push("");
         addWP(" ", theme.fg("dim", "Enter to submit • Esc to cancel"));
       } else if (currentTab === questions.length) {
+        // Submit tab: note editor open by default; Enter submits.
         addWP(" ", theme.fg("accent", theme.bold("Ready to submit")));
         lines.push("");
         for (const question of questions) {
@@ -308,7 +349,17 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
           }
         }
         lines.push("");
-        addWP(" ", allAnswered() ? theme.fg("success", "Enter to submit") : theme.fg("warning", "Unanswered questions"));
+        if (inputMode && inputQuestionId === "__note__") {
+          addWP(" ", theme.fg("muted", "Append a note (optional):"));
+          lines.push("");
+          for (const line of editor.render(Math.max(1, rw - 2))) lines.push(` ${line}`);
+          lines.push("");
+          addWP(" ", theme.fg("dim", allAnswered() ? "Enter to submit (empty = just submit) • Esc to back" : "Answer all questions first • Esc to back"));
+        } else if (allAnswered()) {
+          addWP(" ", theme.fg("success", "Enter to submit"));
+        } else {
+          addWP(" ", theme.fg("warning", "Unanswered questions"));
+        }
       } else if (q) {
         addWP(" ", theme.fg("text", q.prompt));
         if (q.description) { lines.push(""); addWP(" ", theme.fg("muted", q.description)); }
@@ -324,7 +375,10 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
       }
 
       lines.push("");
-      if (!inputMode) addWP(" ", theme.fg("dim", isMulti ? "Tab/←→ navigate • ↑↓ select • Enter confirm • Esc cancel" : "↑↓ navigate • Enter select • Esc cancel"));
+      if (!inputMode) {
+        addWP(" ", theme.fg("dim", (isMulti ? "Tab/←→ navigate • ↑↓ select • Enter confirm • Esc cancel" : "↑↓ navigate • Enter select • Esc cancel")));
+        if (confirmCancel) addWP(" ", theme.fg("warning", "Press Esc again to cancel • any other key to continue"));
+      }
       lines.push(theme.fg("accent", "─".repeat(rw)));
 
       cachedLines = lines;
@@ -337,11 +391,11 @@ async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<A
 
 // ── Socket bridge (headless subagent path) ─────────────────────────────────
 
-async function askViaSocket(socketPath: string, requestId: string, questions: QuestionItem[]): Promise<{ cancelled: boolean; answers: Answer[] }> {
-  return new Promise<{ cancelled: boolean; answers: Answer[] }>((resolve) => {
+async function askViaSocket(socketPath: string, requestId: string, questions: QuestionItem[]): Promise<{ cancelled: boolean; answers: Answer[]; note?: string }> {
+  return new Promise<{ cancelled: boolean; answers: Answer[]; note?: string }>((resolve) => {
     let resolved = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
-    const finish = (r: { cancelled: boolean; answers: Answer[] }) => { if (resolved) return; resolved = true; if (timer) clearTimeout(timer); resolve(r); };
+    const finish = (r: { cancelled: boolean; answers: Answer[]; note?: string }) => { if (resolved) return; resolved = true; if (timer) clearTimeout(timer); resolve(r); };
     const socket = connect(socketPath, () => {
       socket.write(JSON.stringify({ type: "ask_request", requestId, questions }) + "\n");
     });
@@ -355,7 +409,7 @@ async function askViaSocket(socketPath: string, requestId: string, questions: Qu
           const msg = JSON.parse(line);
           if (msg.type === "ask_response" && msg.requestId === requestId) {
             socket.end();
-            finish({ cancelled: msg.cancelled, answers: msg.results });
+            finish({ cancelled: msg.cancelled, answers: msg.results, ...(msg.note ? { note: msg.note } : {}) });
           }
         } catch { /* ignore */ }
       }

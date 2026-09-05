@@ -14,7 +14,7 @@ import registerRtk from "./rtk.ts";
 import registerToon from "./toon.ts";
 import registerCave from "./cave.ts";
 import { registerSafeBash } from "./safe-bash.ts";
-import registerAgentCommands from "./agents-cmds.ts";
+import registerAgentCommands from "./cmds.ts";
 import registerRoles from "./roles.ts";
 
 export default function piToolkit(pi: ExtensionAPI) {
@@ -29,6 +29,6 @@ export default function piToolkit(pi: ExtensionAPI) {
   registerToon(pi, cfg.toon);
   registerCave(pi, cfg.cave);
   registerSafeBash(pi, cfg["safe-bash"]);
-  registerAgentCommands(pi, cfg["agent-commands"]);
+  registerAgentCommands(pi, cfg["cmds"]);
   registerRoles(pi, cfg);
 }

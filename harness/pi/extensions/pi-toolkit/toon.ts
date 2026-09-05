@@ -51,13 +51,13 @@ Rule of thumb: TOON for **reading** dense data into context; JSON for **contract
 // ── Prompt relevance gate ──────────────────────────────────────────────────
 
 const JSON_TRIGGERS = [
-	"json",
-	"jsonl",
-	"ndjson",
-	"jq",
-	"toon",
-	"openapi",
-	"swagger",
+  "json",
+  "jsonl",
+  "ndjson",
+  "jq",
+  "toon",
+  "openapi",
+  "swagger",
 ] as const;
 
 const JSON_TRIGGER_RE = new RegExp(`\\b(${JSON_TRIGGERS.join("|")})\\b`, "i");
@@ -68,53 +68,61 @@ const JSON_TRIGGER_RE = new RegExp(`\\b(${JSON_TRIGGERS.join("|")})\\b`, "i");
  * and word-bounded ("JSON", "Json", "json" all match; "adjust" does not).
  */
 export function mentionsJson(prompt: string | undefined | null): boolean {
-	if (!prompt) return false;
-	return JSON_TRIGGER_RE.test(prompt);
+  if (!prompt) return false;
+  return JSON_TRIGGER_RE.test(prompt);
 }
 
 // ── Registration ───────────────────────────────────────────────────────────
 
-export default function registerToon(pi: ExtensionAPI, initialEnabled?: boolean) {
-	let jqAvailable: boolean | null = null;
-	let toonAvailable: boolean | null = null;
+export default function registerToon(
+  pi: ExtensionAPI,
+  initialEnabled?: boolean,
+) {
+  let jqAvailable: boolean | null = null;
+  let toonAvailable: boolean | null = null;
 
-	const t = registerToggle(pi, {
-		command: "toon",
-		description: "Toggle JSON/TOON guidance on/off. Usage: /toon [on|off]",
-		configKey: "toon-config",
-		statusKey: "toon",
-		icon: TOON_ICON,
-		defaultEnabled: false,
-		label: "JSON/TOON guidance",
-		isActive: (enabled) => enabled && jqAvailable !== false && toonAvailable !== false,
-	}, initialEnabled);
+  const t = registerToggle(
+    pi,
+    {
+      command: "toon",
+      description: "Toggle JSON/TOON guidance on/off. Usage: /toon [on|off]",
+      configKey: "toon-config",
+      statusKey: "toon",
+      icon: TOON_ICON,
+      defaultEnabled: false,
+      label: "JSON/TOON guidance",
+      isActive: (enabled) =>
+        enabled && jqAvailable !== false && toonAvailable !== false,
+    },
+    initialEnabled,
+  );
 
-	// ── System prompt injection (gated on JSON mentions) ──────────────────
-	pi.on("before_agent_start", async (event, ctx) => {
-		if (!t.isEnabled()) return undefined;
-		if (!mentionsJson(event.prompt)) return undefined;
+  // ── System prompt injection (gated on JSON mentions) ──────────────────
+  pi.on("before_agent_start", async (event, ctx) => {
+    if (!t.isEnabled()) return undefined;
+    if (!mentionsJson(event.prompt)) return undefined;
 
-		// Probe once on first JSON-relevant prompt.
-		if (jqAvailable === null || toonAvailable === null) {
-			[jqAvailable, toonAvailable] = await Promise.all([
-				canExecute(pi, "jq", ["--version"]),
-				canExecute(pi, "toon", ["--version"]),
-			]);
-			if (!jqAvailable)
-				ctx.ui.notify(
-					"jq not found — JSON/TOON guidance disabled. Install: sudo apt install jq  or  brew install jq",
-					"warning",
-				);
-			if (!toonAvailable)
-				ctx.ui.notify(
-					"toon not found — JSON/TOON guidance disabled. Install: bun add -g @toon-format/cli  or  npm i -g @toon-format/cli",
-					"warning",
-				);
-		}
+    // Probe once on first JSON-relevant prompt.
+    if (jqAvailable === null || toonAvailable === null) {
+      [jqAvailable, toonAvailable] = await Promise.all([
+        canExecute(pi, "jq", ["--version"]),
+        canExecute(pi, "toon", ["--version"]),
+      ]);
+      if (!jqAvailable)
+        ctx.ui.notify(
+          "jq not found — JSON/TOON guidance disabled. Install: sudo apt install jq  or  brew install jq",
+          "warning",
+        );
+      if (!toonAvailable)
+        ctx.ui.notify(
+          "toon not found — JSON/TOON guidance disabled. Install: bun add -g @toon-format/cli  or  npm i -g @toon-format/cli",
+          "warning",
+        );
+    }
 
-		t.refreshStatus();
-		if (jqAvailable === false || toonAvailable === false) return undefined;
-		const existing = event.systemPrompt ?? "";
-		return { systemPrompt: `${TOON_SYSTEM_PROMPT}\n\n${existing}` };
-	});
+    t.refreshStatus();
+    if (jqAvailable === false || toonAvailable === false) return undefined;
+    const existing = event.systemPrompt ?? "";
+    return { systemPrompt: `${TOON_SYSTEM_PROMPT}\n\n${existing}` };
+  });
 }

@@ -1,7 +1,7 @@
 // ─── pi-toolkit config: loaded from settings.json (global + project) ────────
 // Config lives in settings.json rather than a standalone pi-toolkit.json:
 //   - `toolkit`       -> default enabled state for rtk, toon, cave, pi-doc,
-//                        agent-commands (fixed-editor is not a toggle here)
+//                        cmds (fixed-editor is not a toggle here)
 //   - `agent`         -> named roles; `mode: "primary"` = role
 //   - `defaultRole`   -> role seeded into fresh sessions
 // Branch persistence overrides config at session level.
@@ -24,7 +24,7 @@ export interface PiToolkitConfig {
 	toon: boolean;
 	cave: boolean;
 	"pi-doc": boolean;
-	"agent-commands": boolean;
+	"cmds": boolean;
 	"safe-bash": boolean;
 	agent: Record<string, RoleEntry>;
 	defaultRole?: string;
@@ -33,9 +33,9 @@ export interface PiToolkitConfig {
 const DEFAULTS: PiToolkitConfig = {
 	rtk: true,
 	toon: false,
-	cave: true,
+	cave: false,
 	"pi-doc": false,
-	"agent-commands": true,
+	cmds: false,
 	"safe-bash": true,
 	agent: {},
 };
