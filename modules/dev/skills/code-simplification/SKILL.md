@@ -1,10 +1,13 @@
 ---
 name: code-simplification
-agent: code-reviewer
-description: Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complexity.
+description: Simplifies code for clarity and maintainability without changing behavior. Use when refactoring for clarity, when code works but is harder to read, maintain, or extend than it should be, or when reviewing accumulated complexity. Invoke with /code-simplify; applies the ponytail minimal-code philosophy.
 ---
 
 # Code Simplification
+
+## Invocation
+
+Use `/code-simplify` to trigger this skill.
 
 > Inspired by the [Claude Code Simplifier plugin](https://github.com/anthropics/claude-plugins-official/blob/main/plugins/code-simplifier/agents/code-simplifier.md). Adapted here as a model-agnostic, process-driven skill for any AI coding agent.
 
@@ -316,6 +319,10 @@ function UserBadge({ user }: Props) {
 - Simplifying code you don't fully understand
 - Batching many simplifications into one large, hard-to-review commit
 - Refactoring code outside the scope of the current task without being asked
+
+### Ponytail Pass
+
+After verification, run the ponytail over-engineering pass (see `ponytail-review`) to quantify lines cut. Review the result with `reviewing`.
 
 ## Verification
 

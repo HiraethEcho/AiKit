@@ -1,14 +1,13 @@
 ---
 name: refine
-agent: conductor
-description: Refine a vague idea into a concrete SPEC.md using structured questioning modes (Sherlock/Poirot/Columbo). The lite workflow clarify convergence tool — use after brainstorm, before plan.
+description: Refine a vague idea into a concrete SPEC.md using structured questioning modes (Sherlock/Poirot/Columbo). The workflow clarify convergence tool — use after brainstorm, before plan.
 ---
 
-# Lite Refine
+# Refine
 
 ## Overview
 
-Lite Refine converges a rough idea into a concrete `SPEC.md` (Goal / What / Decisions). It reuses the structured investigation protocol — gather, hypothesize, test, conclude — applied to the *idea itself* instead of a bug. The lite clarify stage has two tools: `brainstorm` (diverge, get ideas) and `refine` (converge, idea → spec).
+Refine converges a rough idea into a concrete `SPEC.md` (Goal / What / Decisions). It reuses the structured investigation protocol — gather, hypothesize, test, conclude — applied to the *idea itself* instead of a bug. The clarify stage has two tools: `base/brainstorm` (diverge, get ideas) and `refine` (converge, idea → spec).
 
 ## Modes
 
@@ -49,3 +48,8 @@ Lite Refine converges a rough idea into a concrete `SPEC.md` (Goal / What / Deci
 3. A spec is not done until the user confirms it
 4. If the idea keeps resisting refinement, name the missing information and ask
 5. Explicitly state which assumption you're challenging (Columbo mode)
+
+## Related tools
+- `spec/idea-refine` — 结构化发散→收敛
+- `spec/interview-me` — 追问真实意图（~95% 置信）
+- `base/grill-me` — 收敛前压力测试

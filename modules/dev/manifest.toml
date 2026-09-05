@@ -1,13 +1,6 @@
 # modules/dev/manifest.toml — AiKit modules/dev kit
-# 来源: ~/agentkit/sdd (tool-map) + AiKit reorg
+# 代码开发工具池（不进 workflow preset）
 version = "1.0"
-
-[[skills]]
-id = "advisor"
-category = "dev"
-tags = ["review", "advice"]
-path = "modules/dev/skills/advisor"
-description = "Second-opinion advisor — dispatches 1-2 subagents (advice + hard devil's-advocate) to review a decision, design, plan, or code before you commit to it"
 
 [[skills]]
 id = "api-and-interface-design"
@@ -15,6 +8,13 @@ category = "dev"
 tags = ["design", "api"]
 path = "modules/dev/skills/api-and-interface-design"
 description = "Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend."
+
+[[skills]]
+id = "architecture-review"
+category = "dev"
+tags = ["review", "architecture"]
+path = "modules/dev/skills/architecture-review"
+description = "Deep architectural review of a platform or product — cross-references code against claims, maps failure modes, evaluates scaling bottlenecks, and produces a decision-grade handoff document with ADRs. Use when reviewing an existing system for scaling readiness, performing a CTO handoff, or auditing a codebase before a major migration."
 
 [[skills]]
 id = "aur-guides"
@@ -42,14 +42,14 @@ id = "code-review-and-quality"
 category = "dev"
 tags = ["review", "quality"]
 path = "modules/dev/skills/code-review-and-quality"
-description = "Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch — includes PR triage, parallel lens dispatch, and layered architecture review for large changes."
+description = "Conducts multi-axis code review plus three specialized modes — peer review (fresh-perspective diff review), quick review (fast opinionated quality pass), and bad-smells review (code-smell lens). Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch — includes PR triage, parallel lens dispatch, and layered architecture review for large changes."
 
 [[skills]]
 id = "code-simplification"
 category = "dev"
 tags = ["simplify"]
 path = "modules/dev/skills/code-simplification"
-description = "Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complexity."
+description = "Simplifies code for clarity and maintainability without changing behavior. Use when refactoring for clarity, when code works but is harder to read, maintain, or extend than it should be, or when reviewing accumulated complexity. Invoke with /code-simplify; applies the ponytail minimal-code philosophy."
 
 [[skills]]
 id = "context-engineering"
@@ -66,13 +66,6 @@ path = "modules/dev/skills/context7"
 description = "Retrieve up-to-date documentation for software libraries, frameworks, and components via the Context7 API. This skill should be used when looking up documentation for any programming library or framework, finding code examples for specific APIs or features, verifying correct usage of library functions, or obtaining current information about library APIs that may have changed since training."
 
 [[skills]]
-id = "craft-skill"
-category = "dev"
-tags = ["design", "skill"]
-path = "modules/dev/skills/craft-skill"
-description = ">"
-
-[[skills]]
 id = "debugging-and-error-recovery"
 category = "dev"
 tags = ["debug"]
@@ -87,32 +80,11 @@ path = "modules/dev/skills/deprecation-and-migration"
 description = "Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when deciding whether to maintain or sunset existing code."
 
 [[skills]]
-id = "designing-agents"
-category = "dev"
-tags = ["design", "agent"]
-path = "modules/dev/skills/designing-agents"
-description = "Designs and writes a focused artifact another agent runs — an agent persona in agents/ or a workflow skill in skills/. Use when authoring a reviewer or specialist persona, a repeatable process skill — or when rewriting one that is under-specified, overlapping, or being ignored."
-
-[[skills]]
-id = "discovery"
-category = "dev"
-tags = ["research", "clarify"]
-path = "modules/dev/skills/discovery"
-description = "Understands user demands through structured exploration — explore/brainstorm/deep-dive modes — before planning begins."
-
-[[skills]]
 id = "documentation-and-adrs"
 category = "dev"
 tags = ["documentation"]
 path = "modules/dev/skills/documentation-and-adrs"
 description = "Records decisions and documentation. Use when making architectural decisions, changing public APIs, shipping features, or when you need to record context that future engineers and agents will need to understand the codebase."
-
-[[skills]]
-id = "expert-panel"
-category = "dev"
-tags = ["review", "analysis"]
-path = "modules/dev/skills/expert-panel"
-description = "Multi-perspective analysis — parallel analysis from different role perspectives to evaluate decisions, designs, and plans"
 
 [[skills]]
 id = "frontend-ui-engineering"
@@ -126,42 +98,7 @@ id = "git-workflow-and-versioning"
 category = "dev"
 tags = ["git"]
 path = "modules/dev/skills/git-workflow-and-versioning"
-description = "Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams."
-
-[[skills]]
-id = "grill-me"
-category = "dev"
-tags = ["spec", "interview"]
-path = "modules/dev/skills/grill-me"
-description = "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases."
-
-[[skills]]
-id = "idea-refine"
-category = "dev"
-tags = ["spec", "clarify"]
-path = "modules/dev/skills/idea-refine"
-description = "Refines ideas iteratively. Refine ideas through structured divergent and convergent thinking. Use \"idea-refine\" or \"ideate\" to trigger."
-
-[[skills]]
-id = "interview-me"
-category = "dev"
-tags = ["spec", "interview"]
-path = "modules/dev/skills/interview-me"
-description = "Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified (\"build me X\" without \"for whom\" or \"why now\"), when the user explicitly invokes (\"interview me\", \"grill me\", \"are we sure?\", \"stress-test my thinking\"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists."
-
-[[skills]]
-id = "orchestrate"
-category = "dev"
-tags = ["orchestrate"]
-path = "modules/dev/skills/orchestrate"
-description = "Multi-agent orchestration — dispatch specialists in parallel, own acceptance assertions, synthesize results"
-
-[[skills]]
-id = "peer-review"
-category = "dev"
-tags = ["review"]
-path = "modules/dev/skills/peer-review"
-description = "External-perspective review of a change set before ship by a fresh agent who"
+description = "Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams. Also covers repo status snapshotting — local vs remote sync, branches, open PRs, and working tree state."
 
 [[skills]]
 id = "performance-optimization"
@@ -175,49 +112,14 @@ id = "ponytail"
 category = "dev"
 tags = ["simplify", "ponytail"]
 path = "modules/dev/skills/ponytail"
-description = "Minimal code philosophy — the 7-rung ladder, intensity levels, and comment convention for avoiding over-engineering"
-
-[[skills]]
-id = "ponytail-audit"
-category = "dev"
-tags = ["review", "simplify", "ponytail"]
-path = "modules/dev/skills/ponytail-audit"
-description = "Audit entire repository for over-engineering opportunities, ranked by cut potential"
-
-[[skills]]
-id = "ponytail-debt"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/skills/ponytail-debt"
-description = "Harvest ponytail comments into a debt ledger — track intentional simplifications"
-
-[[skills]]
-id = "ponytail-gain"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/skills/ponytail-gain"
-description = "Display ponytail benchmark scoreboard — LOC, cost, and speed improvements from published data"
-
-[[skills]]
-id = "ponytail-help"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/skills/ponytail-help"
-description = "Quick reference card for ponytail — levels, commands, and the 7-rung ladder"
-
-[[skills]]
-id = "ponytail-review"
-category = "dev"
-tags = ["review", "simplify", "ponytail"]
-path = "modules/dev/skills/ponytail-review"
-description = "Review current diff for over-engineering — produces a delete-list with tagged findings"
+description = "Minimal code philosophy — 7-rung ladder, intensity levels, comment convention, plus audit / debt / gain / help / review workflows"
 
 [[skills]]
 id = "security-and-hardening"
 category = "dev"
 tags = ["security"]
 path = "modules/dev/skills/security-and-hardening"
-description = "Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services."
+description = "Hardens code against vulnerabilities and runs adversarial red-team review (architecture conformance, stub detection, security, story gaps) that exposes weaknesses with failing tests. Use when handling user input, authentication, data storage, or external integrations, or when adversarially probing an implementation."
 
 [[skills]]
 id = "source-driven-development"
@@ -232,20 +134,6 @@ category = "dev"
 tags = ["test", "tdd"]
 path = "modules/dev/skills/test-driven-development"
 description = "Drives development with tests. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality."
-
-[[skills]]
-id = "think"
-category = "dev"
-tags = ["reasoning"]
-path = "modules/dev/skills/think"
-description = "Deep reasoning with multiple frameworks — Expert Panel, Devil's Advocate, What-If, Tradeoff Matrix"
-
-[[agents]]
-id = "architect"
-category = "dev"
-tags = ["design", "api"]
-path = "modules/dev/agents/architect.md"
-description = "System design decisions, ADRs, and architecture documentation for the SDD workflow."
 
 [[agents]]
 id = "artifact-code-reviewer"
@@ -353,57 +241,8 @@ path = "modules/dev/agents/test-engineer.md"
 description = "Creates and executes tests — unit, integration, and spec scenario validation."
 
 [[commands]]
-id = "code-simplify"
-category = "dev"
-tags = ["simplify"]
-path = "modules/dev/commands/code-simplify.md"
-description = "Simplify code for clarity and maintainability — reduce complexity without changing behavior"
-
-[[commands]]
-id = "design-agent"
-category = "dev"
-tags = ["design", "agent"]
-path = "modules/dev/commands/design-agent.md"
-description = "Design a new agent persona, skill, or command"
-
-[[commands]]
 id = "ponytail"
 category = "dev"
 tags = ["simplify", "ponytail"]
-path = "modules/dev/commands/ponytail.md"
-description = "Set ponytail minimal-code intensity level"
-
-[[commands]]
-id = "ponytail-audit"
-category = "dev"
-tags = ["review", "simplify", "ponytail"]
-path = "modules/dev/commands/ponytail-audit.md"
-description = "Audit entire repo for over-engineering"
-
-[[commands]]
-id = "ponytail-debt"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/commands/ponytail-debt.md"
-description = "Harvest ponytail comments into a debt ledger"
-
-[[commands]]
-id = "ponytail-gain"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/commands/ponytail-gain.md"
-description = "Show ponytail benchmark scoreboard"
-
-[[commands]]
-id = "ponytail-help"
-category = "dev"
-tags = ["simplify", "ponytail"]
-path = "modules/dev/commands/ponytail-help.md"
-description = "Ponytail quick reference card"
-
-[[commands]]
-id = "ponytail-review"
-category = "dev"
-tags = ["review", "simplify", "ponytail"]
-path = "modules/dev/commands/ponytail-review.md"
-description = "Review current diff for over-engineering"
+path = "modules/dev/commands/ponytail"
+description = "Ponytail minimal-code philosophy — intensity levels plus audit / debt / gain / help / review subcommands"

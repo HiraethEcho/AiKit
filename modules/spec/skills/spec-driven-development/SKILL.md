@@ -1,6 +1,5 @@
 ---
 name: spec-driven-development
-agent: planner
 description: Clarifies requirements and produces a concrete spec — SPEC.md (lite workflow) or a lightspec proposal (lightspec workflow). The sdd clarify stage's specification engine — use when requirements are unclear, ambiguous, or exist only as a vague idea, before planning begins.
 ---
 

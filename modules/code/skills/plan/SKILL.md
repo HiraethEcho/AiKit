@@ -1,13 +1,12 @@
 ---
 name: plan
-agent: slicer
-description: Lite workflow planner — breaks SPEC.md into a phased PLAN.md with task checkboxes, dependency ordering, and per-task acceptance criteria. Use in the lite workflow after refine, before building.
+description: Workflow planner — breaks SPEC.md into a phased PLAN.md with task checkboxes, dependency ordering, and per-task acceptance criteria. Use in the workflow after refine, before building.
 model: openai-codex/gpt-5.5
 ---
 
-# Lite Plan
+# Plan
 
-Lite workflow plan stage tool: convert `SPEC.md` (Goal/What/Decisions) into `PLAN.md` — phases with `- [ ]` task checkboxes, ordered by dependency, each with a verifiable acceptance criterion. File-driven: no design artifact, no CLI, no proposal gate.
+Workflow plan stage tool: convert `SPEC.md` (Goal/What/Decisions) into `PLAN.md` — phases with `- [ ]` task checkboxes, ordered by dependency, each with a verifiable acceptance criterion. File-driven: no design artifact, no CLI, no proposal gate.
 
 ## Input
 
@@ -58,3 +57,7 @@ Fix gaps, then hand off to `conductor` for building.
 3. Keep tasks thin: fat task = split it
 4. Acceptance criteria are mandatory — an unverifiable task is not a task
 5. Ambiguous requirement → ask, don't guess
+
+## Related tools
+- `spec/planning` / `spec/planning-and-task-breakdown` — 重工作流拆解
+- `dev` agent `slice-verifier` — 逐片对抗验证

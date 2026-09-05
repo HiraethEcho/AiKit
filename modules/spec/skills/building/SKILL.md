@@ -1,6 +1,5 @@
 ---
 name: building
-agent: builder
 description: Implements code in thin vertical slices with quality checks, ponytail minimal code philosophy, and quick-fix/incremental/tdd/plan-driven modes — including plan execution, mismatch handling, and acceptance validation.
 ---
 

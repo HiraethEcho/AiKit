@@ -1,6 +1,5 @@
 ---
 name: app-sdd
-agent: orchestrator
 description: Default workflow guide (lightspec-based). Use when starting a session or task in a lightspec project — routes to the right command, skill, or agent across the workflow (init → clarify → plan → code → review → archive). The four files (SPEC/PLAN/DESIGN/HANDOFF) hold the simple project-level view; per-change detail lives in lightspec/.
 ---
 

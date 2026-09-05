@@ -1,7 +1,6 @@
 ---
 name: git-workflow-and-versioning
-agent: general
-description: Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams.
+description: Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams. Also covers repo status snapshotting — local vs remote sync, branches, open PRs, and working tree state.
 ---
 
 # Git Workflow and Versioning
@@ -294,6 +293,100 @@ git blame src/services/task.ts
 # Search commit messages for a keyword
 git log --grep="validation" --oneline
 ```
+
+## Repo Status
+
+Snapshot of a repository's current state — what changed, branches, dirty files. Covers local vs remote sync, commits ahead/behind, open PRs, and working tree state. Use when the user asks "what's the status of the repo", "are local and remote in sync", "check the branches", or "what's the state of dev and main".
+
+### Identify the repo
+
+If `$ARGUMENTS` is provided, use it as the repo path. Otherwise use the current working directory.
+
+```bash
+REPO="${ARGUMENTS:-$(pwd)}"
+cd "$REPO"
+git rev-parse --show-toplevel 2>/dev/null || echo "NOT A GIT REPO"
+git remote get-url origin 2>/dev/null
+```
+
+If it is not a git repo, tell the user and stop.
+
+### Fetch and collect status
+
+Run all of the following in a single Bash tool call:
+
+```bash
+cd "${ARGUMENTS:-$(pwd)}"
+
+# Fetch silently to update remote-tracking refs
+git fetch --all --quiet 2>/dev/null
+
+# Repo identity
+echo "=REPO=$(git rev-parse --show-toplevel)"
+echo "=REMOTE=$(git remote get-url origin 2>/dev/null)"
+echo "=CURRENT_BRANCH=$(git branch --show-current)"
+
+# All local branches with tracking info
+echo "=LOCAL_BRANCHES="
+git branch -v
+
+# All remote branches
+echo "=REMOTE_BRANCHES="
+git branch -rv
+
+# Working tree
+echo "=STATUS="
+git status --short
+
+# Stash
+echo "=STASH_COUNT=$(git stash list | wc -l | tr -d ' ')"
+
+# Commits on dev not in main (if both exist)
+echo "=DEV_AHEAD_MAIN="
+git log main..dev --oneline 2>/dev/null || echo "(branches not found)"
+
+# Commits on main not in dev (if both exist)
+echo "=MAIN_AHEAD_DEV="
+git log dev..main --oneline 2>/dev/null || echo "(branches not found)"
+
+# Open PRs (requires gh CLI)
+echo "=OPEN_PRS="
+gh pr list --state open --json number,title,headRefName,baseRefName,url \
+  --template '{{range .}}#{{.number}} [{{.headRefName}}→{{.baseRefName}}] {{.title}} {{.url}}{{"\n"}}{{end}}' 2>/dev/null || echo "(gh CLI not available)"
+```
+
+### Produce the summary
+
+Analyse the output and present a clean, structured summary:
+
+```
+Repo: <repo name> (<remote URL>)
+Current branch: <branch>
+
+Branch alignment
+- In sync — local and remote at the same commit
+- Local ahead — N commits not yet pushed
+- Local behind — N commits to pull
+- Diverged — both sides have commits the other doesn't
+
+Commits: dev vs main
+- commits on dev not in main (pending merge)
+- commits on main not in dev (needs merge-back)
+
+Open PRs
+- number, title, branch direction, URL
+
+Working tree
+- clean or uncommitted/untracked files
+
+Stash
+- count if entries exist
+
+Overall assessment
+- one or two sentences on overall state
+```
+
+For each branch that exists both locally and remotely, state clearly whether it is in sync, local ahead, local behind, or diverged. Focus on `main` and `dev` first, then any other active branches. List commits on `dev` but not `main` (pending merge) and any on `main` not yet in `dev` (needs a merge-back); if none, say so. List open PRs with number, title, branch direction, and URL; if none, say so. State whether the working tree is clean or dirty, briefly describing modifications. Note stash count if entries exist. Close with a one or two sentence overall assessment — e.g. "Branches are fully aligned, no outstanding work." or "dev is 2 commits ahead of main with PR #8 open and ready to merge." Keep the summary factual and concise. Do not reproduce raw git output.
 
 ## Common Rationalizations
 

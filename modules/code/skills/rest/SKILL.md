@@ -1,12 +1,11 @@
 ---
 name: rest
-agent: conductor
-description: Pause in-progress work without archiving — survey per the AGENTS.md workflow block, record a parked note in PLAN.md, report status. Shared by the lite and default workflows. Use on pause, or session end with in-progress work.
+description: Pause in-progress work without archiving — survey per the AGENTS.md workflow block, record a parked note in PLAN.md, report status. Shared by both workflows. Use on pause, or session end with in-progress work.
 ---
 
 # Rest (pause and handoff)
 
-Pauses in-progress work — like archive but WITHOUT closing it. Archive says "this is done"; rest says "this is parked, here's exactly where". **Shared by the lite and default workflows** — the survey step follows the workflow block in `AGENTS.md`.
+Pauses in-progress work — like archive but WITHOUT closing it. Archive says "this is done"; rest says "this is parked, here's exactly where". **Shared by both workflows** — the survey step follows the workflow block in `AGENTS.md`.
 
 ## Boundaries
 
@@ -29,7 +28,7 @@ Pauses in-progress work — like archive but WITHOUT closing it. Archive says "t
 **Entry:** User wants to pause.
 
 Read `AGENTS.md` workflow block. Follow its survey method:
-- **LiteSpec block (lite workflow)** — read `PLAN.md`: which phase is active, `- [ ]` vs `- [x]` per task, where the next task is.
+- **Workflow block** — read `PLAN.md`: which phase is active, `- [ ]` vs `- [x]` per task, where the next task is.
 - **LightSpec block (default/lightspec workflow)** — read `PLAN.md` roadmap plus the per-change state named by the block (e.g. `lightspec list` + `changes/<id>/tasks.md`).
 
 For each in-flight item: what's done, what's pending, where the next task is, any blockers or waiting inputs.
@@ -69,3 +68,7 @@ Summarize:
 3. Blocker/waiting-on must be explicit — a fresh session can't read your mind
 4. Keep the handoff compact; no essay
 5. If everything is actually complete, say so and suggest archive instead
+
+## Related tools
+- `base/handoff` — 交接笔记写入
+- `base/pickup` — 恢复入口

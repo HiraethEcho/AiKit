@@ -1,6 +1,5 @@
 ---
 name: reviewing
-agent: code-reviewer
 description: Reviews code across five axes (correctness, readability, architecture, security, performance) with ponytail over-engineering check — plus fresh-perspective (blind-spot) and criteria-walk (acceptance verification) review modes.
 ---
 

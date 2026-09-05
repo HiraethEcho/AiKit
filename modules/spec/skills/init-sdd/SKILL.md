@@ -1,6 +1,5 @@
 ---
 name: init-sdd
-agent: orchestrator
 description: Initialize a project with the default (lightspec) workflow — creates `lightspec/` (copied workflow doc), writes `SPEC.md` and `PLAN.md`, updates `AGENTS.md` and `README.md`. The four files (SPEC/PLAN/DESIGN/HANDOFF) stay simple; detail lives in `lightspec/`. Use for a new project that needs proposal/archive discipline.
 ---
 

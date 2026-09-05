@@ -1,5 +1,5 @@
 ---
-description: Roll up a completed phase — shared by the lite and default workflows. Verify completion, mark PLAN.md done, update SPEC.md decisions and human docs (README/CHANGELOG) where the surface changed, then run any archival step named by the AGENTS.md workflow block
+description: Roll up a completed phase — shared by both workflows. Verify completion, mark PLAN.md done, update SPEC.md decisions and human docs (README/CHANGELOG) where the surface changed, then run any archival step named by the AGENTS.md workflow block
 ---
 
 Invoke the archive skill.

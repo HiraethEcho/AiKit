@@ -10,9 +10,9 @@ commands = ["pickup", "archive", "rest", "upgrade"]
 mcp = []
 
 [[preset]]
-id = "lite"
+id = "code"
 description = "轻 workflow 全套: file-driven (SPEC/PLAN/DESIGN/HANDOFF)"
-skills = ["app", "init", "brainstorm", "refine", "plan", "task"]
+skills = ["app", "init", "refine", "plan", "task"]
 agents = ["conductor", "slicer", "maker", "tester", "inspector"]
 commands = ["init", "task"]
 mcp = []

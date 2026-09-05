@@ -1,3 +1,7 @@
+# modules/extra/manifest.toml — AiKit modules/extra kit
+# 特殊功能工具（非 code/dev 相关）+ meta 工具
+version = "1.0"
+
 [[skills]]
 id = "math-ocr"
 category = "math"
@@ -99,73 +103,37 @@ description = "代数几何问答（Stacks 检索 + 论文搜索）"
 [[skills]]
 id = "literature-api"
 category = "math"
-tags = ["arxiv","crossref","openalex","api"]
+tags = ["arxiv", "crossref", "openalex", "api"]
 path = "modules/extra/skills/literature-api"
 description = "文献 API 客户端 + 时间完整性审计（mrs）"
 
 [[skills]]
 id = "herdr"
 category = "general"
-tags = ["terminal","tools"]
+tags = ["terminal", "tools"]
 path = "modules/extra/skills/herdr"
 description = "Herdr 终端多路复用器控制 (仅 HERDR_ENV=1 时使用)"
-
 
 [[skills]]
 id = "aihot"
 category = "general"
 tags = ["general", "research", "hot"]
 path = "modules/extra/skills/aihot"
-description = "AI HOT (aihot.virxact.com) 中文 AI 资讯查询 Skill。当用户想知道\"今天 AI 圈有什么\"、\"AI 日报\"、\"AI HOT\"、\"AI 资讯\"、\"AI 热点\"、\"最近 AI\"、\"OpenAI/Anthropic/Google 最近发布了什么\"、\"AI hot today\"、\"AI news today\"、\"看一下 AI 行业动态\"、\"今天有什么大模型发布\"、\"昨天 AI 圈\"、\"看下精选条目\"、\"AI HOT 精选\"、\"最近一周的 AI 论文\"、\"AI 模型发布\"、\"AI 产品发布\"、\"AI 行业动态\"、\"AI 技巧与观点\" 等任何中文 AI 资讯查询时使用。即使用户只说\"AI 圈\"、\"AI 新闻\"、\"AI 日报\"，或者只是问\"今天发生了什么\"且上下文是 AI / 大模型 / LLM / 创业领域，也应该触发本 Skill。Skill 会直接 curl 公开 REST API 拉数据并整理成中文 markdown 简报，不需要用户配置任何 API Key 或 MCP server。**不要 undertrigger**——用户问 AI 资讯而你不调本 Skill 就是把过时的训练数据当作今日新闻，对用户有害。"
-
-[[skills]]
-id = "architecture-review"
-category = "general"
-tags = ["general", "review", "architecture"]
-path = "modules/extra/skills/architecture-review"
-description = ">"
-
-[[skills]]
-id = "aur-guides"
-category = "general"
-tags = ["general", "packaging", "aur"]
-path = "modules/extra/skills/aur-guides"
-description = "Master skill for AUR (Arch User Repository) package development. Dispatches to specialized sub-skills for creating PKGBUILDs, auditing packages, submitting to AUR, and more. Use when working with AUR packages, PKGBUILDs, makepkg, pacman, or any Arch Linux packaging task."
-
-[[skills]]
-id = "bad-smells-skill"
-category = "general"
-tags = ["general", "review", "quality"]
-path = "modules/extra/skills/bad-smells-skill"
-description = "从重构坏味道视角进行深度代码审查，识别设计问题与可维护性风险。适用于审查仓库、子系统或变更集，发现糟糕设计、隐藏耦合、重复代码、过大的函数或类、推测性抽象、数据泥团、消息链等坏味道，并输出结构化审查报告与按严重级别排序的整改待办。"
+description = "AI HOT (aihot.virxact.com) 中文 AI 资讯查询 Skill，curl 公开 REST API 拉取并整理成中文 markdown 简报。用户问 AI 日报/资讯/热点/模型发布等时触发。"
 
 [[skills]]
 id = "blog-reading"
 category = "general"
 tags = ["general", "reading", "blog"]
 path = "modules/extra/skills/blog-reading"
-description = ">-"
-
-[[skills]]
-id = "brainstorm"
-category = "general"
-tags = ["general", "ideation"]
-path = "modules/extra/skills/brainstorm"
-description = ">"
-
-[[skills]]
-id = "context7"
-category = "general"
-tags = ["general", "documentation", "research"]
-path = "modules/extra/skills/context7"
-description = "Retrieve up-to-date documentation for software libraries, frameworks, and components via the Context7 API. This skill should be used when looking up documentation for any programming library or framework, finding code examples for specific APIs or features, verifying correct usage of library functions, or obtaining current information about library APIs that may have changed since training."
+description = "深度阅读和分析技术博客、产品公告、行业洞察等非学术类长文，自动判定博客类型并以中文输出分析报告。触发词：读博客、分析这篇文章、技术博客、产品公告。"
 
 [[skills]]
 id = "craft-skill"
 category = "general"
 tags = ["general", "skill", "design"]
 path = "modules/extra/skills/craft-skill"
-description = ">"
+description = "Meta-skill that generates and refines SKILL.md files using the 12 prompting techniques as a quality checklist. The skill that writes skills. Triggers: craft skill, create skill, generate skill, write skill, skill template, improve skill."
 
 [[skills]]
 id = "defuddle"
@@ -175,18 +143,18 @@ path = "modules/extra/skills/defuddle"
 description = "Extract clean markdown content from web pages using Defuddle CLI, removing clutter and navigation to save tokens. Use instead of WebFetch when the user provides a URL to read or analyze, for online documentation, articles, blog posts, or any standard web page. Do NOT use for URLs ending in .md — those are already markdown, use WebFetch directly."
 
 [[skills]]
+id = "designing-agents"
+category = "general"
+tags = ["general", "design", "agent"]
+path = "modules/extra/skills/designing-agents"
+description = "Designs and writes a focused artifact another agent runs — an agent persona in agents/ or a workflow skill in skills/. Use when authoring a reviewer or specialist persona, a repeatable process skill — or when rewriting one that is under-specified, overlapping, or being ignored."
+
+[[skills]]
 id = "find-skills"
 category = "general"
 tags = ["general", "search", "skills"]
 path = "modules/extra/skills/find-skills"
 description = "Helps users discover and install agent skills when they ask questions like \"how do I do X\", \"find a skill for X\", \"is there a skill that can...\", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill."
-
-[[skills]]
-id = "grill-me"
-category = "general"
-tags = ["general", "interview", "clarify"]
-path = "modules/extra/skills/grill-me"
-description = "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases."
 
 [[skills]]
 id = "meblog"
@@ -200,14 +168,14 @@ id = "mineru"
 category = "general"
 tags = ["general", "pdf", "ocr"]
 path = "modules/extra/skills/mineru"
-description = ">"
+description = "MinerU 文档提取 — PDF/Word/PPT/Excel/图片/网页 → Markdown/HTML/LaTeX/DOCX，含表格识别、公式识别、OCR、批量处理，80+ 语言。"
 
 [[skills]]
 id = "neat-freak"
 category = "general"
 tags = ["general", "refactor", "cleanup"]
 path = "modules/extra/skills/neat-freak"
-description = ">"
+description = "End-of-session knowledge cleanup with OCD-level rigor — reconciles project docs (CLAUDE.md, README.md, docs/) and agent memory against the code so nothing rots. Trigger: \"sync up\", \"tidy up docs\", \"整理文档\", \"同步一下\", \"/sync\"。"
 
 [[skills]]
 id = "obsidian-bases"
@@ -221,7 +189,7 @@ id = "obsidian-cli"
 category = "general"
 tags = ["general", "obsidian"]
 path = "modules/extra/skills/obsidian-cli"
-description = "Interact with Obsidian vaults using the Obsidian CLI to read, create, search, and manage notes, tasks, properties, and more. Also supports plugin and theme development with commands to reload plugins, run JavaScript, capture errors, take screenshots, and inspect the DOM. Use when the user asks to interact with their Obsidian vault, manage notes, search vault content, perform vault operations from the command line, or develop and debug Obsidian plugins and themes."
+description = "Interact with Obsidian vaults using the Obsidian CLI to read, create, search, and manage notes, tasks, properties, and more. Also supports plugin and theme development with commands to reload plugins, run JavaScript, capture errors, take screenshots, and inspect the DOM."
 
 [[skills]]
 id = "obsidian-markdown"
@@ -235,7 +203,7 @@ id = "paper-analysis"
 category = "general"
 tags = ["general", "paper"]
 path = "modules/extra/skills/paper-analysis"
-description = "Deep analysis of AI research papers with type-specific prompts. Covers benchmark papers, methodology papers, and survey/position/blog posts. Use when the user asks to read, analyze, review, or summarize a research paper, or mentions 论文分析、论文阅读、paper review、benchmark analysis、方法论分析."
+description = "Deep analysis of AI research papers with type-specific prompts. Covers benchmark papers, methodology papers, and survey/position/blog posts. Use when the user asks to read, analyze, review, or summarize a research paper."
 
 [[skills]]
 id = "pdf"
@@ -256,7 +224,7 @@ id = "postman-cli"
 category = "general"
 tags = ["general", "api", "test"]
 path = "modules/extra/skills/postman-cli"
-description = "Runs Postman collections, sends HTTP requests, manages mock servers, lints API specs, and pushes workspace changes from the command line. Use this skill whenever the user wants to run API tests, execute collection runs, send ad-hoc HTTP requests, test endpoints, check if an API is working, hit a URL, run Postman tests against QA or staging, start mock servers, lint OpenAPI specs, manage Postman workspace sync, or do anything curl-like with environment variables and auth. Trigger even when the user says \"test my API\", \"call this endpoint\", \"run the collection\", or \"send a request to...\" — this skill replaces curl/wget with Postman's full feature set."
+description = "Runs Postman collections, sends HTTP requests, manages mock servers, lints API specs, and pushes workspace changes from the command line. Trigger even when the user says \"test my API\", \"call this endpoint\", \"run the collection\", or \"send a request to...\"."
 
 [[skills]]
 id = "presentations"
@@ -266,39 +234,18 @@ path = "modules/extra/skills/presentations"
 description = "Create, edit, inspect, or convert PowerPoint decks and PPTX slide presentations with practical layout and verification steps."
 
 [[skills]]
-id = "quick-review"
-category = "general"
-tags = ["general", "review", "quick"]
-path = "modules/extra/skills/quick-review"
-description = ">"
-
-[[skills]]
 id = "raycast-script-creator"
 category = "general"
 tags = ["general", "script"]
 path = "modules/extra/skills/raycast-script-creator"
-description = "Create and install a Raycast script command in /Users/astronaute/.config/raycast/script-commands, then register it with chezmoi after the user confirms it works in Raycast. Trigger whenever the user asks to make, add, build, or scaffold a Raycast script, Raycast command, Raycast shortcut, or any shell/zsh command they want to launch from Raycast — even if they don't use the word \"script\". Use this for ANY request about automating something through Raycast from the keyboard."
-
-[[skills]]
-id = "redteam"
-category = "general"
-tags = ["general", "security", "test"]
-path = "modules/extra/skills/redteam"
-description = ">"
-
-[[skills]]
-id = "repo-status"
-category = "general"
-tags = ["general", "git", "status"]
-path = "modules/extra/skills/repo-status"
-description = "Checks the sync status of a git repository — local vs remote branches, commits ahead/behind, open PRs, and working tree state. Works across any project. Use when the user asks \"what's the status of the repo\", \"are local and remote in sync\", \"check the branches\", or \"what's the state of dev and main\"."
+description = "Create and install a Raycast script command, then register it with chezmoi after the user confirms it works in Raycast. Trigger whenever the user asks to make, add, build, or scaffold a Raycast script or any shell/zsh command they want to launch from Raycast."
 
 [[skills]]
 id = "skill-creator"
 category = "general"
 tags = ["general", "skill"]
 path = "modules/extra/skills/skill-creator"
-description = "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Codex's capabilities with specialized knowledge, workflows, or tool integrations."
+description = "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends the agent's capabilities with specialized knowledge, workflows, or tool integrations."
 
 [[skills]]
 id = "spreadsheets"
@@ -308,19 +255,11 @@ path = "modules/extra/skills/spreadsheets"
 description = "Create, edit, analyze, clean, or convert spreadsheets including XLSX, CSV, TSV, formulas, charts, and tabular reports."
 
 [[skills]]
-id = "think"
-category = "general"
-tags = ["general", "reasoning"]
-path = "modules/extra/skills/think"
-description = ">"
-
-
-[[skills]]
 id = "visualize"
 category = "general"
 tags = ["general", "diagram", "viz"]
 path = "modules/extra/skills/visualize"
-description = ">"
+description = "Create shareable HTML visual artifacts from markdown, plans, architecture docs, brainstorms, and other structured content. Triggers: visualize, mindmap, mind map, show me the structure, draw a map, make this clear, make this visual."
 
 [[skills]]
 id = "weread-skills"
@@ -328,37 +267,45 @@ category = "general"
 tags = ["general", "reading", "wechat"]
 path = "modules/extra/skills/weread-skills"
 description = "微信读书助手 — 搜索书籍、管理书架、查看笔记划线、浏览书评、阅读统计、发现推荐好书"
+
 [[agents]]
 id = "advisor"
 category = "math"
-tags = ['research', 'review', 'proof']
+tags = ["research", "review", "proof"]
 path = "modules/extra/agents/advisor.md"
 description = "数学证明审阅与合理性评估"
 
 [[agents]]
 id = "advisor-thin"
 category = "math"
-tags = ['research', 'review']
+tags = ["research", "review"]
 path = "modules/extra/agents/advisor-thin.md"
 description = "轻量证明正确性检查"
 
 [[agents]]
 id = "pre-process"
 category = "math"
-tags = ['research', 'preprocess']
+tags = ["research", "preprocess"]
 path = "modules/extra/agents/pre-process.md"
 description = "材料预处理"
 
 [[agents]]
 id = "pre-read"
 category = "math"
-tags = ['research', 'preread']
+tags = ["research", "preread"]
 path = "modules/extra/agents/pre-read.md"
 description = "论文预读"
 
 [[agents]]
 id = "worker"
 category = "math"
-tags = ['research', 'dispatch']
+tags = ["research", "dispatch"]
 path = "modules/extra/agents/worker.md"
 description = "side-tool 调度（上下文隔离）"
+
+[[commands]]
+id = "design-agent"
+category = "general"
+tags = ["design", "agent"]
+path = "modules/extra/commands/design-agent"
+description = "Design a new agent persona, skill, or command"

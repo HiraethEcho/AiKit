@@ -4,7 +4,7 @@ version = "1.0"
 [[preset]]
 id = "default"
 description = "重项目: lightspec (proposal/apply/archive 纪律)"
-skills = ["app-sdd", "init-sdd", "spec-proposal", "spec-driven-development", "planning", "planning-and-task-breakdown", "building", "reviewing", "shipping", "knowledge-capture"]
-agents = ["orchestrator", "planner", "plan-reviewer", "builder", "code-reviewer", "documenter", "releaser"]
+skills = ["app-sdd", "init-sdd", "spec-proposal", "spec-driven-development", "discovery", "interview-me", "idea-refine", "planning", "planning-and-task-breakdown", "building", "reviewing", "shipping", "knowledge-capture", "orchestrate"]
+agents = ["orchestrator", "planner", "architect", "plan-reviewer", "builder", "code-reviewer", "documenter", "releaser"]
 commands = ["init-sdd", "spec", "plan", "build", "test", "review", "ship"]
 mcp = []

@@ -1,6 +1,5 @@
 ---
 name: test-router
-agent: test-engineer
 description: Detects project type, runs appropriate tests, validates against spec scenarios, and reports results.
 ---
 

@@ -1,6 +1,5 @@
 ---
 name: spec-router
-agent: planner
 description: Entry point for spec-driven development — interviews users, creates and validates specs using lightspec.
 ---
 

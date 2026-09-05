@@ -1,6 +1,5 @@
 ---
 name: knowledge-capture
-agent: documenter
 description: Compound skill for capturing decisions, solutions, and lessons learned — stores to docs/solutions/ with dedup
 ---
 

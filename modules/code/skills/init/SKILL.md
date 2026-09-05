@@ -1,14 +1,13 @@
 ---
 name: init
-agent: conductor
-description: Scaffold the lite workflow file layer — AGENTS.md pointers, SPEC.md (Goal/What/Decisions), PLAN.md (phases with task checkboxes), optional DESIGN.md, on first pause. The four files carry all detail; no CLI tooling. Use to initialize a small project with the standalone lite workflow.
+description: Scaffold the workflow file layer — AGENTS.md pointers, SPEC.md (Goal/What/Decisions), PLAN.md (phases with task checkboxes), optional DESIGN.md, on first pause. The four files carry all detail; no CLI tooling. Use to initialize a small project with the standalone workflow.
 ---
 
-# Init Lite SDD (file-driven workflow setup)
+# Init SDD (file-driven workflow setup)
 
 ## Purpose
 
-Initialize a project with the lite workflow: a small, CLI-free, file-driven layer. The four files (`SPEC.md`, `PLAN.md`, `DESIGN.md`) carry everything — no proposal ceremony, no validate step, no CLI. `AGENTS.md` gets the LiteSpec block that names the workflow and routing.
+Initialize a project with the workflow: a small, CLI-free, file-driven layer. The four files (`SPEC.md`, `PLAN.md`, `DESIGN.md`) carry everything — no proposal ceremony, no validate step, no CLI. `AGENTS.md` gets the Workflow block that names the workflow and routing.
 
 ## Steps
 
@@ -44,20 +43,20 @@ Initialize a project with the lite workflow: a small, CLI-free, file-driven laye
 
    One `## Phase N:` section per phase from the interview. Progress lives ONLY here — never duplicate it elsewhere.
 
-4. **Update `AGENTS.md`** — add the LiteSpec workflow block (below) and a project header with links to `SPEC.md`, `PLAN.md`, `DESIGN.md`. Never remove existing content; append the block if missing.
+4. **Update `AGENTS.md`** — add the Workflow block (below) and a project header with links to `SPEC.md`, `PLAN.md`, `DESIGN.md`. Never remove existing content; append the block if missing.
 5. **Update `README.md`** — if it exists, add links to `SPEC.md` and `PLAN.md` under a small header. Do NOT rewrite README content.
 6. **`DESIGN.md`** — create only if the user asks for design depth (or a phase clearly needs architecture decisions). When created, it carries the architecture detail for the phases that reference it.
 
 ## Idempotency
 
-Re-running `/init` must never clobber: skip any file that already exists; only add missing pieces (e.g. append the LiteSpec block to AGENTS.md if absent).
+Re-running `/init` must never clobber: skip any file that already exists; only add missing pieces (e.g. append the Workflow block to AGENTS.md if absent).
 
-## AGENTS.md LiteSpec block (to embed)
+## AGENTS.md Workflow block (to embed)
 
 ```markdown
-<!-- LITESPEC:START -->
+<!-- WORKFLOW:START -->
 
-# LiteSpec Instructions (lite workflow)
+# Workflow Instructions (file-driven)
 
 ## Files
 
@@ -77,7 +76,7 @@ Re-running `/init` must never clobber: skip any file that already exists; only a
 ## Rules
 
 - Progress is derived from `PLAN.md` checkboxes only — never store a status line elsewhere.
-<!-- LITESPEC:END -->
+<!-- WORKFLOW:END -->
 ```
 
 ## Not In Scope

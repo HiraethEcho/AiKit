@@ -1,7 +1,6 @@
 ---
 name: archive
-agent: documenter
-description: Roll up a completed phase — verify completion, mark PLAN.md done, fold decisions into SPEC.md, refresh DESIGN/HANDOFF/README/CHANGELOG only where the surface changed, then run any archival step named by the AGENTS.md workflow block (e.g. lightspec archive). Shared by the lite and default workflows.
+description: Roll up a completed phase — verify completion, mark PLAN.md done, fold decisions into SPEC.md, refresh DESIGN/HANDOFF/README/CHANGELOG only where the surface changed, then run any archival step named by the AGENTS.md workflow block (e.g. lightspec archive). Shared by both workflows.
 ---
 
 # Archive (phase rollup)
@@ -36,3 +35,8 @@ Close out a completed phase: mark it done, capture decisions, refresh human-faci
 - **README is a mirror** — link to SPEC/PLAN rather than restating content
 - **Progress already in PLAN.md** — do not add a status file; the checkboxes plus the DONE line are the record
 - **Never archive incomplete work** — archive closes; if tasks remain, hand back to build instead
+
+## Related tools
+- `dev/documentation-and-adrs` — 决策记录
+- `dev/git-workflow-and-versioning` — CHANGELOG 从 git history 生成
+- `base/handoff` — 交接笔记

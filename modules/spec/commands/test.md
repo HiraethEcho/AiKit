@@ -2,6 +2,10 @@
 description: Run tests — TDD workflow or acceptance validation (sdd test stage)
 ---
 
+**Subagent-suitable** — writing failing tests + running the suite is self-contained; isolate the noisy test output.
+- type: `general-purpose`
+- note: long suites → `run_in_background: true`; parallel file edits → `isolation: worktree`
+
 Follow `test-driven-development` (red-green-refactor) or the `building` skill's Validation section (acceptance criteria from the plan).
 
 For new features:

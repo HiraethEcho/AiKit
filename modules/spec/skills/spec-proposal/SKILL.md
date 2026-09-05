@@ -1,6 +1,5 @@
 ---
 name: spec-proposal
-agent: planner
 description: Scaffolds a new sdd change proposal — clarifies requirements, writes proposal/design/tasks/spec deltas, reviews with plan-reviewer, validates. The lightspec workflow's clarify-to-proposal entry — use for new features, changes, or any non-trivial work before implementation.
 ---
 

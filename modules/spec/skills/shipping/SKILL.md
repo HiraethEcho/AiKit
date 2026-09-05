@@ -1,6 +1,5 @@
 ---
 name: shipping
-agent: releaser
 description: Prepares code for release with git workflow, documentation, and commit/release/audit modes.
 ---
 

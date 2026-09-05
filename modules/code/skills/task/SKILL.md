@@ -1,14 +1,13 @@
 ---
 name: task
-agent: maker
-description: Implement the next unfinished task from PLAN.md — locate the current phase, read the linked DESIGN.md section if present, implement, and tick the checkbox. Use for executing lite workflow work without proposal or validation ceremony.
+description: Implement the next unfinished task from PLAN.md — locate the current phase, read the linked DESIGN.md section if present, implement, and tick the checkbox. Use for executing workflow work without proposal or validation ceremony.
 ---
 
-# Lite Build (apply the plan)
+# Build (apply the plan)
 
 ## Purpose
 
-Execute work from the lite workflow plan: pick the next unfinished task in `PLAN.md`, implement it, mark it done. No proposal gate, no approval ceremony — just the next task.
+Execute work from the workflow plan: pick the next unfinished task in `PLAN.md`, implement it, mark it done. No proposal gate, no approval ceremony — just the next task.
 
 ## Steps
 
@@ -28,5 +27,11 @@ Execute work from the lite workflow plan: pick the next unfinished task in `PLAN
 ## Not In Scope
 
 - Creating proposals or spec deltas (that's the sdd/lightspec `/spec`)
-- Validation ceremony — the lite workflow skips it (self-review + PLAN.md checkbox is the gate)
+- Validation ceremony — the workflow skips it (self-review + PLAN.md checkbox is the gate)
 - Updating SPEC.md/AGENTS.md/README/CHANGELOG — that's `/archive` at phase end
+
+## Related tools
+- `dev/ponytail` — 最少代码 / 不过度设计
+- `dev/test-driven-development` — 先红后绿
+- `dev/source-driven-development` — 实现以官方文档为准
+- `dev/code-simplification` — 保持清晰

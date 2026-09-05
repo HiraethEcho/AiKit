@@ -2,6 +2,10 @@
 description: Conduct a code review — five-axis, fresh-perspective, or criteria-walk
 ---
 
+**Subagent-suitable** — review needs a clean context (fresh-perspective) and heavy diff reading; isolate it.
+- type: `general-purpose` (read-only search: `Explore`)
+- note: run each axis (correctness / security / architecture) as a parallel subagent; main thread collects the reports
+
 Follow the `reviewing` skill — five-axis standard mode, fresh-perspective mode (pre-merge blind-spot check), or criteria-walk mode (verify acceptance criteria), per the change.
 
 Review the current changes (staged or recent commits) across five axes:

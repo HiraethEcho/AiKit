@@ -1,10 +1,10 @@
 ---
-description: Apply the next unfinished task from PLAN.md — implement, self-review, tick the checkbox. Lite workflow build step.
+description: Apply the next unfinished task from PLAN.md — implement, self-review, tick the checkbox. Workflow build step.
 ---
 
 Invoke the build skill.
 
-Execute the next unfinished task from the lite plan:
+Execute the next unfinished task from the plan:
 
 1. **Read `PLAN.md`** — find the current phase (first phase with an unchecked `- [ ]` task).
 2. **Read design if linked** — if the phase references a `DESIGN.md` section, read it first.

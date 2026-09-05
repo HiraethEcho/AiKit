@@ -1,6 +1,5 @@
 ---
 name: planning
-agent: planner
 description: Creates specs and breaks down work into tasks using lightspec, with quick-plan/spec/architecture modes — including vertical-slice decomposition for complex features.
 ---
 

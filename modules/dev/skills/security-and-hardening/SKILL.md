@@ -1,7 +1,6 @@
 ---
 name: security-and-hardening
-agent: security-auditor
-description: Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services.
+description: Hardens code against vulnerabilities and runs adversarial red-team review (architecture conformance, stub detection, security, story gaps) that exposes weaknesses with failing tests. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services, or when adversarially probing an implementation.
 ---
 
 # Security and Hardening
@@ -313,6 +312,130 @@ git diff --cached | grep -i "password\|secret\|api_key\|token"
 - [ ] Dependencies audited for vulnerabilities
 - [ ] Error messages don't expose internals
 ```
+## Red team
+
+Adversarial review mode. Find weaknesses and expose them with failing tests — never fix them, never modify implementation. Only write NEW test files.
+
+### Priorities (work in order)
+
+1. **Architecture conformance** — every dependency/pattern in the architecture doc is actually imported/used in source
+2. **Stub/scaffolding detection** — no hardcoded, faked, or placeholder implementations shipped as done
+3. **Security and edge cases** — input boundaries defended, auth enforced, data handled safely
+4. **Story completeness** — every acceptance criterion implemented and tested
+
+Skip a priority only when its input (architecture doc / stories) is unavailable.
+
+### Attack categories
+
+**Architecture conformance** — for each dependency in the architecture doc's Dependencies table:
+
+```bash
+grep -r "from ['\"]${DEPENDENCY}['\"]" src/ --include="*.ts" --include="*.js"
+```
+
+Missing import → write a conformance test that fails:
+
+```typescript
+it("should import ${dependency} (per architecture doc)", () => {
+  const source = readFileSync("src/services/${file}", "utf-8");
+  expect(source).toMatch(/import.*from\s+['"]${dependency}['"]/);
+});
+```
+
+Also verify: integration patterns followed, file structure matches arch doc, expected exports exist.
+
+**Stub detection** — scan for hardcoded returns, TODO/FIXME/STUB markers, `NotImplementedError`, regex classifiers where LLM/API calls are specified, empty bodies, console.log as error handling:
+
+```bash
+# Hardcoded returns
+grep -rn "return.*{.*:.*}" src/ --include="*.ts" | grep -v "test\|spec\|mock"
+
+# Explicit markers
+grep -rn "TODO\|FIXME\|STUB\|HACK\|XXX\|PLACEHOLDER" src/ --include="*.ts"
+
+# Not implemented
+grep -rn "throw.*not.*implement\|NotImplementedError\|TODO" src/ --include="*.ts"
+
+# Regex where LLM calls should be
+grep -rn "new RegExp\|\.match(\|\.test(" src/ --include="*.ts" | grep -v "test\|spec"
+```
+
+For each stub, write a test exposing it (different inputs → different outputs):
+
+```typescript
+it("should produce different outputs for different inputs (not hardcoded)", () => {
+  const result1 = process(input1);
+  const result2 = process(input2);
+  expect(result1).not.toEqual(result2);
+});
+```
+
+**Security** — at input boundaries, probe: null/undefined/empty inputs, unbounded strings/numbers, auth bypass via crafted inputs, unparameterized SQL, unsanitized rendering, hardcoded secrets, sensitive data logged. Payloads:
+
+```
+SQL injection:   '; DROP TABLE users; --
+XSS:            <script>alert('xss')</script>
+Command inj.:   ; rm -rf /
+Path traversal: ../../etc/passwd
+SSRF:           internal URLs in user-controlled fields
+```
+
+Each issue → a failing test:
+
+```typescript
+it("should reject SQL injection in search query", () => {
+  expect(() => search("'; DROP TABLE users; --"))
+    .toThrow(); // or return error, not execute the injection
+});
+```
+
+**Story completeness** — map each acceptance criterion to a test, each edge case to a test, each negative case ("what happens when X fails") to a test. Gap → failing test.
+
+### Stub verification strategy
+
+For each suspected stub, write a test that fails if the stub is real:
+
+1. **Different inputs → different outputs** — identical output across meaningfully different inputs = hardcoded
+2. **Side effects happen** — verify the DB write / API call occurred; stubs skip side effects
+3. **Error cases error** — invalid input must validate and reject; stubs return success regardless
+4. **Performance correlates with work** — N vs 1 item should produce proportionally different results
+
+Reduce false positives — exclude `*.config.*`, `*.d.ts`, `*.test.*` / `*.spec.*`, legit constant returns (error messages, defaults), and early-return guard clauses. When in doubt, read the surrounding context.
+
+### Report
+
+```markdown
+## Red Team Report
+
+### Architecture Conformance
+- {N} violations found, {M} tests written
+- Missing dependencies: {list}
+- Pattern violations: {list}
+
+### Stub Detection
+- {N} stubs found, {M} tests written
+- {list of stub locations}
+
+### Security
+- {N} issues found, {M} tests written
+- {list of issues}
+
+### Story Completeness
+- {N} gaps found, {M} tests written
+- {list of missing criteria}
+
+### New Test Files
+- {path}: {what it tests}
+```
+
+### Validate (red team)
+
+- [ ] Every architecture dependency checked for import in source
+- [ ] Stub detection scan ran on all implementation files
+- [ ] Every finding has a NEW failing test (not a comment or note)
+- [ ] No implementation code modified — only new test files created
+- [ ] New tests actually fail when run (verified, not just written)
+
 ## See Also
 
 For detailed security checklists and pre-commit verification steps, see `references/security-checklist.md`.

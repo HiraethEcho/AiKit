@@ -86,6 +86,34 @@ tags = ["test"]
 path = "modules/spec/skills/test-router"
 description = "Detects project type, runs appropriate tests, validates against spec scenarios, and reports results."
 
+[[skills]]
+id = "discovery"
+category = "spec"
+tags = ["clarify", "lightspec"]
+path = "modules/spec/skills/discovery"
+description = "Understands user demands through structured exploration — explore/brainstorm/deep-dive modes — before planning begins."
+
+[[skills]]
+id = "interview-me"
+category = "spec"
+tags = ["clarify", "lightspec"]
+path = "modules/spec/skills/interview-me"
+description = "Extracts what the user actually wants instead of what they think they should want, through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified."
+
+[[skills]]
+id = "idea-refine"
+category = "spec"
+tags = ["clarify", "lightspec"]
+path = "modules/spec/skills/idea-refine"
+description = "Refines ideas iteratively through structured divergent and convergent thinking. Use \"idea-refine\" or \"ideate\" to trigger."
+
+[[skills]]
+id = "orchestrate"
+category = "spec"
+tags = ["orchestrate", "lightspec"]
+path = "modules/spec/skills/orchestrate"
+description = "Multi-agent orchestration — dispatch specialists in parallel, own acceptance assertions, synthesize results."
+
 [[agents]]
 id = "builder"
 category = "spec"
@@ -135,6 +163,13 @@ tags = ["ship"]
 path = "modules/spec/agents/releaser.md"
 description = "Manages releases — version bumping, changelog generation, tagging, and verification."
 
+[[agents]]
+id = "architect"
+category = "spec"
+tags = ["design", "architecture"]
+path = "modules/spec/agents/architect.md"
+description = "System design decisions, ADRs, and architecture documentation for the SDD workflow."
+
 [[commands]]
 id = "build"
 category = "spec"
@@ -183,3 +218,31 @@ category = "spec"
 tags = ["test"]
 path = "modules/spec/commands/test.md"
 description = "Run tests — TDD workflow or acceptance validation (sdd test stage)"
+
+[[commands]]
+id = "capture"
+category = "spec"
+tags = ["archive"]
+path = "modules/spec/commands/capture"
+description = "Capture decisions, solutions, and lessons learned to docs/solutions/ with dedup"
+
+[[commands]]
+id = "interview-me"
+category = "spec"
+tags = ["clarify", "lightspec"]
+path = "modules/spec/commands/interview-me"
+description = "Extract what the user actually wants — one-question-at-a-time interview to ~95% confidence"
+
+[[commands]]
+id = "idea-refine"
+category = "spec"
+tags = ["clarify", "lightspec"]
+path = "modules/spec/commands/idea-refine"
+description = "Refine an idea through structured divergent and convergent thinking"
+
+[[commands]]
+id = "orchestrate"
+category = "spec"
+tags = ["orchestrate", "lightspec"]
+path = "modules/spec/commands/orchestrate"
+description = "Multi-agent orchestration — dispatch specialists in parallel, own acceptance assertions, synthesize"

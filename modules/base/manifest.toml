@@ -1,7 +1,100 @@
+# modules/base/manifest.toml — AiKit base kit（所有场景通用基础）
+version = "1.0"
+
+[[skills]]
+id = "adhd"
+category = "general"
+tags = ["general", "style", "output"]
+path = "modules/base/skills/adhd"
+description = "Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /i-have-adhd; stays on until \"stop adhd mode\"."
+
+[[skills]]
+id = "brainstorm"
+category = "general"
+tags = ["general", "thinking", "discovery"]
+path = "modules/base/skills/brainstorm"
+description = "Collaborative discovery before planning. Explore the problem space, evaluate approaches, surface past work, and produce a structured brainstorm document."
+
+[[skills]]
+id = "expert-panel"
+category = "general"
+tags = ["general", "thinking", "review"]
+path = "modules/base/skills/expert-panel"
+description = "Multi-perspective analysis — parallel analysis from different role perspectives to evaluate decisions, designs, and plans."
+
+[[skills]]
+id = "grill-me"
+category = "general"
+tags = ["general", "thinking", "interview"]
+path = "modules/base/skills/grill-me"
+description = "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases."
+
+[[skills]]
+id = "second-opinion"
+category = "general"
+tags = ["general", "review", "thinking"]
+path = "modules/base/skills/second-opinion"
+description = "Second-opinion advisor — dispatches 1-2 subagents (advice + hard devil's-advocate) to review a decision, design, plan, or code before you commit to it."
+
+[[skills]]
+id = "think"
+category = "general"
+tags = ["general", "thinking"]
+path = "modules/base/skills/think"
+description = "Deep reasoning for complex decisions — expert panel simulation, devil's advocate, what-if scenarios, and structured tradeoff analysis. Use when a decision has high stakes or multiple valid approaches."
 
 [[skills]]
 id = "ultracave"
 category = "general"
 tags = ["general", "style", "writing"]
 path = "modules/base/skills/ultracave"
-description = ">"
+description = "Ultra-compressed communication. Full technical accuracy, zero fluff. Trigger: \"caveman mode\", \"talk like caveman\", \"be brief\", \"less tokens\", \"/caveman\", or any request for token efficiency."
+
+[[commands]]
+id = "handoff"
+category = "general"
+tags = ["handoff", "shared"]
+path = "modules/base/commands/handoff"
+description = "Create or update HANDOFF.md — record current progress, key decisions, plan, next steps, and caveats."
+
+[[commands]]
+id = "pickup"
+category = "general"
+tags = ["pickup", "shared"]
+path = "modules/base/commands/pickup"
+description = "Resume from HANDOFF.md — restore context and continue."
+
+[[commands]]
+id = "brainstorm"
+category = "general"
+tags = ["general", "thinking", "discovery"]
+path = "modules/base/commands/brainstorm"
+description = "Collaborative discovery before planning — explore the problem space and produce a structured brainstorm document"
+
+[[commands]]
+id = "panel"
+category = "general"
+tags = ["general", "thinking", "review"]
+path = "modules/base/commands/panel"
+description = "Multi-perspective analysis — parallel role-based evaluation of a decision, design, or plan"
+
+[[commands]]
+id = "grill-me"
+category = "general"
+tags = ["general", "thinking", "interview"]
+path = "modules/base/commands/grill-me"
+description = "Stress-test a plan, decision, or idea with relentless questioning"
+
+[[commands]]
+id = "second-opinion"
+category = "general"
+tags = ["general", "review", "thinking"]
+path = "modules/base/commands/second-opinion"
+description = "Cheap independent second opinion — dispatch 1-2 subagents (advice + devil's advocate) before committing"
+
+[[commands]]
+id = "think"
+category = "general"
+tags = ["general", "thinking"]
+path = "modules/base/commands/think"
+description = "Deep reasoning for high-stakes decisions — panel simulation, devil's advocate, what-if, tradeoff analysis"

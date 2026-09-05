@@ -1,4 +1,4 @@
 # code
 
-lite work SDD straightly by FILES.md
+file-driven SDD straightly by FILES.md
 
