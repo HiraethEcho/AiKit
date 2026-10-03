@@ -1,6 +1,7 @@
 // ─── pi-toolkit — multi-function Pi extension ───────────────────────────────
 //
-// Entry point that registers all modules. Modules are independent; no cross-imports.
+// Entry point that registers all modules. Modules are independent; no runtime
+// cross-imports (type-only imports are fine).
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { loadConfig } from "./config.ts";
@@ -11,8 +12,7 @@ import registerAddDir from "./add-dir.ts";
 import registerTools from "./tools.ts";
 import registerRtk from "./rtk.ts";
 import registerToon from "./toon.ts";
-import registerCave from "./cave.ts";
-import registerAdhd from "./adhd.ts";
+import registerTerse from "./terse.ts";
 import { registerSafeBash } from "./safe-bash.ts";
 import registerAgentCommands from "./cmds.ts";
 import registerRoles from "./roles.ts";
@@ -26,8 +26,7 @@ export default function piToolkit(pi: ExtensionAPI) {
   registerTools(pi);
   registerRtk(pi, cfg.rtk);
   registerToon(pi, cfg.toon);
-  registerCave(pi, cfg.cave);
-  registerAdhd(pi, cfg.adhd);
+  registerTerse(pi, cfg.terse);
   registerSafeBash(pi, cfg["safe-bash"]);
   registerAgentCommands(pi, cfg["cmds"]);
   registerRoles(pi, cfg);

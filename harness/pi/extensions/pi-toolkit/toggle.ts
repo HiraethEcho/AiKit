@@ -1,6 +1,7 @@
-// ─── toggle: shared on/off/toggle scaffold for /cave /toon /rtk /pi-doc ─────
+// ─── toggle: shared on/off/toggle scaffold for /toon /rtk /pi-doc ─────────
 // Each module keeps its own prompt + injection logic; this handles state,
 // persistence, status icon, command handler, and session lifecycle.
+// Multi-state toggles (like /terse off|normal|ultra) live in their own module.
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { AutocompleteItem } from "@earendil-works/pi-tui";
@@ -8,7 +9,7 @@ import type { AutocompleteItem } from "@earendil-works/pi-tui";
 export interface ToggleSpec {
   command: string;
   description: string;
-  configKey: string;   // appendEntry custom type, e.g. "cave-config"
+  configKey: string;   // appendEntry custom type, e.g. "toon-config"
   statusKey: string;   // setStatus key, e.g. "cave"
   icon: string;
   defaultEnabled: boolean;

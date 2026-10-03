@@ -30,7 +30,7 @@ replaces theirs. No fact rule here yields to a token target stated elsewhere.
 | Level | Meaning |
 | --- | --- |
 | `off` | Default agent style. Nothing here applies. |
-| `normal` | Plain, explicit sentences in Simplified Technical English (STE100). Full words, subject and verb present. No budget on the response. |
+| `normal` | Plain, explicit sentences in Simplified Technical English (STE100). Full words, subject and verb present, no length target. |
 | `ultra` | More brief, more compressed: articles, filler, conjunctions, and pronouns dropped. Fragments allowed. Technical substance exact. |
 
 `/terse off|normal|ultra` sets and pins the level. Otherwise, when terse is on:
@@ -110,6 +110,14 @@ If the project has a `CONTEXT.md`, use its terms exactly, in the defined part of
 never use a word an `_Avoid_` line rejects. If it has none, do not invent one; define at
 first use. Prefer the plainest common word.
 
+### normal 中文
+
+- 主动语态，短句，一次一指令（不串两个动作）。
+- 主句在前：先给动作与对象，再给限定条件。
+- 省字不省事实：条件、注意事项、范围一律保留。
+- 首次出现的领域术语给一句定义。
+- 不用链式限定词（"可能也许大约"）；不确定就单写一句"原因未确认。"
+
 ## ultra — maximum compression
 
 Style for prose only. Everything under "Never compress" stays verbatim.
@@ -141,13 +149,6 @@ Style for prose only. Everything under "Never compress" stays verbatim.
 - 省略主语，动作前置。句式：`[动] [宾]。[原因→结果]。[下一步]。`
 - 代码、函数名、API 名、路径、报错：永不缩写，永不改写。
 - diff 只输出 `+ / − / ∼`。
-
-### normal 中文
-
-- 主动语态，短句，一次一指令（不用"并然后"串两个动作）。
-- 主句在前：先给动作与对象，再给限定条件。
-- 省略与含糊限定词不省事实：条件、注意事项、范围一律保留。
-- 首次出现的领域术语给一句定义。
 
 ## When to break these
 

@@ -1,6 +1,6 @@
 // ─── pi-toolkit config: loaded from settings.json (global + project) ────────
 // Config lives in settings.json rather than a standalone pi-toolkit.json:
-//   - `toolkit`       -> default enabled state for rtk, toon, cave, pi-doc,
+//   - `toolkit`       -> default state for rtk, toon, terse, pi-doc,
 //                        cmds (fixed-editor is not a toggle here)
 //   - `agent`         -> named roles; `mode: "primary"` = role
 //   - `defaultRole`   -> role seeded into fresh sessions
@@ -9,6 +9,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import type { TerseLevel } from "./terse.ts";
 
 /** One entry in the `agent` map of settings.json. `mode: "primary"` = role. */
 export interface RoleEntry {
@@ -22,8 +23,7 @@ export interface RoleEntry {
 export interface PiToolkitConfig {
 	rtk: boolean;
 	toon: boolean;
-	cave: boolean;
-  adhd: boolean;
+	terse: TerseLevel;
 	"pi-doc": boolean;
 	"cmds": boolean;
 	"safe-bash": boolean;
@@ -34,8 +34,8 @@ export interface PiToolkitConfig {
 const DEFAULTS: PiToolkitConfig = {
 	rtk: true,
 	toon: false,
-	cave: false,
-  adhd: true,
+	// ultra = the skill's resting level; "off" to disable injection entirely.
+	terse: "ultra",
 	"pi-doc": false,
 	cmds: false,
 	"safe-bash": true,
