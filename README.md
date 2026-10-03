@@ -96,5 +96,7 @@ Inspired by [OpenAgentControl](https://github.com/darrenhinde/OpenAgentsControl)
 - 真源: `harness/agents.toml` (agents presets / agents.mcp / pi packages-skills-prompts-mcp) + `harness/agents/pi/settings.example.json` 模板
 - `python3 deploy/gen.py` — 独立生成脚本, 重生成 deploy/manifest/preset/agents 的 lua+json (+yaml 只读 sidecar, 脚本不用)
 - `python3 deploy/deploy.py agents` — 预览 (.agents 链接计划 + mcp.json + pi settings)
+  - 写出的 `.agents/mcp.json` **仅 opencode 读**; pi 的 MCP 是内置 (`builtin:mcp`, 1.0.0+),
+    手工 `pi mcp add` → `~/.pi/agent/mcp.json` / `./.pi/mcp.json` (详见 `harness/universal/readme.md`)
 - `python3 deploy/deploy.py agents --project <proj>` — 写 `<proj>/.agents/` + `<proj>/.pi/settings.json`
 - `python3 deploy/deploy.py agents --global` — 写 `~/.agents/` + `~/.pi/agent/settings.json`

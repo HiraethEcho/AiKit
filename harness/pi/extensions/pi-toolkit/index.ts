@@ -8,7 +8,6 @@ import registerPiDocs from "./pi-docs.ts";
 import registerNotify from "./notify.ts";
 import registerRename from "./rename.ts";
 import registerAddDir from "./add-dir.ts";
-import registerMcp from "./mcp/index.ts";
 import registerTools from "./tools.ts";
 import registerRtk from "./rtk.ts";
 import registerToon from "./toon.ts";
@@ -23,7 +22,6 @@ export default function piToolkit(pi: ExtensionAPI) {
   registerNotify(pi);
   registerRename(pi);
   registerAddDir(pi);
-  registerMcp(pi);
   registerTools(pi);
   registerRtk(pi, cfg.rtk);
   registerToon(pi, cfg.toon);

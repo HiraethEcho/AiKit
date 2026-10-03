@@ -8,7 +8,8 @@ version = "1.0"
 [agents]
 presets = ["full"]
 
-# [agents.mcp] — 渲染为 <target>/.agents/mcp.json (mcpServers)
+# [agents.mcp] — 渲染为 <target>/.agents/mcp.json (mcpServers) — 仅 opencode 读;
+# pi 内置只读 ~/.pi/agent/mcp.json 与 ./.pi/mcp.json, 用 `pi mcp add` 手工加
 [agents.mcp]
 [agents.mcp.codegraph]
 command = "codegraph"
@@ -18,31 +19,30 @@ directTools = true
 
 # [pi] — pi settings: <project>/.pi/ 或 ~/.pi/
 [pi]
-template = "harness/agents/pi/settings.example.json"
+template = "harness/pi/settings.example.json"
 project_target = ".pi/settings.json"
 global_target = ".pi/agent/settings.json"
 
 # packages: type=local → path 展开为 <repo-root>/<path>; type=npm → name 加 npm: 前缀
-# (实际目录为 extensions/, pi-toolkit 已拆分为 pi-agents/pi-tasks/pi-pane)
 [[pi.packages]]
 type = "local"
-path = "harness/agents/pi/extensions/pi-agents"
+path = "harness/pi/extensions/pi-agents"
 
 [[pi.packages]]
 type = "local"
-path = "harness/agents/pi/extensions/pi-tasks"
+path = "harness/pi/extensions/pi-tasks"
 
 [[pi.packages]]
 type = "local"
-path = "harness/agents/pi/extensions/pi-pane"
+path = "harness/pi/extensions/pi-pane"
 
 [[pi.packages]]
 type = "local"
-path = "harness/agents/pi/extensions/pi-asks"
+path = "harness/pi/extensions/pi-asks"
 
 [[pi.packages]]
 type = "local"
-path = "harness/agents/pi/extensions/pi-context-mode"
+path = "harness/pi/extensions/pi-context-mode"
 
 [[pi.packages]]
 type = "npm"
@@ -73,10 +73,13 @@ name = "pi-ocgo-usage"
 presets = ["full"]
 
 # pi commands: 部署为 pi settings 的 prompts 目录 (绝对路径)
+# ⚠ 下面两个目录在仓库里不存在 (旧布局遗留), prompts 指向空目录 = no-op
 [pi.commands]
 dirs = ["codekit/commands", "base/commands"]
 
 # pi mcp: 部署为 pi settings 的 mcp 名称
+# ⚠ pi 1.0 无 "mcp" 设置键 → 此处渲染为 no-op. pi 的 server 在 ~/.pi/agent/mcp.json
+#   里手工维护 (directTools 也不认, 内置用 exposure = "direct"). 见 harness/universal/readme.md
 [pi.mcp]
 names = ["codegraph"]
 

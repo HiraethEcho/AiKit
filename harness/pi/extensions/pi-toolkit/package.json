@@ -2,7 +2,7 @@
   "name": "pi-toolkit",
   "private": true,
   "type": "module",
-  "description": "Pi extension: pi-docs toggle, desktop notify, session rename, external dir injection, MCP runtime with checkbox toggle, safe-bash guard, and idle timeout",
+  "description": "Pi extension: pi-docs toggle, desktop notify, session rename, external dir injection, safe-bash guard, and tool toggles (MCP is handled by pi's built-in extension)",
   "pi": {
     "extensions": ["./index.ts"]
   },
