@@ -37,6 +37,13 @@ path = "modules/base/skills/second-opinion"
 description = "Second-opinion advisor — dispatches 1-2 subagents (advice + hard devil's-advocate) to review a decision, design, plan, or code before you commit to it."
 
 [[skills]]
+id = "terse"
+category = "general"
+tags = ["general", "style", "output"]
+path = "modules/base/skills/terse"
+description = "Compressed, action-shaped output in three levels: off, normal (Simplified Technical English), ultra (maximum compression). Auto-escalates to normal when compression risks misreading. Lead with the next action, number steps, restate state, cap lists at 5, no preamble/recap/closer. Invoke with /terse or on any request for brevity, token efficiency, caveman mode, or ADHD-shaped output."
+
+[[skills]]
 id = "think"
 category = "general"
 tags = ["general", "thinking"]

@@ -23,6 +23,7 @@ export interface PiToolkitConfig {
 	rtk: boolean;
 	toon: boolean;
 	cave: boolean;
+  adhd: boolean;
 	"pi-doc": boolean;
 	"cmds": boolean;
 	"safe-bash": boolean;
@@ -34,6 +35,7 @@ const DEFAULTS: PiToolkitConfig = {
 	rtk: true,
 	toon: false,
 	cave: false,
+  adhd: true,
 	"pi-doc": false,
 	cmds: false,
 	"safe-bash": true,
