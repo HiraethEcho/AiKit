@@ -11,6 +11,8 @@
   var historyFilter = "";
   var appendixTimer = null;
   var viewMode = "raw"; // "raw" | "preview" | "edit"
+  var historySig = null; // signature of the history list already rendered
+  var HISTORY_POLL_MS = 2000;
 
   var CODE_EXTS = /\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|c|cpp|cc|h|hpp|java|sh|bash|zsh|json|yaml|yml|toml|xml|css|scss|sql|rb|php)$/i;
 
@@ -70,6 +72,7 @@
   async function refresh() {
     try {
       board = await api("/state");
+      historySig = historySignature(board.history);
       renderBoardSummary();
       renderBoardItems();
       renderHistory();
@@ -85,20 +88,32 @@
     $("boardSummary").textContent = n + " 项 · " + a + " 注释" + (edited ? " · " + edited + " 已编辑" : "");
   }
 
-  // ── left tabs ─────────────────────────────────────────────────
+  // ── left tabs / center prompt switch ──────────────────────────
+  function setPromptActive(on) {
+    var b = $("promptBtn");
+    if (!b) return;
+    b.classList.toggle("active", on);
+    b.title = on ? "返回查看器" : "打开 prompt 面板";
+  }
+  function promptShown() {
+    var a = $("viewerAssembly");
+    return Boolean(a && !a.hidden);
+  }
   function showAssemblyView() {
     $("viewerAssembly").hidden = false;
     $("viewerRaw").hidden = true;
     $("preview").hidden = true;
     $("viewerEdit").hidden = true;
-    var vt = document.querySelector(".view-toggle");
-    if (vt) vt.hidden = true;
+    $("viewToggle").hidden = true;
+    $("assemblyActions").hidden = false;
+    setPromptActive(true);
     refreshAssembly();
   }
   function showNormalView() {
     $("viewerAssembly").hidden = true;
-    var vt = document.querySelector(".view-toggle");
-    if (vt) vt.hidden = false;
+    $("viewToggle").hidden = false;
+    $("assemblyActions").hidden = true;
+    setPromptActive(false);
     setView(viewMode);
   }
   function initTabs() {
@@ -108,9 +123,8 @@
         tabs.forEach(function (x) { x.classList.remove("active"); });
         t.classList.add("active");
         var tab = t.dataset.tab;
-        ["board", "files", "history", "assembly"].forEach(function (k) { $("pane-" + k).hidden = k !== tab; });
-        if (tab === "assembly") showAssemblyView();
-        else showNormalView();
+        ["board", "files", "history"].forEach(function (k) { $("pane-" + k).hidden = k !== tab; });
+        showNormalView();
       });
     });
   }
@@ -243,6 +257,27 @@
     });
   }
 
+  // ── history auto-refresh ──────────────────────────────────────
+  // The server rebuilds its history on pi's turn_end, so a completed reply
+  // appears here without a manual refresh. Poll cheaply, and re-render only
+  // when the list actually changed, so the viewer / Edit text is never touched.
+  function historySignature(list) {
+    return (list || []).map(function (h) { return h.locator + ":" + h.ts; }).join("|");
+  }
+  async function pollHistory() {
+    try {
+      var st = await api("/state");
+      var sig = historySignature(st.history);
+      if (sig === historySig) return;
+      historySig = sig;
+      board.history = st.history || [];
+      renderHistory();
+    } catch (e) { /* keep polling: the server may be stopped */ }
+  }
+  function watchHistory() {
+    window.setInterval(pollHistory, HISTORY_POLL_MS);
+  }
+
   // ── open into viewer ──────────────────────────────────────────
   async function openFile(path) {
     try {
@@ -270,6 +305,7 @@
     };
     if (source !== "file" && viewMode === "edit") setView("raw");
     setStatus("已上板: " + cur.label);
+    showNormalView();
     refresh();
   }
 
@@ -279,10 +315,10 @@
     $("backdropCode").textContent = "";
     $("editText").value = "";
     $("assemblyText").value = "";
-    $("viewerAssembly").hidden = true;
     $("viewerTitle").textContent = "（未打开文件/消息）";
     $("preview").srcdoc = "";
     setView("raw");
+    showNormalView();
   }
 
   // ── viewer render (gutter + backdrop highlight) ───────────────
@@ -336,7 +372,7 @@
   }
 
   function renderViewer() {
-    if (!cur) { clearViewer(); return; }
+    if (!cur) { if (!promptShown()) clearViewer(); return; }
     $("viewerTitle").textContent = "[" + cur.source + "] " + cur.label + (isEdited() ? " （已编辑）" : "");
     $("raw").value = cur.content;
     renderGutter();
@@ -543,6 +579,59 @@
     });
   }
 
+  // ── side rails (left sources / right comments) ───────────────
+  // railPref[side]: true/false = explicit user choice, null = follow viewport.
+  var RAIL_NARROW = window.matchMedia("(max-width: 1100px)");
+  var railPref = { left: null, right: null };
+
+  function loadRailPref() {
+    try {
+      var raw = localStorage.getItem("pi-board-rails");
+      if (!raw) return;
+      var o = JSON.parse(raw) || {};
+      if (typeof o.left === "boolean") railPref.left = o.left;
+      if (typeof o.right === "boolean") railPref.right = o.right;
+    } catch (e) { /* ignore */ }
+  }
+  function saveRailPref() {
+    try { localStorage.setItem("pi-board-rails", JSON.stringify(railPref)); } catch (e) { /* ignore */ }
+  }
+  function railOpen(side) {
+    if (railPref[side] !== null) return railPref[side];
+    return !RAIL_NARROW.matches;
+  }
+  function markRailBtn(btn, open, name) {
+    if (!btn) return;
+    btn.classList.toggle("active", open);
+    btn.title = (open ? "隐藏" : "显示") + name;
+    btn.setAttribute("aria-label", btn.title);
+    btn.setAttribute("aria-pressed", open ? "true" : "false");
+  }
+  function applyRails() {
+    var ws = document.querySelector("main.workspace");
+    if (!ws) return;
+    var left = railOpen("left"), right = railOpen("right");
+    ws.classList.toggle("hide-left", !left);
+    ws.classList.toggle("hide-right", !right);
+    markRailBtn($("leftRailBtn"), left, "左栏");
+    markRailBtn($("rightRailBtn"), right, "右栏");
+  }
+  function toggleRail(side) {
+    railPref[side] = !railOpen(side);
+    saveRailPref();
+    applyRails();
+  }
+  function wireRails() {
+    loadRailPref();
+    applyRails();
+    var onViewport = function () { applyRails(); };
+    if (RAIL_NARROW.addEventListener) RAIL_NARROW.addEventListener("change", onViewport);
+    else if (RAIL_NARROW.addListener) RAIL_NARROW.addListener(onViewport);
+    var lb = $("leftRailBtn"), rb = $("rightRailBtn");
+    if (lb) lb.addEventListener("click", function () { toggleRail("left"); });
+    if (rb) rb.addEventListener("click", function () { toggleRail("right"); });
+  }
+
   // ── theme (dark/light) ───────────────────────────────────────
   function isLight() { return (document.documentElement.dataset.theme || "dark") === "light"; }
   function applyTheme(t) {
@@ -590,15 +679,19 @@
       }
     });
     $("assemblyRefreshBtn").addEventListener("click", refreshAssembly);
+    var promptBtn = $("promptBtn");
+    if (promptBtn) promptBtn.addEventListener("click", function () {
+      if (promptShown()) showNormalView(); else showAssemblyView();
+    });
     $("clearBtn").addEventListener("click", async function () {
       if (!window.confirm("清空整块板？")) return;
       try {
         await postAction("clear");
+        var wasPrompt = promptShown();
         cur = null;
         clearViewer();
         await refresh();
-        var activeTab = document.querySelector("nav.tabs .tab.active");
-        if (activeTab && activeTab.dataset.tab === "assembly") showAssemblyView();
+        if (wasPrompt) showAssemblyView();
         setStatus("板已清空");
       } catch (e) { setStatus("clear: " + e.message, true); }
     });
@@ -698,6 +791,8 @@
 
   // ── init ──────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", function () {
+    wireRails();
+    watchHistory();
     initTabs();
     initTree();
     wireViewer();

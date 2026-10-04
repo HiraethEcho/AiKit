@@ -513,6 +513,7 @@ const HTML_PAGE = `<!doctype html>
 </head>
 <body>
 <header class="topbar">
+  <button id="leftRailBtn" class="rail-toggle" title="隐藏左栏" aria-label="切换左栏">◧</button>
   <div class="top-left">
     <h1>pi-board</h1>
     <span class="summary" id="boardSummary"></span>
@@ -523,6 +524,7 @@ const HTML_PAGE = `<!doctype html>
     <button id="clearBtn" class="danger" title="清空整块板">Clear</button>
     <button id="themeBtn" title="切换暗色/亮色">☀️</button>
   </div>
+  <button id="rightRailBtn" class="rail-toggle" title="隐藏右栏" aria-label="切换右栏">◨</button>
 </header>
 
 <main class="workspace">
@@ -531,7 +533,6 @@ const HTML_PAGE = `<!doctype html>
       <button class="tab active" data-tab="board">板</button>
       <button class="tab" data-tab="files">文件</button>
       <button class="tab" data-tab="history">历史</button>
-      <button class="tab" data-tab="assembly">prompt</button>
     </nav>
 
     <section class="pane" id="pane-board">
@@ -551,19 +552,20 @@ const HTML_PAGE = `<!doctype html>
       </form>
       <ul class="messages" id="historyMessages"></ul>
     </section>
-
-    <section class="pane" id="pane-assembly" hidden>
-      <p class="hint">prompt 面板位于中间：上方为完整回复，下方为追加内容。</p>
-    </section>
   </aside>
 
   <section class="viewer">
     <header class="viewer-head">
+      <button id="promptBtn" class="pane-toggle" title="打开 prompt 面板">prompt</button>
       <span class="viewer-title" id="viewerTitle">（未打开文件/消息）</span>
-      <div class="view-toggle">
+      <div class="view-toggle" id="viewToggle">
         <button id="rawBtn" class="active">Raw</button>
         <button id="previewBtn">Preview</button>
         <button id="editBtn" hidden>Edit</button>
+      </div>
+      <div class="assembly-actions" id="assemblyActions" hidden>
+        <button id="assemblyRefreshBtn">刷新 prompt</button>
+        <button id="sendBtn">发送</button>
       </div>
     </header>
     <div class="viewer-raw" id="viewerRaw">
@@ -583,12 +585,7 @@ const HTML_PAGE = `<!doctype html>
     </section>
 
     <section class="viewer-assembly" id="viewerAssembly" hidden>
-      <div class="assembly-toolbar">
-        <span class="assembly-hint">完整 prompt，可直接修改后发送</span>
-        <button id="assemblyRefreshBtn">刷新 prompt</button>
-        <button id="sendBtn">发送</button>
-      </div>
-      <textarea id="assemblyText" spellcheck="false"></textarea>
+      <textarea id="assemblyText" spellcheck="false" placeholder="完整 prompt，可直接修改后发送"></textarea>
       <div class="appendix-toolbar"><span>追加内容</span></div>
       <textarea id="appendixText" placeholder="单独编辑的追加内容，不会被刷新覆盖"></textarea>
     </section>
