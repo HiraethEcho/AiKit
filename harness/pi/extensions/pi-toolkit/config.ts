@@ -34,8 +34,7 @@ export interface PiToolkitConfig {
 const DEFAULTS: PiToolkitConfig = {
 	rtk: true,
 	toon: false,
-	// ultra = the skill's resting level; "off" to disable injection entirely.
-	terse: "ultra",
+	terse: "normal",
 	"pi-doc": false,
 	cmds: false,
 	"safe-bash": true,
