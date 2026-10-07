@@ -2,6 +2,7 @@ import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-a
 import { Text, Editor, Key, matchesKey, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
 import { Type, type Static } from "typebox";
 import { getBus, Events } from "./bus.js";
+import { scheduleAskNotify, cancelAskNotify } from "./notify.js";
 import { connect } from "node:net";
 import { randomUUID } from "node:crypto";
 
@@ -69,7 +70,7 @@ export default function (pi: ExtensionAPI): void {
   unsubscribes.push(getBus().on(Events.ASK_REQUEST, async (payload: unknown) => {
     const data = payload as { source: string; requestId: string; questions: Question[] };
     if (!currentCtx?.ui) return;
-    const result = await runAskUI(currentCtx, data.questions);
+    const result = await runAskUIWithNotify(currentCtx, data.questions);
     getBus().emit(Events.ASK_RESPONSE, {
       requestId: data.requestId,
       cancelled: result.cancelled,
@@ -86,6 +87,7 @@ export default function (pi: ExtensionAPI): void {
   }));
 
   pi.on("session_shutdown", () => {
+    cancelAskNotify();
     unsubscribes.forEach(fn => fn());
     unsubscribes.length = 0;
   });
@@ -126,7 +128,7 @@ export default function (pi: ExtensionAPI): void {
         allowOther: q.allowOther !== false,
       }));
 
-      const result = await runAskUI(ctx, questions);
+      const result = await runAskUIWithNotify(ctx, questions);
       if (result.cancelled) {
         return { content: [{ type: "text" as const, text: "User cancelled." }], details: result };
       }
@@ -162,6 +164,26 @@ export default function (pi: ExtensionAPI): void {
 
 // ── TUI helper ────────────────────────────────────────────────────────────
 
+/**
+ * Wrap the ask UI with a delayed desktop notification: the user is pinged when
+ * a question waits for input, and the pending notification is dropped as soon
+ * as the UI closes (answered or cancelled).
+ */
+async function runAskUIWithNotify(ctx: ExtensionContext, questions: Question[]): Promise<AskResult> {
+  scheduleAskNotify("Pi", askNotifyBody(questions));
+  try {
+    return await runAskUI(ctx, questions);
+  } finally {
+    cancelAskNotify();
+  }
+}
+
+function askNotifyBody(questions: Question[]): string {
+  const first = (questions[0]?.prompt ?? "").replace(/\s+/g, " ").trim();
+  const body = first.length > 120 ? `${first.slice(0, 117)}…` : first;
+  const text = body || "A question needs your answer";
+  return questions.length > 1 ? `${questions.length} questions: ${text}` : text;
+}
 
 async function runAskUI(ctx: ExtensionContext, questions: Question[]): Promise<AskResult> {
   const isMulti = questions.length > 1;
