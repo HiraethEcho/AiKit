@@ -1,6 +1,6 @@
 ---
 name: teachme
-description: 把当前目录变成一个「agent 教我学 X」的学习工作区。首次调用走四步 —— 问清楚我要学什么、搜学习资源、生成 examples/exercise/helper/logs/notes/practice/reference 与 AGENTS.md/README.md/USAGE.md、之后每次问答按边界级别出题并把知识落成笔记。agent 写例题与解答（examples/）和练习环境（exercise/ 的题面、注释、骨架），学生写实现。Use when the user says 教我 / 我要学 / 开个学习工作区 / 带我做 / 出一套练习题 / teach me / learn X from scratch, or asks to turn Q&A into notes.
+description: 把当前目录变成一个「agent 教我学 X」的学习工作区。首次调用走四步 —— 问清楚我要学什么、搜学习资源、生成 reference（含 examples/ 与 solutions/）/exercise/helper/logs/notes 与 AGENTS.md/README.md/USAGE.md、之后每次问答按边界级别出题并把知识落成笔记。agent 写例题与答案（reference/examples/）、习题解答（reference/solutions/）和练习环境（exercise/ 的题面、注释、骨架），学生写实现。Use when the user says 教我 / 我要学 / 开个学习工作区 / 带我做 / 出一套练习题 / teach me / learn X from scratch, or asks to turn Q&A into notes.
 ---
 
 # Teach Me
@@ -40,24 +40,23 @@ description: 把当前目录变成一个「agent 教我学 X」的学习工作�
 | **L0 讲解** | 只讲解、画表、举例、回答提问。一个文件都不建 | 全部 |
 | **L1 骨架（默认）** | 文件 + docstring + 行内注释 + 空函数体 / `TODO` / `sorry` | 实现 |
 | **L2 首步** | 完整写前 1–2 步当范例，然后停 | 其余 |
-| **L3 对照** | 在 `examples/` 写完整例题与解答 | 在 `practice/` 重写自己的版本，再对拍 |
+| **L3 对照** | 在 `reference/examples/` 写完整例题与答案 | 自己另写一份，再对拍 |
 
 升降规则：
 
 - 学生连续两次卡在同一处 → 临时降到 L2 只写卡住的那一段。写完回到 L1，让学生自己重敲一遍。
 - 学生说「直接给我看」→ 降到 L3，把这笔记进 `logs/dev/`。
 - 任何级别下，**学生说做完了才写，不说就不写**。
-- 解答一律进 `examples/`，不进 `exercise/`。L1 的骨架放 `exercise/`，L2 的首 1–2 步也放 `exercise/`。
-- `practice/` 只归学生，任何级别下 agent 都不动它。
+- 解答一律进 `reference/examples/` 与 `reference/solutions/`，不进 `exercise/`。L1 的骨架放 `exercise/`，L2 的首 1–2 步也放 `exercise/`。
 
 ## 教学循环
 
 一轮 = 一道题。
 
-1. **出题** —— 从 `reference/` 挑一个知识点，先在 `examples/NN-topic.<ext>` 写例题 + 解答（标注来源），再在 `exercise/NN-topic.<ext>` 写题面 + 注释 + 骨架 + 练习环境。题面写清：要什么、验收什么、允许查什么。**`exercise/` 里不出现答案，也不出现能推出答案的实现。** 指定了辅语言时，同时在 `examples/` 写一份注释加厚的辅语言对照版（规则见 `SOURCES.md` §6）。
+1. **出题** —— 从 `reference/` 挑一个知识点，先写 `reference/examples/NN-topic.<ext>`（例题 + 答案，标注来源），再写 `exercise/NN-topic.<ext>`（题面 + 注释 + 骨架 + 练习环境），最后写 `reference/solutions/NN-topic.<ext>`（这道题的解答，当对拍基准）。题面写清：要什么、验收什么、允许查什么。**`exercise/` 里不出现答案，也不出现能推出答案的实现。** `reference/solutions/` 在验收前不给学生看。指定了辅语言时，同时在 `reference/examples/` 写一份注释加厚的辅语言对照版（规则见 `SOURCES.md` §6）。
 2. **停手** —— 输出「你写吧」，不贴答案，不在下一轮偷偷补全。
 3. **验收** —— 学生说「做完了」，跑 `helper/check.sh <file>`，报剩余未完成数。有洞就直说有几处，不美化。
-4. **对拍** —— 先跑 `examples/` 的解答拿基准数，再跑学生的，比。不一致处就是学生写错处。数字进 `logs/dev/`。
+4. **对拍** —— 先跑 `reference/solutions/` 的解答拿基准数，再跑学生的，比。不一致处就是学生写错处。数字进 `logs/dev/`。
 5. **沉淀** —— 按 `NOTES.md` 判这一轮的知识进 `notes/` 还是 `logs/dev/`。
 6. **进度** —— 更新 `logs/dev/01-local-state.md` 的「当前进度」段。
 
@@ -72,7 +71,7 @@ description: 把当前目录变成一个「agent 教我学 X」的学习工作�
 5. **一份文件只留一个真相。** 旧笔记错了直接改，不在旁边加一条纠正。
 6. **长任务不占主面板。** 训练、编译、下载丢给 subagent 或 herdr pane，日志落 `logs/run/`。
 7. **语言**：对话与文档用中文，代码、注释、标识符用英文，技术术语保持英文。
-8. **解答只进 `examples/`。** 学生说「做完了」之前，不主动展开解答，也不在对话里复述关键那几行。
+8. **解答只进 `reference/examples/` 与 `reference/solutions/`。** 学生说「做完了」之前，不主动展开解答，也不在对话里复述关键那几行。
 
 ## 交付检查
 
@@ -82,6 +81,6 @@ description: 把当前目录变成一个「agent 教我学 X」的学习工作�
 - [ ] 边界级别已确认，且写进了 `AGENTS.md`
 - [ ] 新知识已落盘，不是只说了
 - [ ] 没有替学生写实现（L2 的首步除外）
-- [ ] 解答写在 `examples/` 且标了来源，`exercise/` 里没有答案泄漏
-- [ ] 指定了辅语言时，`examples/` 里已有对应的加注释对照版
+- [ ] 例题与解答写在 `reference/examples/` 与 `reference/solutions/` 且标了来源，`exercise/` 里没有答案泄漏
+- [ ] 指定了辅语言时，`reference/examples/` 里已有对应的加注释对照版
 - [ ] 没有未经批准的 commit

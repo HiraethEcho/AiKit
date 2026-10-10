@@ -17,14 +17,15 @@
 ## 目录语义
 
 ```
-examples/    例题与解答（agent 写的），基准数字的来源，辅语言对照版
-exercise/    根据 reference/ 和 examples/ 出的练习题（题面 + 注释 + 骨架 + 练习环境，学生填实现）
-practice/    学生的 playground，自主练习，agent 不写
-helper/      助手产出：check.sh / status.sh 等脚本，也包括其他辅助材料
-reference/   只读参考资源 + README.md 索引
-notes/       纯知识笔记（换台机器依然成立的内容）
-logs/dev/    手写的本机记录：实测数字、环境故障、踩过的坑
-logs/run/    程序吐出的日志、指标、曲线（gitignore）
+reference/            参考资料（对学生只读）
+reference/<name>/     上游副本：代码库、论文出处、大文件软链
+reference/examples/   例题与答案（agent 写全），基准数字的来源，辅语言对照版
+reference/solutions/  exercise 每题的解答（对拍基准），序号与 exercise 对齐
+exercise/             根据 reference/examples/ 出的练习题（题面 + 注释 + 骨架 + 练习环境，学生填实现）
+helper/               助手产出：check.sh / status.sh 等脚本，也包括其他辅助材料
+notes/                纯知识笔记（换台机器依然成立的内容）
+logs/dev/             手写的本机记录：实测数字、环境故障、踩过的坑
+logs/run/             程序吐出的日志、指标、曲线（gitignore）
 ```
 
 在创建前先 `ls` 一遍。已存在的目录不动，已存在的文件不覆盖。
@@ -47,31 +48,32 @@ logs/run/    程序吐出的日志、指标、曲线（gitignore）
 | L0 讲解 | 只讲解、举例、画表，不建文件 | 全部 |
 | L1 骨架（默认） | 文件 + docstring + 注释 + 空函数体 / TODO | 实现 |
 | L2 首步 | 完整写前 1–2 步当范例，然后停 | 其余 |
-| L3 对照 | 在 `examples/` 写完整例题与解答 | 在 `practice/` 重写自己的版本，再对拍 |
+| L3 对照 | 在 `reference/examples/` 写完整例题与答案 | 自己另写一份，再对拍 |
 
 ## 写代码的分工
 
-- agent 写：`examples/` 的例题与解答；`exercise/` 的题面、注释、骨架、练习环境；`helper/` 的脚本；`reference/` 的索引
-- agent 不写：`exercise/` 里的实现（L2 的首 1–2 步除外）、`practice/` 里的任何东西
-- **解答只进 `examples/`，不进 `exercise/`。** 学生说「做完了」之前不展开解答
+- agent 写：`reference/examples/` 的例题与答案；`reference/solutions/` 的习题解答；`exercise/` 的题面、注释、骨架、练习环境；`helper/` 的脚本；`reference/README.md` 的索引
+- agent 不写：`exercise/` 里的实现（L2 的首 1–2 步除外）
+- **解答只进 `reference/examples/` 与 `reference/solutions/`，不进 `exercise/`。** 学生说「做完了」之前不展开解答
 - agent 不写：`notes/` 里没实测或没出处的数字
 
 ## 辅语言对照版
 
 主语言：<主语言>。辅语言：<辅语言，没指定就删掉这一节>。
 
-每道题在 `examples/` 里同步生成一份辅语言版本，**注释写厚** —— 它不用于做题，只用于自读。
+每道题在 `reference/examples/` 里同步生成一份辅语言版本，**注释写厚** —— 它不用于做题，只用于自读。
 重点写辅语言有、主语言没有的坑。它**不镜像到 `exercise/`**：是读物，不是作业。
 
 ## 目录分工
 
 | 目录 | 放什么 | 不放什么 |
 |---|---|---|
-| `examples/` | 例题、解答、辅语言对照版、基准数字的出处 | 学生写的实现 |
+| `reference/` | 只读参考资料 + `README.md` 索引 | 会被学生修改的代码 |
+| `reference/<name>/` | 上游副本，原样保留 | 学生改过的版本 |
+| `reference/examples/` | 例题与答案、辅语言对照版、基准数字的出处 | 学生的作业 |
+| `reference/solutions/` | `exercise/` 每题的解答，对拍基准 | 验收前给学生看 |
 | `exercise/` | 题面、注释、骨架、练习环境 | 实现、答案 |
-| `practice/` | 学生自己的练习 | agent 写的代码 |
 | `helper/` | 验收脚本、辅助材料 | 学生的作业 |
-| `reference/` | 只读参考资料 + 索引 | 会被修改的代码 |
 | `notes/` | 纯知识：概念、原理、坑 | 本机专有的数字、路径、状态 |
 | `logs/dev/` | 手写的本机实测、环境故障 | 概念解释（那属于 notes） |
 | `logs/run/` | 程序输出 | 任何手写内容 |
@@ -111,7 +113,7 @@ L1 起生成，学科相关：
 
 1. `git init`（需要学生同意）并写 `.gitignore`：`logs/run/`、`.venv/`、`node_modules/`、大文件软链
 2. `logs/dev/01-local-state.md` 建好，写「环境」和「当前进度」两段
-3. `examples/README.md` 建好，列：题号 / 知识点 / 来源 / 对应的 exercise 文件
+3. `reference/examples/README.md` 建好，列：题号 / 知识点 / 来源 / 对应的 exercise 文件；`reference/solutions/` 的文件名与 `exercise/` 对齐
 4. 打印目录树
 5. 打印下一步：调 `helper/status.sh` 看一屏状态，然后开始第一道题
 6. 把当前边界级别写进 `AGENTS.md`，并提醒学生可以随时改
@@ -124,5 +126,5 @@ L1 起生成，学科相关：
 | 建一个学生不会用的空目录 | 目录越多越不知道该往哪写 |
 | `helper/` 里放学生的答案 | 学生下次直接抄 |
 | 没写 `.gitignore` 就 `git init` | 第一次 commit 带进日志和虚拟环境 |
-| 一次建全 8 个空目录不写说明 | 一周后没人记得 `practice/` 和 `exercise/` 的区别 |
+| 一次建全所有空目录不写说明 | 一周后没人记得 `reference/examples/`、`reference/solutions/`、`exercise/` 的区别 |
 | 把解答写进 `exercise/` 或只留在对话里 | 学生直接抄，练习作废 |

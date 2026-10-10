@@ -32,7 +32,7 @@
 - 「本机 torch 2.12 的 matmul 精度是 1.2e-4」→ 数字是本机的，但结论「fp32 下误差量级 1e-4 属正常」是通用。写 `notes/`，把数字放进 `logs/dev/` 并互相引用。
 - 「这个包的 API 从 5.x 起签名变了」→ 通用，`notes/`。
 - 「装 dllm 时 transformers 被顶到 5.x」→ 本机事件，`logs/dev/`。
-- 「例题本身」不进 `notes/`。例题与解答归 `examples/`；例题暴露出的知识点才写 `notes/`。
+- 「例题本身」不进 `notes/`。例题与解答归 `reference/examples/` 与 `reference/solutions/`；例题暴露出的知识点才写 `notes/`。
 
 ## 文件命名
 
@@ -104,7 +104,7 @@ logs/dev/02-topic.md
 
 ## 进度
 
-例题写在 `examples/NN-topic`，题面写在 `exercise/NN-topic`，两边序号对齐，对拍靠 `examples/README.md` 的索引。
+例题写在 `reference/examples/NN-topic`，题面写在 `exercise/NN-topic`，解答写在 `reference/solutions/NN-topic`，三边序号对齐，对拍靠 `reference/examples/README.md` 的索引。
 
 每轮结束更新 `logs/dev/01-local-state.md` 的「当前进度」段：
 
