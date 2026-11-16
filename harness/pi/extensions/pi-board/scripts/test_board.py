@@ -137,10 +137,11 @@ def http_post(port, payload, timeout=15):
 
 
 class Scenario:
-    def __init__(self, name, fn, keep_state=False):
+    def __init__(self, name, fn, keep_state=False, start_board=True):
         self.name = name
         self.fn = fn
         self.keep_state = keep_state
+        self.start_board = start_board
 
 
 def clean_state():
@@ -156,6 +157,9 @@ def run_scenario(sc, port):
     failures = []
     try:
         time.sleep(3)  # let the TUI become ready for command input
+        if not sc.start_board:
+            sc.fn(pi, None, failures)
+            return failures
         pi.send("/board")
         m = pi.wait_for(r"\[board\] port=(\d+)")
         if not m:
@@ -177,6 +181,11 @@ def check(failures, cond, msg):
 
 
 # ── scenarios ──────────────────────────────────────────────────────────
+
+def s_no_board_directory(pi, port, failures):
+    check(failures, not os.path.exists(os.path.join(FIXTURE, ".pi")),
+          "starting pi without /board does not create .pi/")
+
 
 def s_empty_board(pi, port, failures):
     st = http_get(port, "/state")
@@ -412,6 +421,7 @@ def s_persistence_after_restart(pi, port, failures):
 
 
 SCENARIOS = [
+    Scenario("no_board_directory", s_no_board_directory, start_board=False),
     Scenario("empty_board", s_empty_board),
     Scenario("open_file", s_open_file),
     Scenario("plain_file_omitted", s_plain_file_omitted),

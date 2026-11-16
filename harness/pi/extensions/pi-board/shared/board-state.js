@@ -11,7 +11,6 @@ import { createEmptyState, normalizeState } from "./board-model.js";
 export function resolveStatePath(cwd) {
   try {
     const dir = resolve(String(cwd ?? process.cwd()), ".pi");
-    mkdirSync(dir, { recursive: true });
     return join(dir, "board.json");
   } catch {
     return join(homedir(), ".pi", "board", "board.json");
